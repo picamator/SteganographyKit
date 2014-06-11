@@ -3,7 +3,7 @@ SteganographyKit
 
 Introduction
 ------------
-SteganographyKit - package of implementation several stegosystems.
+SteganographyKit - package of implementation several stegosystems for image steganography.
 Such Kit is used termininalogy that was decribed in Christian Cachin [1].
 Kit works with basic types of Steganography [2]:
 * Pure Steganography
