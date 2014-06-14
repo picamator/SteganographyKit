@@ -11,14 +11,14 @@ namespace SteganographyKit\SecretText;
 interface SecretTextInterface 
 {
     /**
-     * @param array $options;
+     * @param array $options
      */
     public function __construct(array $options);
     
     /**
      * Gets converted data to binary format
      * 
-     * @return array each element has 8 bit
+     * @return array each eaqual number of bits
      */
     public function getBinaryData();
 }

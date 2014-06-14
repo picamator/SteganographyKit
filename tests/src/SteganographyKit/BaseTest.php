@@ -15,7 +15,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * 
      * @var string 
      */
-    protected $data_path = './data/';
+    protected $dataPath = './data/';
     
     /**
      * Template methods runs once for each test method
@@ -23,7 +23,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        
+
     }
     
     /**
@@ -34,6 +34,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function getDataPath($path)
     {        
-        return realpath($this->data_path.$path);
+        return realpath($this->dataPath.$path);
     }
 }
