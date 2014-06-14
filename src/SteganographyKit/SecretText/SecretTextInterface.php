@@ -18,7 +18,14 @@ interface SecretTextInterface
     /**
      * Gets converted data to binary format
      * 
-     * @return array each eaqual number of bits
+     * @return array each element has equal number of bits
      */
     public function getBinaryData();
+    
+    /**
+     * Gets size data in bit
+     * 
+     * @return integer
+     */
+    public function getSize();
 }

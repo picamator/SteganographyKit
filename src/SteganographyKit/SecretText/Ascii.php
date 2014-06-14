@@ -26,11 +26,19 @@ class Ascii extends AbstractSecretText
     );
     
     /**
+     * Encoded text to ASCII
+     *
+     * @var string 
+     */
+    protected $encodedText;
+    
+    /**
      * @param array $options
      */
     public function __construct(array $options) 
     {
         $this->setOptions($options);
+        $this->setEncodedText();
     }
 
     /**
@@ -39,10 +47,8 @@ class Ascii extends AbstractSecretText
      * @return array each element has 7 bit
      */
     public function getBinaryData() 
-    {
-        $text = mb_convert_encoding($this->options['text'], 'ASCII', self::FROM_ENCODE);      
-       
-        $textSplit  = \str_split($text);     
+    {       
+        $textSplit  = \str_split($this->encodedText);     
         $result     = array();
         foreach ($textSplit as $item) {
             $item       = decbin(ord($item));
@@ -51,5 +57,25 @@ class Ascii extends AbstractSecretText
         }
                 
         return $result;        
+    }
+    
+        
+    /**
+     * Gets size data in bit
+     * 
+     * @return integer
+     */
+    public function getSize() 
+    {
+        return strlen($this->encodedText)*7;
+    }
+    
+    protected function setEncodedText() 
+    {
+        $this->encodedText = mb_convert_encoding(
+            $this->options['text'], 
+            'ASCII', 
+            self::FROM_ENCODE
+        );
     }
 }
