@@ -22,7 +22,6 @@ trait OptionsTrait
      * Sets options
      * 
      * @param array $options
-     * @throws Exception
      */
     protected function setOptions(array $options) 
     {
@@ -32,5 +31,21 @@ trait OptionsTrait
             }
         }
         unset($value);
+    }
+    
+    /**
+     * Validate path option
+     * 
+     * @param array $options
+     * @throws Exception
+     */
+    protected function validatePath(array $options)
+    {
+        if(!isset($options['path'])
+            || !file_exists($options['path']) 
+            || !is_readable($options['path'])
+        ) {    
+            throw new Exception('Incorrect path. Image does not exsit or not readable.');
+        }
     }
 }

@@ -9,7 +9,7 @@
 namespace SteganographyKit\SecretText;
 
 interface SecretTextInterface 
-{
+{ 
     /**
      * @param array $options
      */

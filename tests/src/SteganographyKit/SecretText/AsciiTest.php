@@ -53,7 +53,8 @@ class AsciiTest extends BaseTest
                '1110000',
                '1110011',
                '1110101',
-               '1101101'
+               '1101101',
+                Ascii::END_TEXT_MARK
             ))
         );
     }

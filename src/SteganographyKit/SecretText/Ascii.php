@@ -55,11 +55,13 @@ class Ascii extends AbstractSecretText
             $item       = str_pad($item, 7, '0', STR_PAD_LEFT);
             $result[]   = $item;
         }
+        
+        // add end text mark
+        $result[] = self::END_TEXT_MARK;
                 
         return $result;        
     }
-    
-        
+         
     /**
      * Gets size data in bit
      * 
@@ -67,9 +69,12 @@ class Ascii extends AbstractSecretText
      */
     public function getSize() 
     {
-        return strlen($this->encodedText)*7;
+        return strlen($this->encodedText) * 7 + strlen(self::END_TEXT_MARK);
     }
     
+    /**
+     * Sets encode text
+     */
     protected function setEncodedText() 
     {
         $this->encodedText = mb_convert_encoding(

@@ -18,22 +18,20 @@ interface StegoTextInterface
     /**
      * Gets converted data to binary format
      * 
-     * @param integer $xIndex
-     * @param integer $yIndex
-     * @return array contains binary rgb representation of image
+     * @param integer $xIndex    x coordinat
+     * @param integer $yIndex    y coordinat
+     * @return array contains binary rgb representation of setting dot
      * <code>
-     *  array(
-     *      0 => array(0 => array('red' => ..., 'green' => ..., 'blue' => ...)),
-     *      ...
-     *  );
+            array('red' => ..., 'green' => ..., 'blue' => ...);
      * </code>
+     * @throws Exception
      */
-    public function getBinaryData($xIndex = null, $yIndex = nul);
+    public function getBinaryData($xIndex, $yIndex);
     
     /**
-     * Gets size of suppose Embedded data
+     * Gets image
      * 
-     * @return integer
+     * @return resource
      */
-    public function getSecretTextSize();
+    public function getImage();
 }

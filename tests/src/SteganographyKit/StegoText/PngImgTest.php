@@ -19,17 +19,23 @@ class PngImgTest extends BaseTest
     public function testGetBinaryData(array $options) 
     {
         $options['path'] = $this->dataPath . '/' . $options['path'];
-        $xIndex = 10;
-        $yIndex = 10;
+        $xStart  = 0;
+        $yStart  = 0;
         
-        $pngImg = new PngImg($options); 
-        $result = $pngImg->getBinaryData($xIndex, $yIndex);
-        foreach($result[0] as $item) {
-            $this->assertFalse(empty($item['red']));
-            $this->assertFalse(empty($item['green']));
-            $this->assertFalse(empty($item['blue']));
-        }      
-        $this->assertEquals($xIndex, count($result[0]));
+        $xEnd    = 1000;
+        $yEnd    = 1000;
+      
+        $pngImg = new PngImg($options);         
+        for ($i = $xStart; $i < $xEnd; $i++) {
+            for ($j = $yStart; $j < $yEnd; $j++) {
+                $result = $pngImg->getBinaryData($i, $j);
+            }
+        }    
+        
+        // assert rgb
+        $this->assertFalse(empty($result['red']));
+        $this->assertFalse(empty($result['green']));
+        $this->assertFalse(empty($result['blue']));
     }
     
     public function providerGetBinaryData() 

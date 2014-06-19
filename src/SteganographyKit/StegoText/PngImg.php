@@ -9,9 +9,12 @@
  */
 
 namespace SteganographyKit\StegoText;
+use SteganographyKit\Image\PngTrait;
 
 class PngImg extends AbstractStegoText 
-{   
+{ 
+    use PngTrait;
+    
     /**
      * Options
      * 
@@ -29,61 +32,33 @@ class PngImg extends AbstractStegoText
     protected $supportedMime = 'image/png';
     
     /**
-     * Gets converted data to binary format
-     * 
-     * @param integer $xIndex max x index
-     * @param integer $yIndex max y index
-     * @return array contains binary rgb representation of image
-     * <code>
-     *  array(
-     *      0 => array(0 => array('red' => ..., 'green' => ..., 'blue' => ...)),
-     *      ...
-     *  );
-     * </code>
+     * @param array $options
      */
-    public function getBinaryData($xIndex = null, $yIndex = null) 
+    public function __construct(array $options) 
     {
-        // identify max (x, y)
-        $getIndex = function($index, $default) {
-            return (is_null($index) || $index > $default)? $default: intval($index);
-        };
+        parent::__construct($options);
         
-        $xIndex = $getIndex($xIndex, $this->imgSize['width']);
-        $yIndex = $getIndex($yIndex, $this->imgSize['height']);
+        $this->validatePath($options);       
+        $this->setOptions($options);
         
-        $result = array();        
-        $image  = imagecreatefrompng($this->options['path']);    
-        for ($i = 0; $i < $xIndex; $i++) {
-            for ($j = 0; $j < $yIndex; $j++) {  
-                $colorIndex = imagecolorat($image, $i, $j);
-                $colorTran  = imagecolorsforindex($image, $colorIndex);
-                
-                $result[$i][$j] = $this->getBinaryColor($colorTran);
-            }
-        }
-        
-        return $result;
-    }
+        $this->setImgSize($options['path']);
+        $this->validateMime();
+        $this->setImage($options['path']);
+    }    
     
     /**
-     * Gets binary color
+     * Gets converted data to binary format
      * 
-     * @param array $colorTran
-     * @return array
+     * @param integer $xIndex    x coordinat
+     * @param integer $yIndex    y coordinat
+     * @return array contains binary rgb representation of setting dot
+     * <code>
+            array('red' => ..., 'green' => ..., 'blue' => ...);
+     * </code>
+     * @throws Exception
      */
-    protected function getBinaryColor(array $colorTran) 
-    {
-        $result = array(
-            'red'   => $colorTran['red'],
-            'green' => $colorTran['green'],
-            'blue'  => $colorTran['blue']
-        );       
-        foreach($result as &$item) {
-            $item = decbin($item);
-            $item = str_pad($item, 7, '0', STR_PAD_LEFT);
-        }
-        unset($item);
-        
-        return $result;
+    public function getBinaryData($xIndex, $yIndex) 
+    {        
+        return $this->getBinaryColor($xIndex, $yIndex);
     }
 }
