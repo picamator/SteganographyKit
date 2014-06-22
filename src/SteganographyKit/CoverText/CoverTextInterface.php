@@ -1,14 +1,14 @@
 <?php
 /**
- * Interface for Stego Text (cover text woth embeded secret text)
+ * Interface for Cover Text (cover image)
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
 
-namespace SteganographyKit\StegoText;
+namespace SteganographyKit\CoverText;
 
-interface StegoTextInterface 
+interface CoverTextInterface 
 {
     /**
      * @param array $options
@@ -34,4 +34,11 @@ interface StegoTextInterface
      * @return resource
      */
     public function getImage();
+    
+    /**
+     * Gets how many data coverText can work with
+     * 
+     * @return integer
+     */
+    public function getCoverCapacity();
 }

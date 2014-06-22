@@ -59,6 +59,16 @@ trait GeneralTrait
     }
     
     /**
+     * Gets image size
+     * 
+     * @return array
+     */
+    public function getImageSize()
+    {
+        return $this->imgSize;
+    }        
+    
+    /**
      * Sets image size
      * 
      * @param string $path
