@@ -11,6 +11,7 @@ use SteganographyKit\BaseTest;
 use SteganographyKit\StegoSystem\Lsb;
 use SteganographyKit\SecretText\Ascii;
 use SteganographyKit\CoverText\PngImg;
+use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
 
 class LsbTest extends BaseTest 
 {
@@ -20,7 +21,7 @@ class LsbTest extends BaseTest
      * @param array $optionsSecretText
      */
     public function testEncode(array $optionsCoverText, array $optionsSecretText) 
-    {        
+    {             
         $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
@@ -33,6 +34,36 @@ class LsbTest extends BaseTest
         
         $this->assertTrue(file_exists($result));
 //        var_dump($result);
+    }
+    
+    /**
+     * @dataProvider providerDecode
+     * @param array $optionsStegoText
+     */
+    public function testDecode(array $optionsStegoText, $expected) 
+    {
+        $optionsStegoText['path'] = $this->getDataPath($optionsStegoText['path']);
+
+        
+        $stegoText  = new StegoTextPngImg($optionsStegoText);
+        $lsb        = new Lsb();    
+        $result     = $lsb->decode($stegoText);
+        
+        $this->assertEquals($expected, $result);
+        
+//        var_dump($result);
+    }
+    
+    public function providerDecode() 
+    {
+        return array(
+            array(
+                array(
+                    'path' => 'stego/lorem_space_ipsum.png',
+                ),
+                'Lorem ipsum'
+            )
+        );
     }
     
     public function providerEncode() 

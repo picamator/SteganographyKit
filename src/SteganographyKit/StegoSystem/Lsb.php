@@ -9,6 +9,7 @@
 
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\SecretText\SecretTextInterface;
+use SteganographyKit\SecretText\AbstractSecretText;
 use SteganographyKit\StegoText\StegoTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 
@@ -39,15 +40,15 @@ class Lsb extends AbstractStegoSystem
         $this->validateEncode($secretText, $coverText, $useChannelSize);
         
         // convert secret data to binary
-        $secretData = $secretText->getBinaryData();
+        $secretData = $secretText->getBinaryData();        
         $imageSize  = $coverText->getImageSize();
         
         $imageCoordinate    = array('x' => 0, 'y' => 0);
         $xMaxIndex          = $imageSize['width'] - 1;   
         
-        // get current secret text item
+        // get current secret text item        
         $secretItem     = array_shift($secretData);
-        $secretItem     = $this->splitSecretTextItem($secretItem, $useChannelSize);
+        $secretItem     = $this->splitSecretTextItem($secretItem, $useChannelSize);        
         do {
             $secretDataSize = count($secretData);
             foreach($secretItem as $item) {
@@ -55,18 +56,18 @@ class Lsb extends AbstractStegoSystem
                 if ($itemSize < $useChannelSize) {
                     // secret item does not have enough data
                     // get next item
-                    $secretItem = array_shift($secretData);
+                    $secretItem  = array_shift($secretData);
                     
                     // get nessesary bits from next item to full fill last previous one   
                     $chunkSize   = $useChannelSize - $itemSize;
-                    $secretChunk = substr($secretItem, 0, $chunkSize);
+                    $secretChunk = substr($secretItem, 0, $chunkSize);                    
                     $item = array_merge_recursive($item, str_split($secretChunk));
                     
                     // update secretItem
-                    $secretItem = substr($secretItem, $chunkSize -1);
+                    $secretItem = substr($secretItem, $chunkSize);
                     $secretItem = $this->splitSecretTextItem($secretItem, $useChannelSize);
                 }
-                
+                                
                 // encode item
                 $this->encodeItem($imageCoordinate, $coverText, $item);
                 
@@ -80,8 +81,8 @@ class Lsb extends AbstractStegoSystem
                 $secretItem = array_shift($secretData);
                 $secretItem = $this->splitSecretTextItem($secretItem, $useChannelSize);
             }       
-        } while(!empty($secretData));    
-        
+        } while($secretDataSize !== 0);    
+                
         // save StegoText
         return $coverText->save();
     }
@@ -93,8 +94,38 @@ class Lsb extends AbstractStegoSystem
      * @return  string
      */
     public function decode(StegoTextInterface $stegoText) 
-    {
-        // @TODO
+    {        
+        $imageSize      = $stegoText->getImageSize();
+        $endMarkSize    = strlen(AbstractSecretText::END_TEXT_MARK);   
+        
+        $imageCoordinate    = array('x' => 0, 'y' => 0);
+        $xMaxIndex          = $imageSize['width'] - 1;   
+        $yMaxIndex          = $imageSize['height'] - 1;   
+        $secretText         = '';
+        do {
+            // get lasts bits value of pixel accordingly confugurated channel
+            $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
+            $endMark     = substr($secretText, -$endMarkSize, $endMarkSize);
+            
+            // get next pixel
+            $imageCoordinate = $this->getNextImageCoordinate($imageCoordinate, $xMaxIndex);           
+        } while ($endMark !== AbstractSecretText::END_TEXT_MARK
+            && $imageCoordinate['x'] !== $xMaxIndex && $imageCoordinate['y'] !== $yMaxIndex
+        );
+             
+        var_dump($secretText);
+
+        // remove endText mark
+        $cutEndMark = strlen($secretText) % $endMarkSize;
+        $cutEndMark = ($cutEndMark === 0)? $endMarkSize: $cutEndMark;
+        $secretText = substr($secretText, 0, -$cutEndMark);
+        
+        // decode
+        $secretText = str_split($secretText, $endMarkSize);
+        $secretText = array_map('bindec', $secretText);
+        $secretText = array_map('chr', $secretText);
+                
+        return implode('', $secretText);
     }
     
     /**
@@ -129,18 +160,17 @@ class Lsb extends AbstractStegoSystem
      */
     protected function getNextImageCoordinate(array $imageCoordinate, $xMaxIndex) 
     {
+        $imageCoordinate['x']++;
         if ($imageCoordinate['x'] > $xMaxIndex) {
             $imageCoordinate['x'] = 0;
             $imageCoordinate['y']++;
-        } else {
-            $imageCoordinate['x']++;
-        }
-        
+        } 
+                
         return $imageCoordinate;
     }
     
     /**
-     * Encode 3 bits of secret text
+     * Encode secret text item
      * 
      * @param array                 $imageCoordinate - e.g. array('x' => 0, 'y' => 0)
      * @param CoverTextInterface    $coverText
@@ -148,7 +178,7 @@ class Lsb extends AbstractStegoSystem
      */
     protected function encodeItem(array $imageCoordinate, 
         CoverTextInterface $coverText, array $secretItem
-    ) {        
+    ) {           
         // get original pixel in binary
         $originalPixel = $coverText->getBinaryData(
             $imageCoordinate['x'], $imageCoordinate['y']);
@@ -156,12 +186,15 @@ class Lsb extends AbstractStegoSystem
         // modify configured chanells
         $modifiedPixel = array();
         foreach($this->useChannel as $key => $value) {
+            if($secretItem[$key] === '') {
+                break;
+            }
             // modify original pixel by secret text
             $modifiedPixel[$value] = substr($originalPixel[$value], 0, -1) 
                 . $secretItem[$key];
         }
         
-        $modifiedPixel = array_merge($originalPixel, $modifiedPixel);
+        $modifiedPixel = array_merge($originalPixel, $modifiedPixel);        
         $modifiedPixel = array_map('bindec', $modifiedPixel);
         
         // apply modification
@@ -178,5 +211,30 @@ class Lsb extends AbstractStegoSystem
             $imageCoordinate['y'],    
             $color
         );
+    }
+    
+    /**
+     * Decode item
+     * 
+     * @param array                 $imageCoordinate - e.g. array('x' => 0, 'y' => 0)
+     * @param StegoTextInterface    $stegoText
+     * @return string
+     */
+    protected function decodeItem(array $imageCoordinate,
+        StegoTextInterface $stegoText 
+    ) {
+        $pixelData = $stegoText->getBinaryData(
+            $imageCoordinate['x'], 
+            $imageCoordinate['y']
+        );
+            
+//        var_dump($pixelData);
+        
+        $result = '';
+        foreach($this->useChannel as $item) {
+            $result .= substr($pixelData[$item], -1, 1);
+        }
+        
+        return $result;
     }
 }

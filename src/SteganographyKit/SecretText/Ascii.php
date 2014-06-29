@@ -15,7 +15,7 @@ class Ascii extends AbstractSecretText
      * Encode that was suppose to be an original text
      */
     const FROM_ENCODE = 'auto';
-    
+        
     /**
      * Options
      * 
@@ -44,21 +44,21 @@ class Ascii extends AbstractSecretText
     /**
      * Gets converted data to binary format
      * 
-     * @return array each element has 7 bit
+     * @return array each element has 8 bit
      */
     public function getBinaryData() 
     {       
-        $textSplit  = \str_split($this->encodedText);     
+        $textSplit  = \str_split($this->encodedText);             
         $result     = array();
         foreach ($textSplit as $item) {
             $item       = decbin(ord($item));
-            $item       = str_pad($item, 7, '0', STR_PAD_LEFT);
+            $item       = str_pad($item, 8, '0', STR_PAD_LEFT);
             $result[]   = $item;
         }
         
         // add end text mark
         $result[] = self::END_TEXT_MARK;
-                
+                       
         return $result;        
     }
          
@@ -69,7 +69,7 @@ class Ascii extends AbstractSecretText
      */
     public function getSize() 
     {
-        return strlen($this->encodedText) * 7 + strlen(self::END_TEXT_MARK);
+        return strlen($this->encodedText) * 8 + strlen(self::END_TEXT_MARK);
     }
     
     /**
