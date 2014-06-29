@@ -11,7 +11,7 @@
 namespace SteganographyKit\CoverText;
 use SteganographyKit\Image\PngTrait;
 
-class PngImg extends AbstractStegoText 
+class PngImg extends AbstractCoverText 
 { 
     use PngTrait;
     
@@ -21,7 +21,8 @@ class PngImg extends AbstractStegoText
      * @var array
      */
     protected $options = array(
-        'path' => ''
+        'path'      => '',
+        'savePath'  => ''
     );
     
     /**
@@ -38,7 +39,8 @@ class PngImg extends AbstractStegoText
     {
         parent::__construct($options);
         
-        $this->validatePath($options);       
+        $this->validatePath($options);
+        $this->validateSavePath($options);
         $this->setOptions($options);
         
         $this->setImgSize($options['path']);
@@ -63,12 +65,29 @@ class PngImg extends AbstractStegoText
     }
     
     /**
-     * Gets how many data coverText can work with
+     * Gets how many data coverText can cover
      * 
+     * @param  integer $useChannelSize
      * @return integer
      */
-    public function getCoverCapacity() 
+    public function getCoverCapacity($useChannelSize) 
     {
-        return $this->imgSize['width'] * $this->imgSize['height'] * 3;
+        return $this->imgSize['width'] * $this->imgSize['height'] * $useChannelSize;
+    }
+    
+    /**
+     * Save modified image
+     * 
+     * @return string - path to image
+     * @throws Exception
+     */
+    public function save() 
+    {
+        if(!imagepng($this->image, $this->options['savePath'])) {
+            throw new Exception('Can not save result image to destination '
+                . $this->options['savePath']);
+        }
+        
+        return $this->options['savePath'];
     }
 }

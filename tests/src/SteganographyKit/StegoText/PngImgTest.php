@@ -1,6 +1,6 @@
 <?php
 /**
- * Base SteganographyKit UnitTest
+ * Stego Text PngImg UnitTest
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
@@ -18,7 +18,7 @@ class PngImgTest extends BaseTest
      */
     public function testGetBinaryData(array $options) 
     {
-        $options['path'] = $this->dataPath . '/' . $options['path'];
+        $options['path'] = $this->getDataPath($options['path']);
         $xStart  = 0;
         $yStart  = 0;
         

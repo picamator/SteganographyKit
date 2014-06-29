@@ -41,7 +41,6 @@ trait PngTrait
             'blue'  => $colorTran['blue']
         );       
         foreach($result as &$item) {
-            $item = decbin($item);
             $item = str_pad(decbin($item), 7, '0', STR_PAD_LEFT);
         }
         unset($item);

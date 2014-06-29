@@ -36,9 +36,18 @@ interface CoverTextInterface
     public function getImage();
     
     /**
-     * Gets how many data coverText can work with
+     * Gets how many data coverText can cover
      * 
-     * @return integer
+     * @param   integer $useChannelSize
+     * @return  integer
      */
-    public function getCoverCapacity();
+    public function getCoverCapacity($useChannelSize);
+    
+    /**
+     * Save modified image
+     * 
+     * @return string - path to image
+     * @throws Exception
+     */
+    public function save();
 }

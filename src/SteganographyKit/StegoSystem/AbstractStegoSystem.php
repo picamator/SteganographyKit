@@ -17,17 +17,18 @@ abstract class AbstractStegoSystem implements StegoSystemInterface
      * Validate is it enouph room into coverText to keep secret one
      * 
      * @param   SecretTextInterface $secretText
-     * @param   CoverTextInterface $coverText
+     * @param   CoverTextInterface  $coverText
+     * @param   Integer             $useChannelSize - how many channels is used
      * @throws  Exception
      */
      protected function validateEncode(SecretTextInterface $secretText, 
-        CoverTextInterface $coverText
+        CoverTextInterface $coverText, $useChannelSize = 3
     ) {
-         $secretSize = $secretText->getSize();
-         $coverSize  = $coverText->getCoverSize();        
-         if ($secretSize > $coverSize) {
+         $secretSize     = $secretText->getSize();
+         $coverCapacity  = $coverText->getCoverCapacity($useChannelSize);        
+         if ($secretSize > $coverCapacity) {
              throw new Exception('Not enouph room to keep all secretText. CoverText can handle '
-                . $coverSize . ' bytes but SecretTest has ' . $secretSize . ' bytes');
+                . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
          }
     }
 }
