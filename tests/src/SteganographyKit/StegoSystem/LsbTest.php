@@ -74,7 +74,7 @@ class LsbTest extends BaseTest
                     'path'      => 'original.png',
                     'savePath'  => 'stego/original_'.date('Y_m_d_H_i_s').'.png'
                 ),
-                array('text' => 'Lorem ipsum'),
+                array('text' => 'Lorem ipsum Lorem ipsum'),
             )
         );
     }

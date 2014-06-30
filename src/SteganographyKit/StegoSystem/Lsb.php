@@ -113,8 +113,6 @@ class Lsb extends AbstractStegoSystem
             && $imageCoordinate['x'] !== $xMaxIndex && $imageCoordinate['y'] !== $yMaxIndex
         );
              
-        var_dump($secretText);
-
         // remove endText mark
         $cutEndMark = strlen($secretText) % $endMarkSize;
         $cutEndMark = ($cutEndMark === 0)? $endMarkSize: $cutEndMark;
