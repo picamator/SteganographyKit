@@ -21,7 +21,7 @@ class LsbTest extends BaseTest
      * @param array $optionsSecretText
      */
     public function testEncode(array $optionsCoverText, array $optionsSecretText) 
-    {             
+    {                  
         $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
@@ -50,7 +50,6 @@ class LsbTest extends BaseTest
         $result     = $lsb->decode($stegoText);
         
         $this->assertEquals($expected, $result);
-        
 //        var_dump($result);
     }
     

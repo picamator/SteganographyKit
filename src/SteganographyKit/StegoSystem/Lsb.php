@@ -40,48 +40,25 @@ class Lsb extends AbstractStegoSystem
         $this->validateEncode($secretText, $coverText, $useChannelSize);
         
         // convert secret data to binary
-        $secretData = $secretText->getBinaryData();        
-        $imageSize  = $coverText->getImageSize();
+        $secretData = $secretText->getBinaryData();    
+        // split data accordingly channel size
+        $secretData = str_split($secretData, $useChannelSize);  
         
+        $imageSize          = $coverText->getImageSize();   
         $imageCoordinate    = array('x' => 0, 'y' => 0);
-        $xMaxIndex          = $imageSize['width'] - 1;   
+        $xMaxIndex          = $imageSize['width'] - 1;  
         
-        // get current secret text item        
-        $secretItem     = array_shift($secretData);
-        $secretItem     = $this->splitSecretTextItem($secretItem, $useChannelSize);        
-        do {
-            $secretDataSize = count($secretData);
-            foreach($secretItem as $item) {
-                $itemSize = count($item);
-                if ($itemSize < $useChannelSize) {
-                    // secret item does not have enough data
-                    // get next item
-                    $secretItem  = array_shift($secretData);
-                    
-                    // get nessesary bits from next item to full fill last previous one   
-                    $chunkSize   = $useChannelSize - $itemSize;
-                    $secretChunk = substr($secretItem, 0, $chunkSize);                    
-                    $item = array_merge_recursive($item, str_split($secretChunk));
-                    
-                    // update secretItem
-                    $secretItem = substr($secretItem, $chunkSize);
-                    $secretItem = $this->splitSecretTextItem($secretItem, $useChannelSize);
-                }
-                                
-                // encode item
-                $this->encodeItem($imageCoordinate, $coverText, $item);
-                
-                // move to next coordinate
-                $imageCoordinate = $this->getNextImageCoordinate(
-                    $imageCoordinate, $xMaxIndex);  
-            }     
-            
-            // move to next item of secretData of it's size was not changed
-            if ($secretDataSize === count($secretData)) {
-                $secretItem = array_shift($secretData);
-                $secretItem = $this->splitSecretTextItem($secretItem, $useChannelSize);
-            }       
-        } while($secretDataSize !== 0);    
+        // get next secret text item
+        $secretItem = array_shift($secretData);
+        do {   
+            // encode item
+            $this->encodeItem($imageCoordinate, $coverText, $secretItem);
+            // move to next coordinate
+            $imageCoordinate = $this->getNextImageCoordinate(
+                $imageCoordinate, $xMaxIndex);           
+            // move to next secret text part
+            $secretItem = array_shift($secretData);
+        } while (!is_null($secretItem));    
                 
         // save StegoText
         return $coverText->save();
@@ -127,30 +104,7 @@ class Lsb extends AbstractStegoSystem
     }
     
     /**
-     * Split secret text item into array chanks accodingly channals number
-     * 
-     * @param string    $secretItem
-     * @param integer   $size
-     * @return array
-     * <code>
-     *  array(
-     *      0 => array(
-     *          0 => 1,
-     *          1 => 0,
-     *          2 => 0
-     *      ),
-     *      ...
-     * );
-     * </code>
-     */
-    protected function splitSecretTextItem($secretItem, $size) 
-    {
-        $secretItem = str_split($secretItem);
-        
-        return array_chunk($secretItem, $size);
-    }
-    
-    /**
+     * Gets next image coordinate
      * 
      * @param array     $imageCoordinate
      * @param integer   $xMaxIndex
@@ -172,43 +126,53 @@ class Lsb extends AbstractStegoSystem
      * 
      * @param array                 $imageCoordinate - e.g. array('x' => 0, 'y' => 0)
      * @param CoverTextInterface    $coverText
-     * @param array                 $secretItem - e.g. array(1, 0, 0)
+     * @param string                $secretItem - e.g. "100"
      */
     protected function encodeItem(array $imageCoordinate, 
-        CoverTextInterface $coverText, array $secretItem
-    ) {           
+        CoverTextInterface $coverText, $secretItem
+    ) {         
         // get original pixel in binary
         $originalPixel = $coverText->getBinaryData(
             $imageCoordinate['x'], $imageCoordinate['y']);
         
-        // modify configured chanells
-        $modifiedPixel = array();
-        foreach($this->useChannel as $key => $value) {
-            if($secretItem[$key] === '') {
-                break;
-            }
-            // modify original pixel by secret text
-            $modifiedPixel[$value] = substr($originalPixel[$value], 0, -1) 
-                . $secretItem[$key];
+        // modify configured channel
+        $modifiedPixel      = array();
+        $useChannel         = $this->useChannel;   
+        $useChannelItem     = array_shift($useChannel);
+        
+        $secretItem         = str_split($secretItem);
+        $secretBitItem      = array_shift($secretItem);
+        do {
+            $modifiedPixel[$useChannelItem] = 
+                substr($originalPixel[$useChannelItem], 0, -1) . $secretBitItem;       
+            
+            // move to next
+            $useChannelItem  = array_shift($useChannel);
+            $secretBitItem   = array_shift($secretItem);
+        } while (!is_null($useChannelItem) && !is_null($secretBitItem));
+
+        $modifiedPixel  = array_merge($originalPixel, $modifiedPixel);   
+        $differentPixel = array_diff_assoc($originalPixel, $modifiedPixel);
+ 
+        $modifiedPixel  = array_map('bindec', $modifiedPixel);
+        
+        // modify pixel if it is neccesary
+        if (!empty($differentPixel)) {
+            // apply modification
+            $image = $coverText->getImage();
+            $color = imagecolorallocate(
+                $image, 
+                $modifiedPixel['red'], 
+                $modifiedPixel['green'], 
+                $modifiedPixel['blue']
+            ); 
+            imagesetpixel(
+                $image,
+                $imageCoordinate['x'],
+                $imageCoordinate['y'],    
+                $color
+            );
         }
-        
-        $modifiedPixel = array_merge($originalPixel, $modifiedPixel);        
-        $modifiedPixel = array_map('bindec', $modifiedPixel);
-        
-        // apply modification
-        $image = $coverText->getImage();
-        $color = imagecolorallocate(
-            $image, 
-            $modifiedPixel['red'], 
-            $modifiedPixel['green'], 
-            $modifiedPixel['blue']
-        ); 
-        imagesetpixel(
-            $image,
-            $imageCoordinate['x'],
-            $imageCoordinate['y'],    
-            $color
-        );
     }
     
     /**
@@ -226,8 +190,6 @@ class Lsb extends AbstractStegoSystem
             $imageCoordinate['y']
         );
             
-//        var_dump($pixelData);
-        
         $result = '';
         foreach($this->useChannel as $item) {
             $result .= substr($pixelData[$item], -1, 1);

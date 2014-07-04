@@ -44,20 +44,19 @@ class Ascii extends AbstractSecretText
     /**
      * Gets converted data to binary format
      * 
-     * @return array each element has 8 bit
+     * @return string binary representation of secret data
      */
     public function getBinaryData() 
     {       
-        $textSplit  = \str_split($this->encodedText);             
-        $result     = array();
+        $textSplit  = str_split($this->encodedText);             
+        $result     = '';
         foreach ($textSplit as $item) {
             $item       = decbin(ord($item));
-            $item       = str_pad($item, 8, '0', STR_PAD_LEFT);
-            $result[]   = $item;
+            $result    .= str_pad($item, 8, '0', STR_PAD_LEFT);
         }
         
         // add end text mark
-        $result[] = self::END_TEXT_MARK;
+        $result .= self::END_TEXT_MARK;
                        
         return $result;        
     }
