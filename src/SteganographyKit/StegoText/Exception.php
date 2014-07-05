@@ -7,9 +7,8 @@
  */
 
 namespace SteganographyKit\StegoText;
-use SteganographyKit\Exception;
 
-class Exception extends Exception 
+class Exception extends \SteganographyKit\Exception 
 {
     
 }
