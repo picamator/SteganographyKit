@@ -16,7 +16,43 @@ abstract class AbstractSecretText implements SecretTextInterface
     /**
      * Mark that is added to end of the text
      * it helps to identify where secret text end
-     * EndMark should be the same size as a text item
      */
-    const END_TEXT_MARK = '00000000';
+     const END_TEXT_MARK = '0000000000000000';
+    
+    /**
+     * Length of secretText item
+     */
+    const TEXT_ITEM_LENGTH = 8;
+    
+    /**
+     * Gets decretText from binary data
+     * 
+     * @param string    $binaryData - raw secretText with endMark
+     * @param integer   $endMarkPos - position of endMark
+     * @return string
+     */
+    static public function getFromBinaryData($binaryData, $endMarkPos) 
+    {
+        // remove endText mark
+        $result = substr($binaryData, 0, $endMarkPos);
+        $result = str_split($result, self::TEXT_ITEM_LENGTH);  
+        
+        // last item would not have enouph data
+        $lastIndex = count($result) - 1;
+        $result[$lastIndex] = str_pad(
+            $result[$lastIndex], 
+            self::TEXT_ITEM_LENGTH, 
+            '0', 
+            STR_PAD_RIGHT
+        );
+        
+        $result = array_map(
+            function($value) {
+                return chr(bindec($value));
+            }, 
+            $result
+        );
+                
+        return implode('', $result);
+    }
 }

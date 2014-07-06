@@ -18,7 +18,7 @@ class LsbTest extends BaseTest
     /**
      * Count for data provider to Encode-Decode test
      */
-    const ENCODE_DECODE_COUNT = 10;
+    const ENCODE_DECODE_COUNT = 1;
     
     /**
      * @dataProvider providerEncode
@@ -46,7 +46,7 @@ class LsbTest extends BaseTest
      * @param array $optionsStegoText
      */
     public function testDecode(array $optionsStegoText, $expected) 
-    {
+    {      
         $optionsStegoText['path'] = $this->getDataPath($optionsStegoText['path']);
 
         $stegoText  = new StegoTextPngImg($optionsStegoText);
@@ -95,6 +95,12 @@ class LsbTest extends BaseTest
                 ),
                 'Lorem ipsum Li'
             )
+//            array(
+//                array(
+//                    'path' => 'stego/original_1404658899.1128_secret_length_7329.png',
+//                ),
+//                ''
+//            )
         );
     }
     
@@ -133,10 +139,10 @@ class LsbTest extends BaseTest
         $providerData = array();
         for($i = 0; $i < self::ENCODE_DECODE_COUNT; $i++) {
             // generate secretText item
-            $textItemStart  = mt_rand(0, 10 - 1);
-            $textItemLength = mt_rand(1, 10); 
-//            $textItemStart  = mt_rand(0, $secretTextLength - 1);
-//            $textItemLength = mt_rand(1, $secretTextLength); 
+//            $textItemStart  = mt_rand(0, 10 - 1);
+//            $textItemLength = mt_rand(1, 10); 
+            $textItemStart  = mt_rand(0, $secretTextLength - 1);
+            $textItemLength = mt_rand(1, $secretTextLength); 
             
             $secretTextItem = substr($secretText,$textItemStart, $textItemLength);
             $secretTextItem = str_shuffle($secretTextItem);
@@ -146,7 +152,7 @@ class LsbTest extends BaseTest
                 'path'      => $optionsCoverText['path'],
                 'savePath'  => sprintf(
                     $optionsCoverText['savePath'],
-                    date('Y_m_d_H_i_s') . '_secret_length_' . $textItemLength    
+                    microtime(true) . '_secret_length_' . $textItemLength    
                 )
             );
             

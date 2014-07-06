@@ -31,7 +31,7 @@ class Ascii extends AbstractSecretText
      * @var string 
      */
     protected $encodedText;
-    
+        
     /**
      * @param array $options
      */
@@ -52,7 +52,7 @@ class Ascii extends AbstractSecretText
         $result     = '';
         foreach ($textSplit as $item) {
             $item       = decbin(ord($item));
-            $result    .= str_pad($item, 8, '0', STR_PAD_LEFT);
+            $result    .= str_pad($item, self::TEXT_ITEM_LENGTH, '0', STR_PAD_LEFT);
         }
         
         // add end text mark
@@ -60,7 +60,7 @@ class Ascii extends AbstractSecretText
                        
         return $result;        
     }
-         
+            
     /**
      * Gets size data in bit
      * 
@@ -68,7 +68,8 @@ class Ascii extends AbstractSecretText
      */
     public function getSize() 
     {
-        return strlen($this->encodedText) * 8 + strlen(self::END_TEXT_MARK);
+        return strlen($this->encodedText) * self::TEXT_ITEM_LENGTH 
+            + strlen(self::END_TEXT_MARK);
     }
     
     /**

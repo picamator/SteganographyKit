@@ -3,8 +3,8 @@ SteganographyKit
 
 Introduction
 ------------
-SteganographyKit - package of implementation several stegosystems for image steganography.
-Such Kit is used termininalogy that was decribed in Christian Cachin [1].
+SteganographyKit - package of implementation several stegoSystems for image steganography.
+Such Kit is used termininalogy that was described in Christian Cachin [1].
 Kit works with basic types of Steganography [2]:
 * Pure Steganography
 * Secret Key Steganography
@@ -15,11 +15,33 @@ moreover comments inside code helps to understand what is going on and create yo
 
 General overview of Steganography and existing tools described by Sean-Philip Oriyano [3].
 
-Encoding/Decoding algorithms
+Pure Steganography
 ----------------------------
 ### Least Significant Bit (LSB)
-LSB method is modified least significant bit of covertext to get stegotext.
- 
+LSB method is modified least significant bit of coverText to get stegoText.
+SteganographyKit has implemented it for png image [4] as a coverText and text with ASCII characters [5] as a secretText.
+
+In general encode LSB can be described by those steps:
+1. Validation such as:
+..* check is it coverText exist and has right to read?
+..* check is it stegoText has permission to write into setting folder?
+..* check is it enough room in coverText to keep secretText?
+2. Convert secretText to binary string
+3. Add to secretText end text mark (it is used for decode algorithm)
+3. Change last bit of each RGB cannel for first pixel of coverText
+4. Save changing if step 3 really change RGB bits
+5. Move to next coverText pixel and change last bit of each RGB channel
+6. Repeat step 5 for each secretText item
+
+Beside decode LSB looks like:
+1. Read every last bit for RGB channel of stegoText
+2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
+3. Convert binary secretText to ASCII characters
+
+More information can be found in [2].
+
+UnitTest that make comparison between encode and decode of secretText can be found here:
+`LsbTest::testEncodeDecode`. It's generate randomly 100 secretTexts
 
 References
 ----------
@@ -33,3 +55,6 @@ References
 3. Sean-Philip Oriyano "Using steganography to avoid observation Hiding in plain sight." IBM Research, 02 June 2009,
    http://www.ibm.com/developerworks/web/library/wa-steganalysis/index.html?ca=dat
 
+4. http://www.w3.org/TR/PNG-Structure.html
+
+5. http://www.asciitable.com/

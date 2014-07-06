@@ -72,9 +72,7 @@ class Lsb extends AbstractStegoSystem
      */
     public function decode(StegoTextInterface $stegoText) 
     {        
-        $imageSize      = $stegoText->getImageSize();
-        $endMarkSize    = strlen(AbstractSecretText::END_TEXT_MARK);   
-        
+        $imageSize          = $stegoText->getImageSize(); 
         $imageCoordinate    = array('x' => 0, 'y' => 0);
         $xMaxIndex          = $imageSize['width'] - 1;   
         $yMaxIndex          = $imageSize['height'] - 1;   
@@ -82,25 +80,21 @@ class Lsb extends AbstractStegoSystem
         do {
             // get lasts bits value of pixel accordingly confugurated channel
             $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
-            $endMark     = substr($secretText, -$endMarkSize, $endMarkSize);
-            
+            $endMarkPos  = strpos($secretText, AbstractSecretText::END_TEXT_MARK);
+                             
             // get next pixel
             $imageCoordinate = $this->getNextImageCoordinate($imageCoordinate, $xMaxIndex);           
-        } while ($endMark !== AbstractSecretText::END_TEXT_MARK
-            && $imageCoordinate['x'] !== $xMaxIndex && $imageCoordinate['y'] !== $yMaxIndex
+        } while ($endMarkPos === false
+            && ($imageCoordinate['x'] !== $xMaxIndex || $imageCoordinate['y'] !== $yMaxIndex)
         );
-             
-        // remove endText mark
-        $cutEndMark = strlen($secretText) % $endMarkSize;
-        $cutEndMark = ($cutEndMark === 0)? $endMarkSize: $cutEndMark;
-        $secretText = substr($secretText, 0, -$cutEndMark);
         
-        // decode
-        $secretText = str_split($secretText, $endMarkSize);
-        $secretText = array_map('bindec', $secretText);
-        $secretText = array_map('chr', $secretText);
-                
-        return implode('', $secretText);
+        // handle last pixel
+        if($endMarkPos === false) {
+            $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
+            $endMarkPos  = strpos($secretText, AbstractSecretText::END_TEXT_MARK);
+        }
+        
+        return AbstractSecretText::getFromBinaryData($secretText, $endMarkPos);
     }
     
     /**
@@ -153,11 +147,11 @@ class Lsb extends AbstractStegoSystem
 
         $modifiedPixel  = array_merge($originalPixel, $modifiedPixel);   
         $differentPixel = array_diff_assoc($originalPixel, $modifiedPixel);
- 
-        $modifiedPixel  = array_map('bindec', $modifiedPixel);
-        
+     
         // modify pixel if it is neccesary
         if (!empty($differentPixel)) {
+            $modifiedPixel  = array_map('bindec', $modifiedPixel);
+            
             // apply modification
             $image = $coverText->getImage();
             $color = imagecolorallocate(
