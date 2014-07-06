@@ -26,16 +26,24 @@ In general encode LSB can be described by those steps:
   * check is it coverText exist and has right to read?
   * check is it stegoText has permission to write into setting folder?
   * check is it enough room in coverText to keep secretText?
+
 2. Convert secretText to binary string
+
 3. Add to secretText end text mark (it is used for decode algorithm)
+
 3. Change last bit of each RGB cannel for first pixel of coverText
+
 4. Save changing if step 3 really change RGB bits
+
 5. Move to next coverText pixel and change last bit of each RGB channel
+
 6. Repeat step 5 for each secretText item
 
 Beside decode LSB looks like:
 1. Read every last bit for RGB channel of stegoText
+
 2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
+
 3. Convert binary secretText to ASCII characters
 
 More information can be found in [2].
