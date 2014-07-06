@@ -23,9 +23,9 @@ SteganographyKit has implemented it for png image [4] as a coverText and text wi
 
 In general encode LSB can be described by those steps:
 1. Validation such as:
-..* check is it coverText exist and has right to read?
-..* check is it stegoText has permission to write into setting folder?
-..* check is it enough room in coverText to keep secretText?
+  * check is it coverText exist and has right to read?
+  * check is it stegoText has permission to write into setting folder?
+  * check is it enough room in coverText to keep secretText?
 2. Convert secretText to binary string
 3. Add to secretText end text mark (it is used for decode algorithm)
 3. Change last bit of each RGB cannel for first pixel of coverText
