@@ -41,12 +41,24 @@ abstract class AbstractStegoSystem implements StegoSystemInterface
      */
     public function setUseChannel(array $useChannel) 
     {
-        $validate = array_diff($this->supportedChannel, $useChannel);
+        $validate = array_diff($useChannel, $this->supportedChannel);
         if (!empty($validate)) {
             throw new Exception('Unsupported channels: ' . implode(',', $validate));
         }
         
         $this->useChannel = $useChannel;
+        
+        return $this;
+    }
+    
+    /**
+     * Gets supported channels
+     * 
+     * @return array
+     */
+    public function getSupportedChannel() 
+    {
+        return $this->supportedChannel;
     }
     
     /**

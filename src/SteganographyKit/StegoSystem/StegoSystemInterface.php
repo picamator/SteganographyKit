@@ -38,4 +38,11 @@ interface StegoSystemInterface
      * @return self
      */
     public function setUseChannel(array $useChannel);
+    
+    /**
+     * Gets supported channels
+     * 
+     * @return array
+     */
+    public function getSupportedChannel();
 }

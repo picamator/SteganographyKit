@@ -18,7 +18,7 @@ class LsbTest extends BaseTest
     /**
      * Count for data provider to Encode-Decode test
      */
-    const ENCODE_DECODE_COUNT = 1;
+    const ENCODE_DECODE_COUNT = 100;
     
     /**
      * @dataProvider providerEncode
@@ -61,9 +61,13 @@ class LsbTest extends BaseTest
      * @dataProvider        providerEncodeDecode
      * @param array         $optionsCoverText
      * @param array         $optionsSecretText
+     * @param array         $useChannel
      */
-    public function testEncodeDecode(array $optionsCoverText, array $optionsSecretText) 
-    {           
+    public function testEncodeDecode(
+        array $optionsCoverText, 
+        array $optionsSecretText,
+        array $useChannel    
+    ) {           
         // encode
         $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
@@ -73,7 +77,8 @@ class LsbTest extends BaseTest
         $secretText     = new Ascii($optionsSecretText);
         
         $lsb            = new Lsb();        
-        $stegoImgPath   = $lsb->encode($secretText, $coverText);
+        $stegoImgPath   = $lsb->setUseChannel($useChannel)
+            ->encode($secretText, $coverText);
         
         $this->assertTrue(file_exists($stegoImgPath));
         
@@ -129,7 +134,11 @@ class LsbTest extends BaseTest
             'path'      => 'original_200_200.png',
             'savePath'  => 'stego/original_%s.png'
         );        
-
+        
+        $lsb                    = new Lsb();
+        $supportedChannel       = $lsb->getSupportedChannel();
+        $supportedChannelSize   = count($supportedChannel);
+        
         // 200*200*3/8 = 15000 characters max to cover
         // 19433 secret text length
         $secretText         = file_get_contents($this->getDataPath('secret_text.txt'));
@@ -147,12 +156,22 @@ class LsbTest extends BaseTest
             $secretTextItem = substr($secretText,$textItemStart, $textItemLength);
             $secretTextItem = str_shuffle($secretTextItem);
             
-            // get coverText options
+            // generate use channel
+            $useChannelSize = mt_rand(1, $supportedChannelSize);
+            $useChannelKey  = (array)array_rand($supportedChannel, $useChannelSize);
+            
+            $useChannel = array();
+            foreach($useChannelKey as $value) {
+                $useChannel[] = $supportedChannel[$value];
+            }
+            
+            // set coverText options
             $providerData[$i][] = array(
                 'path'      => $optionsCoverText['path'],
                 'savePath'  => sprintf(
                     $optionsCoverText['savePath'],
-                    microtime(true) . '_secret_length_' . $textItemLength    
+                    microtime(true) . '_secret_length_' . $textItemLength
+                    . '_' . implode('_', $useChannel)    
                 )
             );
             
@@ -160,9 +179,11 @@ class LsbTest extends BaseTest
             $providerData[$i][] = array(
                 'text' => $secretTextItem
             );
+            
+            // set use channel
+            $providerData[$i][] = $useChannel;                 
         }
-           
-        
+
         return $providerData;
     }
 }
