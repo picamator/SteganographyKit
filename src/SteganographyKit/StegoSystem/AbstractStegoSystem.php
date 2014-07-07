@@ -14,6 +14,42 @@ use SteganographyKit\CoverText\CoverTextInterface;
 abstract class AbstractStegoSystem implements StegoSystemInterface 
 {
     /**
+     * List of supported channels
+     * That can be used by stegoSystem
+     * 
+     * @var array
+     */
+    protected $supportedChannel = array(
+        'red', 'green', 'blue'
+    );
+    
+    /**
+     * Used channels for encode - decode
+     * with a certain order
+     * 
+     * 
+     * @var array
+     */
+    protected $useChannel;
+    
+    /**
+     * Sets channels that are going to use for encode-decode
+     * 
+     * @param array $useChannel
+     * @return self
+     * @throws Exception
+     */
+    public function setUseChannel(array $useChannel) 
+    {
+        $validate = array_diff($this->supportedChannel, $useChannel);
+        if (!empty($validate)) {
+            throw new Exception('Unsupported channels: ' . implode(',', $validate));
+        }
+        
+        $this->useChannel = $useChannel;
+    }
+    
+    /**
      * Validate is it enouph room into coverText to keep secret one
      * 
      * @param   SecretTextInterface $secretText
@@ -22,7 +58,7 @@ abstract class AbstractStegoSystem implements StegoSystemInterface
      * @throws  Exception
      */
      protected function validateEncode(SecretTextInterface $secretText, 
-        CoverTextInterface $coverText, $useChannelSize = 3
+        CoverTextInterface $coverText, $useChannelSize
     ) {
          $secretSize     = $secretText->getSize();
          $coverCapacity  = $coverText->getCoverCapacity($useChannelSize);        

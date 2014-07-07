@@ -16,8 +16,8 @@ use SteganographyKit\CoverText\CoverTextInterface;
 class Lsb extends AbstractStegoSystem
 { 
     /**
-     * Used channels during encode and decoding
-     * Ordering os important
+     * Used channels for encode - decode
+     * with a certain order
      * 
      * @var array
      */

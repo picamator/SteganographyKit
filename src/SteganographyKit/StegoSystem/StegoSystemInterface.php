@@ -30,4 +30,12 @@ interface StegoSystemInterface
      * @return  string
      */
     public function decode(StegoTextInterface $stegoText);
+    
+    /**
+     * Sets channels that are going to use for encode-decode
+     * 
+     * @param array $useChannel
+     * @return self
+     */
+    public function setUseChannel(array $useChannel);
 }
