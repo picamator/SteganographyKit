@@ -14,12 +14,7 @@ use SteganographyKit\CoverText\PngImg;
 use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
 
 class LsbTest extends BaseTest 
-{
-    /**
-     * Count for data provider to Encode-Decode test
-     */
-    const ENCODE_DECODE_COUNT = 100;
-    
+{    
     /**
      * @dataProvider providerEncode
      * @param array $optionsCoverText
@@ -126,15 +121,32 @@ class LsbTest extends BaseTest
      * DataProvider to generate set of encode information
      * to validate how encode-decode is working
      * 
+     * before optimizaton it's run 1.7 Min and used 9 MB
+     * 
      * @return array
      */
     public function providerEncodeDecode()
     {
+       return $this->generateProvider(1, 12000, array('red', 'green', 'blue'));
+    }
+    
+    /**
+     * Generate data provider
+     * It's use secret_text.txt as a secret text and
+     * original_200_200.png as a cover tet
+     * 
+     * @param integer $resultCount  - number of providers data
+     * @param integer $textLength   - text length, if not set random data is used
+     * @param integer $channel      - channel, if not set random data is used
+     */
+    protected function generateProvider($resultCount, 
+        $textLength = null, array $channel = []
+    ) {
         $optionsCoverText = array(
             'path'      => 'original_200_200.png',
             'savePath'  => 'stego/original_%s.png'
         );        
-        
+              
         $lsb                    = new Lsb();
         $supportedChannel       = $lsb->getSupportedChannel();
         $supportedChannelSize   = count($supportedChannel);
@@ -144,33 +156,33 @@ class LsbTest extends BaseTest
         $secretText         = file_get_contents($this->getDataPath('secret_text.txt'));
         $secretTextLength   = strlen($secretText);
         
+        // validate parameters
+        if ((!is_null($textLength) &&  $textLength > $secretTextLength) 
+            || (!empty($channel) && count($channel) > $supportedChannelSize)) {
+            
+            throw new PHPUnit_Framework_Exception('Used parameters are out of data source length: text ['
+                . $secretTextLength . '], channels [' . $supportedChannelSize . ']');  
+        }
+        
         // generate provider data set
-        $providerData = array();
-        for($i = 0; $i < self::ENCODE_DECODE_COUNT; $i++) {
-            // generate secretText item
-//            $textItemStart  = mt_rand(0, 10 - 1);
-//            $textItemLength = mt_rand(1, 10); 
-            $textItemStart  = mt_rand(0, $secretTextLength - 1);
-            $textItemLength = mt_rand(1, $secretTextLength); 
+        $providerData = [];
+        for($i = 0; $i < $resultCount; $i++) {
+            // generate secretText item 
+            $secretTextItem = (is_null($textLength))?
+                self::getRandomText($secretText, $secretTextLength): 
+                substr($secretText, 0, $textLength);
             
-            $secretTextItem = substr($secretText,$textItemStart, $textItemLength);
-            $secretTextItem = str_shuffle($secretTextItem);
-            
-            // generate use channel
-            $useChannelSize = mt_rand(1, $supportedChannelSize);
-            $useChannelKey  = (array)array_rand($supportedChannel, $useChannelSize);
-            
-            $useChannel = array();
-            foreach($useChannelKey as $value) {
-                $useChannel[] = $supportedChannel[$value];
-            }
+            // generate use channel      
+            $useChannel = (empty($channel))? 
+                self::getRandomChannel($supportedChannel, $supportedChannelSize): 
+                $channel;
             
             // set coverText options
             $providerData[$i][] = array(
                 'path'      => $optionsCoverText['path'],
                 'savePath'  => sprintf(
                     $optionsCoverText['savePath'],
-                    microtime(true) . '_secret_length_' . $textItemLength
+                    microtime(true) . '_secret_length_' . strlen($secretTextItem)
                     . '_' . implode('_', $useChannel)    
                 )
             );
@@ -186,4 +198,4 @@ class LsbTest extends BaseTest
 
         return $providerData;
     }
-}
+ }

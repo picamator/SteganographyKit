@@ -36,4 +36,37 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {        
         return realpath($this->dataPath.$path);
     }
+    
+        
+    /**
+     * Gets random channel
+     * 
+     * @return array
+     */
+    static protected function getRandomChannel(array $channel, $channelSize = null) 
+    {
+        $channelSize = $channelSize ? : count($channel);
+        
+        $useChannelSize = mt_rand(1, $channelSize);
+        $useChannelKey  = (array)array_rand($channel, $useChannelSize);
+
+        $result = [];
+        foreach($useChannelKey as $value) {
+            $result[] = $channel[$value];
+        }
+        
+        return $result;
+    }
+    
+    static protected function getRandomText($text, $textLength = null) 
+    {
+        $textLength = $textLength ? : strlen($text);
+        
+        $itemStart  = mt_rand(0, $textLength - 1);
+        $itemLength = mt_rand(1, $textLength); 
+
+        $result = substr($text, $itemStart, $itemLength);
+        
+        return str_shuffle($result);
+    }
 }
