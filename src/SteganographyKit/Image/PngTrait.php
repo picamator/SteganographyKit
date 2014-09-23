@@ -20,27 +20,18 @@ trait PngTrait
     protected $image;
     
     /**
-     * Gets rgb binary by pixel coordinats
+     * Gets rgb and alpha of pixel as binary for current pixel coordinat
      * 
      * @param integer $xIndex    x coordinat
      * @param integer $yIndex    y coordinat
-     * @return array contains binary rgb representation of setting dot
+     * @return array
      * <code>
-            array('red' => ..., 'green' => ..., 'blue' => ...);
+            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
      * </code>
-     * @throws Exception
      */
     public function getBinaryColor($xIndex, $yIndex) 
     {        
-        $colorIndex = imagecolorat($this->image, $xIndex, $yIndex);
-        $colorTran  = imagecolorsforindex($this->image, $colorIndex);
-        
-        $result = array(
-            'red'   => $colorTran['red'],
-            'green' => $colorTran['green'],
-            'blue'  => $colorTran['blue']
-        );
-        
+        $result = $this->getDecimalColor($xIndex, $yIndex);
         foreach($result as &$item) {
             $item = str_pad(decbin($item), 8, '0', STR_PAD_LEFT);
         }
@@ -48,6 +39,23 @@ trait PngTrait
         
         return $result;
     } 
+    
+    /**
+     * Gets rgb and alpha of pixel as decimal for current pixel coordinat
+     * 
+     * @param integer $xIndex    x coordinat
+     * @param integer $yIndex    y coordinat
+     * @return array contains
+     * <code>
+            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
+     * </code>
+     */
+    public function getDecimalColor($xIndex, $yIndex) 
+    {
+        $colorIndex = imagecolorat($this->image, $xIndex, $yIndex);
+        
+        return imagecolorsforindex($this->image, $colorIndex);
+    }
     
     /**
      * Sets Image

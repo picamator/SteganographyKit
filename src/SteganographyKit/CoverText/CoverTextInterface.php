@@ -16,7 +16,7 @@ interface CoverTextInterface
     public function __construct(array $options);
     
     /**
-     * Gets converted data to binary format
+     * Gets converted data in binary format
      * 
      * @param integer $xIndex    x coordinat
      * @param integer $yIndex    y coordinat
@@ -27,6 +27,19 @@ interface CoverTextInterface
      * @throws Exception
      */
     public function getBinaryData($xIndex, $yIndex);
+    
+    /**
+     * Gets converted data in decimal format
+     * 
+     * @param integer $xIndex    x coordinat
+     * @param integer $yIndex    y coordinat
+     * @return array contains binary rgb representation of setting dot
+     * <code>
+            array('red' => ..., 'green' => ..., 'blue' => ...);
+     * </code>
+     * @throws Exception
+     */
+    public function getDecimalData($xIndex, $yIndex);
     
     /**
      * Gets image

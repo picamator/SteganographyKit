@@ -126,32 +126,38 @@ class Lsb extends AbstractStegoSystem
         CoverTextInterface $coverText, $secretItem
     ) {         
         // get original pixel in binary
-        $originalPixel = $coverText->getBinaryData(
+        $originalPixel = $coverText->getDecimalData(
             $imageCoordinate['x'], $imageCoordinate['y']);
-        
+             
         // modify configured channel
         $modifiedPixel      = array();
         $useChannel         = $this->useChannel;   
         $useChannelItem     = array_shift($useChannel);
         
         $secretItem         = str_split($secretItem);
-        $secretBitItem      = array_shift($secretItem);
-        do {
-            $modifiedPixel[$useChannelItem] = 
-                substr($originalPixel[$useChannelItem], 0, -1) . $secretBitItem;       
-            
+        $secretBitItem      = array_shift($secretItem);      
+        do {        
+            if ($originalPixel[$useChannelItem] & 1) {
+                // odd
+                $modifiedPixel[$useChannelItem] = ($secretBitItem === '1') ? 
+                    $originalPixel[$useChannelItem] : 
+                    $originalPixel[$useChannelItem] - 1;  
+            } else {
+                // even
+                $modifiedPixel[$useChannelItem] = ($secretBitItem === '1') ? 
+                    $originalPixel[$useChannelItem] + 1 : 
+                    $originalPixel[$useChannelItem]; 
+            }
+                      
             // move to next
             $useChannelItem  = array_shift($useChannel);
             $secretBitItem   = array_shift($secretItem);
         } while (!is_null($useChannelItem) && !is_null($secretBitItem));
-
         $modifiedPixel  = array_merge($originalPixel, $modifiedPixel);   
         $differentPixel = array_diff_assoc($originalPixel, $modifiedPixel);
-     
-        // modify pixel if it is neccesary
-        if (!empty($differentPixel)) {
-            $modifiedPixel  = array_map('bindec', $modifiedPixel);
             
+        // modify pixel if it is neccesary
+        if (!empty($differentPixel)) {            
             // apply modification
             $image = $coverText->getImage();
             $color = imagecolorallocate(
