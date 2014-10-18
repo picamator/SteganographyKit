@@ -4,15 +4,11 @@ SteganographyKit
 Introduction
 ------------
 SteganographyKit - package of implementation several stegoSystems for image steganography.
-Such Kit is used termininalogy that was described in Christian Cachin [1].
-Kit works with basic types of Steganography [2]:
+Such Kit is used terminology that was described in Christian Cachin [1].
+SteganographyKit contains:
 * Pure Steganography
-* Secret Key Steganography
-* Public key Steganography
 
-Each algorithm of SteganographyKit is well documented and based on scientific articles 
-moreover comments inside code helps to understand what is going on and create your own modification. 
-
+Each algorithm of SteganographyKit is well documented and based on research. 
 General overview of Steganography and existing tools described by Sean-Philip Oriyano [3].
 
 Pure Steganography
@@ -20,23 +16,22 @@ Pure Steganography
 ### Least Significant Bit (LSB)
 LSB method is modified least significant bit of coverText to get stegoText.
 SteganographyKit has implemented it for png image [4] as a coverText and text with ASCII characters [5] as a secretText.
+Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
 
-In general encode LSB can be described by those steps:
-
+In general encode LSB can be described by steps:
 1. Convert secretText to binary string
 
 2. Add to secretText end text mark (it is used for decode algorithm)
 
 3. Change last bit of each RGB cannel for first pixel of coverText
 
-4. Save changing if step 3 really change RGB bits
+4. Save changing if step 3 really change RGB bit
 
 5. Move to next coverText pixel and change last bit of each RGB channel
 
 6. Repeat step 5 for each secretText item
 
 Beside decode LSB looks like:
-
 1. Read every last bit for RGB channel of stegoText
 
 2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
@@ -45,8 +40,16 @@ Beside decode LSB looks like:
 
 More information can be found in [2].
 
-UnitTest that make comparison between encode and decode of secretText can be found here:
-`LsbTest::testEncodeDecode`. It's generate randomly 100 secretTexts
+UnitTest
+--------
+Tests can be found in '/tests' folder. 
+It should be noticed that `LsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
+
+BackLog
+-------
+Wait to implement Pure Steganography with:
+* Secret Key
+* Public key
 
 References
 ----------

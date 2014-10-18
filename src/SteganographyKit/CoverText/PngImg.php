@@ -39,12 +39,11 @@ class PngImg extends AbstractCoverText
     {
         parent::__construct($options);
         
-        $this->validatePath($options);
-        $this->validateSavePath($options);
+        self::validatePath($options);
+        self::validateSavePath($options);
         $this->setOptions($options);
         
         $this->setImgSize($options['path']);
-        $this->validateMime();
         $this->setImage($options['path']);
     }    
     

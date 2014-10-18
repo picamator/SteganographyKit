@@ -38,11 +38,10 @@ class PngImg extends AbstractStegoText
     {
         parent::__construct($options);
         
-        $this->validatePath($options);       
+        self::validatePath($options);       
         $this->setOptions($options);
         
         $this->setImgSize($options['path']);
-        $this->validateMime();
         $this->setImage($options['path']);
     }    
     

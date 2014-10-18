@@ -84,6 +84,9 @@ trait GeneralTrait
             array('width', 'height', 'type', 'attr', 'bits', 'mime'),
             $result     
         );
+        
+        // validate mime
+        $this->validateMime(); 
     }
     
     /**
@@ -91,7 +94,7 @@ trait GeneralTrait
      * 
      * @throws Exception
      */
-    protected function validateGbLib() 
+    static protected function validateGbLib() 
     {
         if(extension_loaded('gd') === false) {
             throw new Exception('GD php extension was not loaded: http://www.php.net/manual/en/book.image.php');
@@ -100,6 +103,8 @@ trait GeneralTrait
     
     /**
      * Validate supported mime type
+     * 
+     * @throws Exception
      */
     protected function validateMime() 
     {

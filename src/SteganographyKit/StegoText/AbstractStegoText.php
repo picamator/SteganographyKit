@@ -19,6 +19,6 @@ abstract class AbstractStegoText implements StegoTextInterface
      */
     public function __construct(array $options) 
     {
-        $this->validateGbLib();
+        self::validateGbLib();
     }
 }

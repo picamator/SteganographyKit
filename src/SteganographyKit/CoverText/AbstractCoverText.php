@@ -19,6 +19,6 @@ abstract class AbstractCoverText implements CoverTextInterface
      */
     public function __construct(array $options) 
     {
-        $this->validateGbLib();
+        self::validateGbLib();
     }
 }

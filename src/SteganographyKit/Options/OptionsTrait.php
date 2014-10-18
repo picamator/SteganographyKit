@@ -24,13 +24,8 @@ trait OptionsTrait
      * @param array $options
      */
     protected function setOptions(array $options) 
-    {
-        foreach($this->options as $key => &$value) {
-            if(isset($options[$key])) {
-                $value = $options[$key];
-            }
-        }
-        unset($value);
+    {        
+        $this->options = array_merge($this->options, $options);
     }
     
     /**
@@ -39,7 +34,7 @@ trait OptionsTrait
      * @param array $options
      * @throws Exception
      */
-    protected function validatePath(array $options)
+    static protected function validatePath(array $options)
     {
         if(!isset($options['path'])
             || !file_exists($options['path']) 
@@ -55,7 +50,7 @@ trait OptionsTrait
      * @param array $options
      * @throws Exception
      */
-    protected function validateSavePath(array $options) 
+    static protected function validateSavePath(array $options) 
     {
         if(!isset($options['savePath'])) {    
             throw new Exception('Incorrect savePath. Option is not set.');

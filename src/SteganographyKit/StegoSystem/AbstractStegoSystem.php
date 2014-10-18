@@ -8,7 +8,6 @@
 
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\SecretText\SecretTextInterface;
-use SteganographyKit\StegoText\StegoTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 
 abstract class AbstractStegoSystem implements StegoSystemInterface 
@@ -69,7 +68,7 @@ abstract class AbstractStegoSystem implements StegoSystemInterface
      * @param   Integer             $useChannelSize - how many channels is used
      * @throws  Exception
      */
-     protected function validateEncode(SecretTextInterface $secretText, 
+    protected function validateEncode(SecretTextInterface $secretText, 
         CoverTextInterface $coverText, $useChannelSize
     ) {
          $secretSize     = $secretText->getSize();

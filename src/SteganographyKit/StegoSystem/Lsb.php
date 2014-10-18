@@ -80,7 +80,7 @@ class Lsb extends AbstractStegoSystem
         do {
             // get lasts bits value of pixel accordingly confugurated channel
             $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
-            $endMarkPos  = strpos($secretText, AbstractSecretText::END_TEXT_MARK);
+            $endMarkPos  = $this->getEndMarkPos($secretText);
                              
             // get next pixel
             $imageCoordinate = $this->getNextImageCoordinate($imageCoordinate, $xMaxIndex);           
@@ -91,7 +91,7 @@ class Lsb extends AbstractStegoSystem
         // handle last pixel
         if($endMarkPos === false) {
             $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
-            $endMarkPos  = strpos($secretText, AbstractSecretText::END_TEXT_MARK);
+            $endMarkPos  = $this->getEndMarkPos($secretText);
         }
         
         return AbstractSecretText::getFromBinaryData($secretText, $endMarkPos);
@@ -127,10 +127,12 @@ class Lsb extends AbstractStegoSystem
     ) {         
         // get original pixel in binary
         $originalPixel = $coverText->getDecimalData(
-            $imageCoordinate['x'], $imageCoordinate['y']);
+            $imageCoordinate['x'], $imageCoordinate['y']
+        );
              
         // modify configured channel
-        $modifiedPixel      = array();
+        // modified pixel could not have all chanels
+        $modifiedPixel      = $originalPixel;
         $useChannel         = $this->useChannel;   
         $useChannelItem     = array_shift($useChannel);
         
@@ -153,25 +155,12 @@ class Lsb extends AbstractStegoSystem
             $useChannelItem  = array_shift($useChannel);
             $secretBitItem   = array_shift($secretItem);
         } while (!is_null($useChannelItem) && !is_null($secretBitItem));
-        $modifiedPixel  = array_merge($originalPixel, $modifiedPixel);   
-        $differentPixel = array_diff_assoc($originalPixel, $modifiedPixel);
             
         // modify pixel if it is neccesary
-        if (!empty($differentPixel)) {            
+        $diffPixel = array_diff_assoc($originalPixel, $modifiedPixel);
+        if (!empty($diffPixel)) {            
             // apply modification
-            $image = $coverText->getImage();
-            $color = imagecolorallocate(
-                $image, 
-                $modifiedPixel['red'], 
-                $modifiedPixel['green'], 
-                $modifiedPixel['blue']
-            ); 
-            imagesetpixel(
-                $image,
-                $imageCoordinate['x'],
-                $imageCoordinate['y'],    
-                $color
-            );
+            $coverText->setPixel($imageCoordinate['x'], $imageCoordinate['y'], $modifiedPixel);
         }
     }
     
@@ -182,9 +171,7 @@ class Lsb extends AbstractStegoSystem
      * @param StegoTextInterface    $stegoText
      * @return string
      */
-    protected function decodeItem(array $imageCoordinate,
-        StegoTextInterface $stegoText 
-    ) {
+    protected function decodeItem(array $imageCoordinate, StegoTextInterface $stegoText) {
         $pixelData = $stegoText->getBinaryData(
             $imageCoordinate['x'], 
             $imageCoordinate['y']
@@ -196,5 +183,16 @@ class Lsb extends AbstractStegoSystem
         }
         
         return $result;
+    }
+    
+    /**
+     * Gets possition of end mark
+     * 
+     * @param string $secretText
+     * @return integer|false
+     */
+    protected function getEndMarkPos($secretText) 
+    {
+        return strpos($secretText, AbstractSecretText::END_TEXT_MARK);
     }
 }

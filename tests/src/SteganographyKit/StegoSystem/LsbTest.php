@@ -127,7 +127,8 @@ class LsbTest extends BaseTest
      */
     public function providerEncodeDecode()
     {
-       return $this->generateProvider(1, 12000, array('red', 'green', 'blue'));
+       return $this->generateProvider(100, 1000, array('red', 'green', 'blue'));
+//       return $this->generateProvider(1, 12000, array('red', 'green', 'blue'));
     }
     
     /**
