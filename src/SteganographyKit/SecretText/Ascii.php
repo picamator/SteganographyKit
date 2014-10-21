@@ -48,16 +48,19 @@ class Ascii extends AbstractSecretText
      */
     public function getBinaryData() 
     {       
-        $textSplit  = str_split($this->encodedText);             
-        $result     = '';
-        foreach ($textSplit as $item) {
-            $item       = decbin(ord($item));
-            $result    .= str_pad($item, self::TEXT_ITEM_LENGTH, '0', STR_PAD_LEFT);
-        }
-        
+        // convert to binary string 
+        $format     = '%0' . self::TEXT_ITEM_LENGTH . 'd';
+        $result     = preg_replace_callback(
+             '/.{1}|\n{1}/', 
+            function($match) use($format) {             
+                return sprintf($format, decbin(ord($match[0])));
+            },
+            $this->encodedText
+        );
+                      
         // add end text mark
         $result .= self::END_TEXT_MARK;
-                       
+                    
         return $result;        
     }
             

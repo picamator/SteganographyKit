@@ -34,25 +34,49 @@ abstract class AbstractSecretText implements SecretTextInterface
     static public function getFromBinaryData($binaryData, $endMarkPos) 
     {
         // remove endText mark
-        $result = substr($binaryData, 0, $endMarkPos);
-        $result = str_split($result, self::TEXT_ITEM_LENGTH);  
+        $dataFiltered = self::removeEndMark($binaryData, $endMarkPos);
         
-        // last item would not have enouph data
-        $lastIndex = count($result) - 1;
-        $result[$lastIndex] = str_pad(
-            $result[$lastIndex], 
-            self::TEXT_ITEM_LENGTH, 
-            '0', 
-            STR_PAD_RIGHT
-        );
-        
-        $result = array_map(
-            function($value) {
-                return chr(bindec($value));
+        // convert ascii binary code to char
+        return self::convertBinaryToChar($dataFiltered);
+    }
+    
+    /**
+     * Convert binaru data to char
+     * 
+     * @param string $binaryData
+     * @return string
+     */
+    static protected function convertBinaryToChar($binaryData) 
+    {
+        $pattern    = '/[01]{' . self::TEXT_ITEM_LENGTH . '}/';
+        $result     = preg_replace_callback(
+            $pattern, 
+            function($match) { 
+                return chr(bindec($match[0])); 
             }, 
-            $result
+            $binaryData
         );
-                
-        return implode('', $result);
+
+        return $result;
+    }
+    
+    /**
+     * Remove text endMark
+     * 
+     * @param string    $binaryData - raw secretText with endMark
+     * @param integer   $endMarkPos - position of endMark
+     * @return string
+     */
+    static protected function removeEndMark($binaryData, $endMarkPos) {
+        // remove endText mark
+        $result = substr($binaryData, 0, $endMarkPos);
+        
+        // it's possible remove some seros from last character
+        $missingZero = strlen($result) % self::TEXT_ITEM_LENGTH;
+        if ($missingZero !== 0) {
+            $result .= str_repeat('0', $missingZero);
+        }
+        
+        return $result;
     }
 }
