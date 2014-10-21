@@ -12,10 +12,15 @@ namespace SteganographyKit\SecretText;
 class Ascii extends AbstractSecretText 
 {
     /**
-     * Encode that was suppose to be an original text
+     * Encode of original text
      */
     const FROM_ENCODE = 'auto';
-        
+    
+    /**
+     * Encode of prepeared text
+     */
+    const TO_ENCODE = 'ASCII';
+    
     /**
      * Options
      * 
@@ -26,19 +31,12 @@ class Ascii extends AbstractSecretText
     );
     
     /**
-     * Encoded text to ASCII
-     *
-     * @var string 
-     */
-    protected $encodedText;
-        
-    /**
      * @param array $options
      */
-    public function __construct(array $options) 
+    public function __construct(array $options = array()) 
     {
         $this->setOptions($options);
-        $this->setEncodedText();
+        $this->setEncodedText($this->options['text']);
     }
 
     /**
@@ -51,9 +49,15 @@ class Ascii extends AbstractSecretText
         // convert to binary string 
         $format     = '%0' . self::TEXT_ITEM_LENGTH . 'd';
         $result     = preg_replace_callback(
-             '/.{1}|\n{1}/', 
-            function($match) use($format) {             
-                return sprintf($format, decbin(ord($match[0])));
+            '/.{1}|\n{1}/', 
+            function($match) use($format) { 
+                $result = self::getFromCache($match[0]);
+                if ($result === false) {
+                    $result = sprintf($format, decbin(ord($match[0])));
+                    self::setToCache($match[0], $result);
+                } 
+            
+                return $result; 
             },
             $this->encodedText
         );
@@ -65,25 +69,54 @@ class Ascii extends AbstractSecretText
     }
             
     /**
-     * Gets size data in bit
+     * Gets decretText from binary data
      * 
-     * @return integer
+     * @param string    $binaryData - raw secretText with endMark
+     * @param integer   $endMarkPos - position of endMark
+     * @return string
      */
-    public function getSize() 
+    public function getFromBinaryData($binaryData, $endMarkPos) 
     {
-        return strlen($this->encodedText) * self::TEXT_ITEM_LENGTH 
-            + strlen(self::END_TEXT_MARK);
+        // remove endText mark
+        $dataFiltered = self::removeEndMark($binaryData, $endMarkPos);
+        
+        // convert ascii binary code to char
+        return self::convertBinaryToChar($dataFiltered);
+    }
+    
+    /**
+     * Convert binary data to char
+     * 
+     * @param string $binaryData
+     * @return string
+     */
+    static protected function convertBinaryToChar($binaryData) 
+    {
+        $pattern    = '/[01]{' . self::TEXT_ITEM_LENGTH . '}/';
+        $result     = preg_replace_callback(
+            $pattern, 
+            function($match) { 
+                $result = self::getFromCache($match[0]);
+                if ($result === false) {
+                    $result = chr(bindec($match[0]));
+                    self::setToCache($match[0], $result);
+                }
+            
+                return $result; 
+            }, 
+            $binaryData
+        );
+
+        return $result;
     }
     
     /**
      * Sets encode text
+     * 
+     * @param string $encodeText
      */
-    protected function setEncodedText() 
+    protected function setEncodedText($encodeText) 
     {
-        $this->encodedText = mb_convert_encoding(
-            $this->options['text'], 
-            'ASCII', 
-            self::FROM_ENCODE
-        );
+        $this->encodedText = mb_convert_encoding($encodeText, self::TO_ENCODE, self::FROM_ENCODE);
     }
 }

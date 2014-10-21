@@ -25,39 +25,39 @@ abstract class AbstractSecretText implements SecretTextInterface
     const TEXT_ITEM_LENGTH = 8;
     
     /**
-     * Gets decretText from binary data
-     * 
-     * @param string    $binaryData - raw secretText with endMark
-     * @param integer   $endMarkPos - position of endMark
-     * @return string
+     * Encoded text to ASCII
+     *
+     * @var string 
      */
-    static public function getFromBinaryData($binaryData, $endMarkPos) 
+    protected $encodedText;
+    
+    /**
+     * Cache container
+     * 
+     * @var array 
+     */
+    static protected $cache = array();
+    
+    /**
+     * Gets size data in bit
+     * 
+     * @return integer
+     */
+    public function getSize() 
     {
-        // remove endText mark
-        $dataFiltered = self::removeEndMark($binaryData, $endMarkPos);
-        
-        // convert ascii binary code to char
-        return self::convertBinaryToChar($dataFiltered);
+        return strlen($this->encodedText) * self::TEXT_ITEM_LENGTH 
+            + strlen(self::END_TEXT_MARK);
     }
     
     /**
-     * Convert binaru data to char
+     * Gets position of end mark
      * 
-     * @param string $binaryData
-     * @return string
+     * @param string $secretText
+     * @return integer|false
      */
-    static protected function convertBinaryToChar($binaryData) 
+    public function getEndMarkPos($secretText) 
     {
-        $pattern    = '/[01]{' . self::TEXT_ITEM_LENGTH . '}/';
-        $result     = preg_replace_callback(
-            $pattern, 
-            function($match) { 
-                return chr(bindec($match[0])); 
-            }, 
-            $binaryData
-        );
-
-        return $result;
+        return strpos($secretText, self::END_TEXT_MARK);
     }
     
     /**
@@ -78,5 +78,26 @@ abstract class AbstractSecretText implements SecretTextInterface
         }
         
         return $result;
+    }
+    
+    /**
+     * Set to cache
+     * 
+     * @param string $key
+     * @param string $value
+     */
+    static protected function setToCache($key, $value) 
+    {
+        self::$cache[$key] = $value;
+    }
+    
+    /**
+     * Gets from cache
+     * 
+     * @return string|false
+     */
+    static protected function getFromCache($key) 
+    {
+        return (key_exists($key, self::$cache)) ? self::$cache[$key] : false;
     }
 }

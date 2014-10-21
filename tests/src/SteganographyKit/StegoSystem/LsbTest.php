@@ -46,7 +46,7 @@ class LsbTest extends BaseTest
 
         $stegoText  = new StegoTextPngImg($optionsStegoText);
         $lsb        = new Lsb();    
-        $result     = $lsb->decode($stegoText);
+        $result     = $lsb->decode($stegoText, new Ascii());
         
         $this->assertEquals($expected, $result);
 //        var_dump($result);
@@ -81,7 +81,7 @@ class LsbTest extends BaseTest
         $stegoText  = new StegoTextPngImg(array(
             'path' => $stegoImgPath
         ));
-        $decodeText = $lsb->decode($stegoText);
+        $decodeText = $lsb->decode($stegoText, new Ascii());
         
         $this->assertEquals($optionsSecretText['text'], $decodeText);
     }

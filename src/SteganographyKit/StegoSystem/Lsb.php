@@ -9,7 +9,6 @@
 
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\SecretText\SecretTextInterface;
-use SteganographyKit\SecretText\AbstractSecretText;
 use SteganographyKit\StegoText\StegoTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 
@@ -68,19 +67,21 @@ class Lsb extends AbstractStegoSystem
      * Decode stegoText
      * 
      * @param   StegoTextInterface $stegoText
+     * @param   SecretTextInterface $secretText
      * @return  string
      */
-    public function decode(StegoTextInterface $stegoText) 
-    {        
+    public function decode(StegoTextInterface $stegoText, 
+        SecretTextInterface $secretText
+    ) {        
         $imageSize          = $stegoText->getImageSize(); 
         $imageCoordinate    = array('x' => 0, 'y' => 0);
         $xMaxIndex          = $imageSize['width'] - 1;   
         $yMaxIndex          = $imageSize['height'] - 1;   
-        $secretText         = '';
+        $result             = '';
         do {
             // get lasts bits value of pixel accordingly confugurated channel
-            $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
-            $endMarkPos  = $this->getEndMarkPos($secretText);
+            $result .= $this->decodeItem($imageCoordinate, $stegoText);
+            $endMarkPos  = $secretText->getEndMarkPos($result);
                              
             // get next pixel
             $imageCoordinate = $this->getNextImageCoordinate($imageCoordinate, $xMaxIndex);           
@@ -90,11 +91,11 @@ class Lsb extends AbstractStegoSystem
         
         // handle last pixel
         if($endMarkPos === false) {
-            $secretText .= $this->decodeItem($imageCoordinate, $stegoText);
-            $endMarkPos  = $this->getEndMarkPos($secretText);
+            $result     .= $this->decodeItem($imageCoordinate, $stegoText);
+            $endMarkPos  = $secretText->getEndMarkPos($result);
         }
         
-        return AbstractSecretText::getFromBinaryData($secretText, $endMarkPos);
+        return $secretText->getFromBinaryData($result, $endMarkPos);
     }
     
     /**
@@ -183,16 +184,5 @@ class Lsb extends AbstractStegoSystem
         }
         
         return $result;
-    }
-    
-    /**
-     * Gets possition of end mark
-     * 
-     * @param string $secretText
-     * @return integer|false
-     */
-    protected function getEndMarkPos($secretText) 
-    {
-        return strpos($secretText, AbstractSecretText::END_TEXT_MARK);
     }
 }

@@ -17,12 +17,12 @@ interface SecretTextInterface
      * @param integer   $endMarkPos - position of endMark
      * @return string
      */
-    static public function getFromBinaryData($binaryData, $endMarkPos);
+    public function getFromBinaryData($binaryData, $endMarkPos);
     
     /**
      * @param array $options
      */
-    public function __construct(array $options);
+    public function __construct(array $options = array());
     
     /**
      * Gets converted data to binary format
@@ -37,4 +37,12 @@ interface SecretTextInterface
      * @return integer
      */
     public function getSize();
+    
+    /** 
+     * Gets position of end mark
+     * 
+     * @param string $secretText
+     * @return integer|false
+     */
+    public function getEndMarkPos($secretText);
 }

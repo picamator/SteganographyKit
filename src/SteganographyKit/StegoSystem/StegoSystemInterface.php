@@ -26,10 +26,12 @@ interface StegoSystemInterface
     /**
      * Decode stegoText
      * 
-     * @param   StegoTextInterface $stegoText
+     * @param   StegoTextInterface  $stegoText
+     * @param   SecretTextInterface $secretText
      * @return  string
      */
-    public function decode(StegoTextInterface $stegoText);
+    public function decode(StegoTextInterface $stegoText, 
+        SecretTextInterface $secretText);
     
     /**
      * Sets channels that are going to use for encode-decode
