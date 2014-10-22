@@ -49,15 +49,11 @@ class Ascii extends AbstractSecretText
         // convert to binary string 
         $format     = '%0' . self::TEXT_ITEM_LENGTH . 'd';
         $result     = preg_replace_callback(
-            '/.{1}|\n{1}/', 
+            '/.{1}|\n{1}/',
             function($match) use($format) { 
-                $result = self::getFromCache($match[0]);
-                if ($result === false) {
-                    $result = sprintf($format, decbin(ord($match[0])));
-                    self::setToCache($match[0], $result);
-                } 
-            
-                return $result; 
+                return self::convertData($match[0], function($data) use ($format) {
+                    return sprintf($format, decbin(ord($data)));
+                }); 
             },
             $this->encodedText
         );
@@ -96,18 +92,32 @@ class Ascii extends AbstractSecretText
         $result     = preg_replace_callback(
             $pattern, 
             function($match) { 
-                $result = self::getFromCache($match[0]);
-                if ($result === false) {
-                    $result = chr(bindec($match[0]));
-                    self::setToCache($match[0], $result);
-                }
-            
-                return $result; 
+                return self::convertData($match[0], function($data){
+                    return chr(bindec($data));
+                }); 
             }, 
             $binaryData
         );
 
         return $result;
+    }
+    
+    /**
+     * Convert data
+     * 
+     * @param string $data
+     * @param \Closure $converter
+     * @return string
+     */
+    static protected function convertData($data, \Closure $converter)
+    {
+        $result = self::getFromCache($data);
+        if ($result === false) {
+           $result = $converter($data);
+           self::setToCache($data, $result);
+        }
+
+       return $result; 
     }
     
     /**

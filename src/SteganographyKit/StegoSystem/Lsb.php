@@ -40,25 +40,23 @@ class Lsb extends AbstractStegoSystem
         
         // convert secret data to binary
         $secretData = $secretText->getBinaryData();    
-        // split data accordingly channel size
-        $secretData = str_split($secretData, $useChannelSize);  
         
         $imageSize          = $coverText->getImageSize();   
         $imageCoordinate    = array('x' => 0, 'y' => 0);
-        $xMaxIndex          = $imageSize['width'] - 1;  
+        $xMaxIndex          = $imageSize['width'] - 1;
+        $secretDataSize     = strlen($secretData);
         
-        // get next secret text item
-        $secretItem = array_shift($secretData);
-        do {   
+        // encode
+        for ($i = 0; $i <= $secretDataSize; $i = $i + $useChannelSize) {
+            // get item
+            $secretItem = substr($secretData, $i, $useChannelSize);
             // encode item
             $this->encodeItem($imageCoordinate, $coverText, $secretItem);
             // move to next coordinate
             $imageCoordinate = $this->getNextImageCoordinate(
-                $imageCoordinate, $xMaxIndex);           
-            // move to next secret text part
-            $secretItem = array_shift($secretData);
-        } while (!is_null($secretItem));    
-                
+                $imageCoordinate, $xMaxIndex);        
+        }
+
         // save StegoText
         return $coverText->save();
     }
@@ -77,7 +75,7 @@ class Lsb extends AbstractStegoSystem
         $imageCoordinate    = array('x' => 0, 'y' => 0);
         $xMaxIndex          = $imageSize['width'] - 1;   
         $yMaxIndex          = $imageSize['height'] - 1;   
-        $result             = '';
+        $result             = '';        
         do {
             // get lasts bits value of pixel accordingly confugurated channel
             $result .= $this->decodeItem($imageCoordinate, $stegoText);
@@ -131,33 +129,29 @@ class Lsb extends AbstractStegoSystem
             $imageCoordinate['x'], $imageCoordinate['y']
         );
              
-        // modify configured channel
         // modified pixel could not have all chanels
         $modifiedPixel      = $originalPixel;
-        $useChannel         = $this->useChannel;   
-        $useChannelItem     = array_shift($useChannel);
+        $useChannel         = $this->useChannel;
+        $secretItemSize     = strlen($secretItem);
         
-        $secretItem         = str_split($secretItem);
-        $secretBitItem      = array_shift($secretItem);      
-        do {        
+        // encode
+        for ($i = 0; $i < $secretItemSize; $i++) {
+            // get channel and secret bit
+            $useChannelItem  = array_shift($useChannel);
             if ($originalPixel[$useChannelItem] & 1) {
                 // odd
-                $modifiedPixel[$useChannelItem] = ($secretBitItem === '1') ? 
+                $modifiedPixel[$useChannelItem] = ($secretItem[$i] === '1') ? 
                     $originalPixel[$useChannelItem] : 
                     $originalPixel[$useChannelItem] - 1;  
             } else {
                 // even
-                $modifiedPixel[$useChannelItem] = ($secretBitItem === '1') ? 
+                $modifiedPixel[$useChannelItem] = ($secretItem[$i] === '1') ? 
                     $originalPixel[$useChannelItem] + 1 : 
                     $originalPixel[$useChannelItem]; 
             }
-                      
-            // move to next
-            $useChannelItem  = array_shift($useChannel);
-            $secretBitItem   = array_shift($secretItem);
-        } while (!is_null($useChannelItem) && !is_null($secretBitItem));
-            
-        // modify pixel if it is neccesary
+        }
+        
+        // modify pixel if it's neccesary
         $diffPixel = array_diff_assoc($originalPixel, $modifiedPixel);
         if (!empty($diffPixel)) {            
             // apply modification

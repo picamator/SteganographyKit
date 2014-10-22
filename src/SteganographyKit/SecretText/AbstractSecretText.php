@@ -67,13 +67,14 @@ abstract class AbstractSecretText implements SecretTextInterface
      * @param integer   $endMarkPos - position of endMark
      * @return string
      */
-    static protected function removeEndMark($binaryData, $endMarkPos) {
+    static protected function removeEndMark($binaryData, $endMarkPos) 
+    {
         // remove endText mark
         $result = substr($binaryData, 0, $endMarkPos);
         
-        // it's possible remove some seros from last character
-        $missingZero = strlen($result) % self::TEXT_ITEM_LENGTH;
-        if ($missingZero !== 0) {
+        // it's possible remove some zeros from last character
+        $missingZero = self::TEXT_ITEM_LENGTH - (strlen($result) % self::TEXT_ITEM_LENGTH);
+        if ($missingZero !== self::TEXT_ITEM_LENGTH) {
             $result .= str_repeat('0', $missingZero);
         }
         
