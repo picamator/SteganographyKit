@@ -8,44 +8,39 @@ SteganographyKit - package of implementation several stegoSystems for image steg
 SteganographyKit is used terminology that was described in Christian Cachin [1].
 
 SteganographyKit contains:
-* Pure Steganography
-* Secret Key Steganography
+* Least Significant Bit (LSB) 
+  * Pure Steganography 
+  * Secret Key Steganography 
 
 Each algorithm of SteganographyKit is well documented and based on research. 
 General overview of Steganography and existing tools described by Sean-Philip Oriyano [3].
 
-Pure Steganography
-------------------
-Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
-
-### Least Significant Bit (LSB)
+Least Significant Bit (LSB)
+---------------------------
 LSB method is modified least significant bit of coverText to get stegoText. 
 Detailed description with example can be found in [6] or in "Steganography in Depth" section [7].
-LSB is easy to hide information but also easy to reveal. 
+LSB is easy to hide information but also easy to reveal.
 
-SteganographyKit has implementation for png image [4] as a coverText and text with ASCII characters [5] as a secretText.
+SteganographyKit has implementation of LSB with such conditions:
+* png image [4] as coverText,
+* text with ASCII characters [5] as a secretText.
 
-In general encode LSB can be described by steps:
-1. Convert secretText to binary string
+### Pure Steganography
+Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
+ 
+Encode algorithm can be described by steps:
+# Convert secretText to binary string
+# Add to secretText end text mark (it is used for decode algorithm)
+# Get number of bits accordingly number of channels from secretText
+# Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
+# Save changing if step 3 really change RGB bit
+# Move to next coverText pixel and change last bit of each RGB channel
+# Repeat step 3-6 for each secretText item
 
-2. Add to secretText end text mark (it is used for decode algorithm)
-
-3. Get number of bits accordingly number of channels from secretText
-
-4. Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
-
-5. Save changing if step 3 really change RGB bit
-
-6. Move to next coverText pixel and change last bit of each RGB channel
-
-7. Repeat step 3-6 for each secretText item
-
-Beside decode LSB looks like:
-1. Read every last bit for RGB channel of stegoText
-
-2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
-
-3. Convert binary secretText to ASCII characters
+Decode algorithm can be described by steps:
+# Read every last bit for RGB channel of stegoText
+# Stop step 1 if end text mark was found or it's read last pixel of stegoText
+# Convert binary secretText to ASCII characters
 
 *Note*:
 Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
@@ -53,17 +48,29 @@ Additionally it's possible to configurate channel that will be used in algorithm
 * Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
 Such conclusion is based on experiment [8]. But it should be taken critically because first of all stegoanalyze use computer technique to identify picture 
 with hidden information, the second digital picture is displayed on a screen that has enough light to differ Blue channel as a best choose.
- 
 
-Secret Key Steganography
-------------------------
+### Secret Key Steganography
 For Secret Key Steganography is similar with Pure Steganography but Secret Key is used for encode-decode process [2].
 
 SteganographyKit is used approach described in [2], accordingly them Secret Key is a seed for pseudo-random generator. 
-Such seed is used to create sequences of numbers that shows what pixel should be used for embed secretText. 
-Moreover all pseudo-random sequences have max period 2^n where n is a length of seed.
+Such seed is used to create sequences of numbers that shows in what order coverText's pixels should be taken for embed secretText. 
+Moreover all pseudo-random sequences have period 2^(n/2) in average where n is a number of bits in seed.
 
-Therefore it increase complexity for the attacker [9].
+SteganogrpahyKit implements Secret Key Steganography with such conditions:
+* Max length of secretText is 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
+Such restriction helps to make room for better random distribution of secretText. 
+* SecretKey is a seed for ``mt_srand`` function should have at least 8 digits (20 bits) therefore average period of pseudo-random numbers are 
+2^10. Taking into account that x and y coordinates in CoverText are token by pseudo-random so we have at least 2^20 period for coordinates.  
+
+Of course such conditions should be investigated to find out optimize min parameters.
+
+Encode/Decode algorithm is differ from Pure Steganography by:
+* Method of choosing pixels in CoverText. In Pure Steganography it gets one by one but in Secret Key Steganography gets accordingly pseudo-random algorithm.
+* Method of use RGB channels. In Pure Steganography order is the same as user set but for Secret Key Steganography is changes accordingly pixel's coordinates. 
+
+If pixel coordinates X and Y and array of channels is ['red', 'green', 'blue'] then 'red' will have (X + Y) % 3 index in channel array the 
+channel that had (X + Y) % 3 would be moved to old red's place. For instance X = 4, Y = 10 them (2 + 10) % 3 = 2 then new channels array is
+['blue', 'green', 'red']. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
  
 UnitTest
 --------
@@ -73,8 +80,7 @@ It should be noticed that `LsbTest::testEncodeDecode` includes random generated 
 BackLog
 -------
 Wait to implement Pure Steganography with:
-* Public Key Steganography
-* Stegoanalyze for LSB
+* Create Stegoanalyze for LSB
 * Add diagrams for algorithm's description
 
 References
