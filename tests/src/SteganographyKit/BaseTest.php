@@ -34,7 +34,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function getDataPath($path)
     {        
-        return realpath($this->dataPath.$path);
+        return realpath($this->dataPath . $path);
     }
     
         

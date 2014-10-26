@@ -59,7 +59,7 @@ Moreover all pseudo-random sequences have period 2^(n/2) in average where n is a
 SteganogrpahyKit implements Secret Key Steganography with such conditions:
 * Max length of secretText is 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
 Such restriction helps to make room for better random distribution of secretText. 
-* SecretKey is a seed for ``mt_srand`` function should have at least 8 digits (20 bits) therefore average period of pseudo-random numbers are 
+* SecretKey is a seed for ``mt_srand`` function should have max 8 digits (20 bits) and min 4 digits (10 bits) therefore average period of pseudo-random numbers are 
 2^10. Taking into account that x and y coordinates in CoverText are token by pseudo-random so we have at least 2^20 period for coordinates.  
 
 Of course such conditions should be investigated to find out optimize min parameters.
