@@ -1,7 +1,6 @@
 <?php
 /**
- * Stego System LSB
- * Least Significant Bit
+ * Abstract for Least Segnificant Bit LSB (Least Segnificant Bit) Stego System
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
@@ -12,17 +11,57 @@ use SteganographyKit\SecretText\SecretTextInterface;
 use SteganographyKit\StegoText\StegoTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 
-class Lsb extends AbstractStegoSystem
-{ 
+abstract class AbstractLsb implements StegoSystemInterface 
+{
+    /**
+     * List of supported channels
+     * That can be used by stegoSystem
+     * 
+     * @var array
+     */
+    protected $supportedChannel = array(
+        'red', 'green', 'blue'
+    );
+    
     /**
      * Used channels for encode - decode
      * with a certain order
+     * 
      * 
      * @var array
      */
     protected $useChannel = array(
         'red', 'green', 'blue'
     );
+    
+    /**
+     * Sets channels that are going to use for encode-decode
+     * 
+     * @param array $useChannel
+     * @return self
+     * @throws Exception
+     */
+    public function setUseChannel(array $useChannel) 
+    {
+        $diffChannel = array_diff($useChannel, $this->supportedChannel);
+        if (!empty($diffChannel)) {
+            throw new Exception('Unsupported channels: ' . implode(',', $diffChannel));
+        }
+        
+        $this->useChannel = $useChannel;
+        
+        return $this;
+    }
+    
+    /**
+     * Gets supported channels
+     * 
+     * @return array
+     */
+    public function getSupportedChannel() 
+    {
+        return $this->supportedChannel;
+    }
     
     /**
      * Encode secretText
@@ -35,8 +74,8 @@ class Lsb extends AbstractStegoSystem
         CoverTextInterface $coverText
     ) {
         // validate
-        $useChannelSize = count($this->useChannel);
-        $this->validateEncode($secretText, $coverText, $useChannelSize);
+        $channelSize = count($this->useChannel);
+        $this->validateCapacity($secretText, $coverText, $channelSize);
         
         // convert secret data to binary
         $secretData = $secretText->getBinaryData();    
@@ -44,16 +83,17 @@ class Lsb extends AbstractStegoSystem
         $imageSize          = $coverText->getImageSize();   
         $coordinate         = array('x' => 0, 'y' => 0);
         $xMax               = $imageSize['width'] - 1;
+        $yMax               = $imageSize['height'] - 1;  
         $secretDataSize     = strlen($secretData);
         
         // encode
-        for ($i = 0; $i <= $secretDataSize; $i = $i + $useChannelSize) {
+        for ($i = 0; $i <= $secretDataSize; $i = $i + $channelSize) {
             // get item
-            $secretItem = substr($secretData, $i, $useChannelSize);
+            $secretItem = substr($secretData, $i, $channelSize);
             // encode item
             $this->encodeItem($coordinate, $coverText, $secretItem);
             // move to next coordinate
-            $coordinate = self::getNextCoordinate($coordinate, $xMax);        
+            $coordinate = $this->getNextCoordinate($coordinate, $xMax, $yMax);        
         }
 
         // save StegoText
@@ -69,19 +109,19 @@ class Lsb extends AbstractStegoSystem
      */
     public function decode(StegoTextInterface $stegoText, 
         SecretTextInterface $secretText
-    ) {        
-        $imageSize      = $stegoText->getImageSize(); 
+    ) {    
+        $imgSize        = $stegoText->getImageSize(); 
         $coordinate     = array('x' => 0, 'y' => 0);
-        $xMax           = $imageSize['width'] - 1;   
-        $yMax           = $imageSize['height'] - 1;   
+        $xMax           = $imgSize['width'] - 1;   
+        $yMax           = $imgSize['height'] - 1;   
         $result         = '';        
         do {
             // get lasts bits value of pixel accordingly confugurated channel
-            $result .= $this->decodeItem($coordinate, $stegoText);
+            $result     .= $this->decodeItem($coordinate, $stegoText);
             $endMarkPos  = $secretText->getEndMarkPos($result);
                              
             // get next pixel
-            $coordinate = self::getNextCoordinate($coordinate, $xMax);           
+            $coordinate = $this->getNextCoordinate($coordinate, $xMax, $yMax);           
         } while ($endMarkPos === false
             && ($coordinate['x'] !== $xMax || $coordinate['y'] !== $yMax)
         );
@@ -94,25 +134,7 @@ class Lsb extends AbstractStegoSystem
         
         return $secretText->getFromBinaryData($result, $endMarkPos);
     }
-    
-    /**
-     * Gets next image coordinate
-     * 
-     * @param array     $coordinate
-     * @param integer   $xMax
-     * @return integer
-     */
-    static protected function getNextCoordinate(array $coordinate, $xMax) 
-    {
-        $coordinate['x']++;
-        if ($coordinate['x'] > $xMax) {
-            $coordinate['x'] = 0;
-            $coordinate['y']++;
-        } 
-           
-        return $coordinate;
-    }
-    
+        
     /**
      * Encode secret text item
      * 
@@ -128,23 +150,21 @@ class Lsb extends AbstractStegoSystem
              
         // modified pixel could not have all chanels
         $modifiedPixel      = $originalPixel;
-        $useChannel         = $this->useChannel;
+        $channel            = $this->getChannel($coordinate);
         $secretItemSize     = strlen($secretItem);
         
         // encode
         for ($i = 0; $i < $secretItemSize; $i++) {
-            // get channel and secret bit
-            $useChannelItem  = array_shift($useChannel);
-            if ($originalPixel[$useChannelItem] & 1) {
+            // get channel and modify bit
+            $channelItem  = array_shift($channel);
+            if ($originalPixel[$channelItem] & 1) {
                 // odd
-                $modifiedPixel[$useChannelItem] = ($secretItem[$i] === '1') ? 
-                    $originalPixel[$useChannelItem] : 
-                    $originalPixel[$useChannelItem] - 1;  
+                $modifiedPixel[$channelItem] = ($secretItem[$i] === '1') ? 
+                    $originalPixel[$channelItem] : $originalPixel[$channelItem] - 1;  
             } else {
                 // even
-                $modifiedPixel[$useChannelItem] = ($secretItem[$i] === '1') ? 
-                    $originalPixel[$useChannelItem] + 1 : 
-                    $originalPixel[$useChannelItem]; 
+                $modifiedPixel[$channelItem] = ($secretItem[$i] === '1') ? 
+                    $originalPixel[$channelItem] + 1 : $originalPixel[$channelItem]; 
             }
         }
         
@@ -162,16 +182,47 @@ class Lsb extends AbstractStegoSystem
      * @param StegoTextInterface    $stegoText
      * @return string
      */
-    protected function decodeItem(array $coordinate, 
-        StegoTextInterface $stegoText    
-    ) {
+    protected function decodeItem(array $coordinate, StegoTextInterface $stegoText) 
+    {
         $pixelData = $stegoText->getBinaryData($coordinate['x'], $coordinate['y']);
-            
-        $result = '';
-        foreach($this->useChannel as $item) {
+        $channel   = $this->getChannel($coordinate);    
+        
+        $result     = '';
+        foreach($channel as $item) {
             $result .= substr($pixelData[$item], -1, 1);
         }
         
         return $result;
     }
+     
+    /**
+     * Validate is it enouph room into coverText to keep secret one
+     * 
+     * @param   SecretTextInterface $secretText
+     * @param   CoverTextInterface  $coverText
+     * @param   Integer             $useChannelSize - how many channels is used
+     * @throws  Exception
+     */
+    abstract protected function validateCapacity(SecretTextInterface $secretText, 
+        CoverTextInterface $coverText, $useChannelSize
+    );
+    
+    /**
+     * Gets next image coordinate
+     * 
+     * @param array     $prevCoordinate - previous coordinate
+     * @param integer   $xMax
+     * @param integer   $yMax
+     * @return integer
+     */
+    abstract protected function getNextCoordinate(array $prevCoordinate, $xMax, $yMax);
+    
+    /**
+     * Gets channel that should be used for current coordinate
+     * It's possible that channel is choosed with dependence on coordinate
+     * 
+     * @param array $coordinate
+     * @return array
+     */
+    abstract protected function getChannel(array $coordinate);
 }

@@ -20,6 +20,7 @@ class PseudoRandomKeyTest extends BaseTest
     
     public function setUp()
     {
+        parent::setUp();
         $this->stegoKey = new PseudoRandomKey();
     }
     
