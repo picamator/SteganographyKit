@@ -42,8 +42,8 @@ class Lsb extends AbstractStegoSystem
         $secretData = $secretText->getBinaryData();    
         
         $imageSize          = $coverText->getImageSize();   
-        $imageCoordinate    = array('x' => 0, 'y' => 0);
-        $xMaxIndex          = $imageSize['width'] - 1;
+        $coordinate         = array('x' => 0, 'y' => 0);
+        $xMax               = $imageSize['width'] - 1;
         $secretDataSize     = strlen($secretData);
         
         // encode
@@ -51,10 +51,9 @@ class Lsb extends AbstractStegoSystem
             // get item
             $secretItem = substr($secretData, $i, $useChannelSize);
             // encode item
-            $this->encodeItem($imageCoordinate, $coverText, $secretItem);
+            $this->encodeItem($coordinate, $coverText, $secretItem);
             // move to next coordinate
-            $imageCoordinate = $this->getNextImageCoordinate(
-                $imageCoordinate, $xMaxIndex);        
+            $coordinate = self::getNextCoordinate($coordinate, $xMax);        
         }
 
         // save StegoText
@@ -71,25 +70,25 @@ class Lsb extends AbstractStegoSystem
     public function decode(StegoTextInterface $stegoText, 
         SecretTextInterface $secretText
     ) {        
-        $imageSize          = $stegoText->getImageSize(); 
-        $imageCoordinate    = array('x' => 0, 'y' => 0);
-        $xMaxIndex          = $imageSize['width'] - 1;   
-        $yMaxIndex          = $imageSize['height'] - 1;   
-        $result             = '';        
+        $imageSize      = $stegoText->getImageSize(); 
+        $coordinate     = array('x' => 0, 'y' => 0);
+        $xMax           = $imageSize['width'] - 1;   
+        $yMax           = $imageSize['height'] - 1;   
+        $result         = '';        
         do {
             // get lasts bits value of pixel accordingly confugurated channel
-            $result .= $this->decodeItem($imageCoordinate, $stegoText);
+            $result .= $this->decodeItem($coordinate, $stegoText);
             $endMarkPos  = $secretText->getEndMarkPos($result);
                              
             // get next pixel
-            $imageCoordinate = $this->getNextImageCoordinate($imageCoordinate, $xMaxIndex);           
+            $coordinate = self::getNextCoordinate($coordinate, $xMax);           
         } while ($endMarkPos === false
-            && ($imageCoordinate['x'] !== $xMaxIndex || $imageCoordinate['y'] !== $yMaxIndex)
+            && ($coordinate['x'] !== $xMax || $coordinate['y'] !== $yMax)
         );
         
         // handle last pixel
         if($endMarkPos === false) {
-            $result     .= $this->decodeItem($imageCoordinate, $stegoText);
+            $result     .= $this->decodeItem($coordinate, $stegoText);
             $endMarkPos  = $secretText->getEndMarkPos($result);
         }
         
@@ -99,35 +98,33 @@ class Lsb extends AbstractStegoSystem
     /**
      * Gets next image coordinate
      * 
-     * @param array     $imageCoordinate
-     * @param integer   $xMaxIndex
-     * @return int
+     * @param array     $coordinate
+     * @param integer   $xMax
+     * @return integer
      */
-    protected function getNextImageCoordinate(array $imageCoordinate, $xMaxIndex) 
+    static protected function getNextCoordinate(array $coordinate, $xMax) 
     {
-        $imageCoordinate['x']++;
-        if ($imageCoordinate['x'] > $xMaxIndex) {
-            $imageCoordinate['x'] = 0;
-            $imageCoordinate['y']++;
+        $coordinate['x']++;
+        if ($coordinate['x'] > $xMax) {
+            $coordinate['x'] = 0;
+            $coordinate['y']++;
         } 
-                
-        return $imageCoordinate;
+           
+        return $coordinate;
     }
     
     /**
      * Encode secret text item
      * 
-     * @param array                 $imageCoordinate - e.g. array('x' => 0, 'y' => 0)
+     * @param array                 $coordinate - e.g. array('x' => 0, 'y' => 0)
      * @param CoverTextInterface    $coverText
      * @param string                $secretItem - e.g. "100"
      */
-    protected function encodeItem(array $imageCoordinate, 
+    protected function encodeItem(array $coordinate, 
         CoverTextInterface $coverText, $secretItem
-    ) {         
+    ) {
         // get original pixel in binary
-        $originalPixel = $coverText->getDecimalData(
-            $imageCoordinate['x'], $imageCoordinate['y']
-        );
+        $originalPixel = $coverText->getDecimalData($coordinate['x'], $coordinate['y']);
              
         // modified pixel could not have all chanels
         $modifiedPixel      = $originalPixel;
@@ -153,24 +150,22 @@ class Lsb extends AbstractStegoSystem
         
         // modify pixel if it's neccesary
         $diffPixel = array_diff_assoc($originalPixel, $modifiedPixel);
-        if (!empty($diffPixel)) {            
-            // apply modification
-            $coverText->setPixel($imageCoordinate['x'], $imageCoordinate['y'], $modifiedPixel);
+        if (!empty($diffPixel)) {
+            $coverText->setPixel($coordinate['x'], $coordinate['y'], $modifiedPixel);
         }
     }
     
     /**
      * Decode item
      * 
-     * @param array                 $imageCoordinate - e.g. array('x' => 0, 'y' => 0)
+     * @param array                 $coordinate - e.g. array('x' => 0, 'y' => 0)
      * @param StegoTextInterface    $stegoText
      * @return string
      */
-    protected function decodeItem(array $imageCoordinate, StegoTextInterface $stegoText) {
-        $pixelData = $stegoText->getBinaryData(
-            $imageCoordinate['x'], 
-            $imageCoordinate['y']
-        );
+    protected function decodeItem(array $coordinate, 
+        StegoTextInterface $stegoText    
+    ) {
+        $pixelData = $stegoText->getBinaryData($coordinate['x'], $coordinate['y']);
             
         $result = '';
         foreach($this->useChannel as $item) {

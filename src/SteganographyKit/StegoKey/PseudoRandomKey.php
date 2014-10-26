@@ -74,14 +74,14 @@ class PseudoRandomKey extends AbstractStegoKey
     }
     
     /**
-     * Geta coordinats
+     * Geta coordinate
      * 
      * @param integer $xMax
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
      * @throw Exception
      */
-    public function getCoordinats($xMax, $yMax)
+    public function getCoordinate($xMax, $yMax)
     {      
         // set seed
         $secretKey = $this->getSecretKey();

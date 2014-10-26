@@ -61,16 +61,16 @@ class PseudoRandomKeyTest extends BaseTest
     }
     
     /**
-     * @dataProvider providerGetCoordinats
+     * @dataProvider providerGetCoordinate
      * @param integer $xMax
      * @param integer $yMax
      * @param integer $count
      */
-    public function testGetCoordinats($xMax, $yMax, $count) 
+    public function testGetCoordinate($xMax, $yMax, $count) 
     {
         $this->stegoKey->generateSecretKey(true);
         for ($i = 0; $i < $count; $i ++) {
-            $coordinats = $this->stegoKey->getCoordinats($xMax, $yMax);
+            $coordinats = $this->stegoKey->getCoordinate($xMax, $yMax);
                         
             $this->assertTrue(is_array($coordinats));
             $this->assertCount(2, $coordinats);
@@ -100,7 +100,7 @@ class PseudoRandomKeyTest extends BaseTest
         );
     }
     
-    public function providerGetCoordinats() 
+    public function providerGetCoordinate() 
     {
         return array(
             array(200, 200, 10)

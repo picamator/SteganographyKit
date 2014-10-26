@@ -41,12 +41,12 @@ interface StegoKeyInterface
     public function generateSecretKey($autoSet = false);
     
     /**
-     * Geta coordinats
+     * Gets coordinate
      * 
      * @param integer $xMax
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
      * @throw Exception
      */
-    public function getCoordinats($xMax, $yMax);
+    public function getCoordinate($xMax, $yMax);
 }
