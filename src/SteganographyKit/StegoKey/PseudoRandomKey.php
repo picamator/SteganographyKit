@@ -51,6 +51,9 @@ class PseudoRandomKey extends AbstractStegoKey
         // reset coordinats container
         $this->coordinats   = array();
         
+        // set seet to random generator
+        mt_srand($secretKey);
+        
         return $this;
     }
     
@@ -80,13 +83,10 @@ class PseudoRandomKey extends AbstractStegoKey
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
      * @throw Exception
+     * @FIXME It's possible that secretkey was not set
      */
     public function getCoordinate($xMax, $yMax)
-    {      
-        // set seed
-        $secretKey = $this->getSecretKey();
-        mt_srand($secretKey);
-        
+    {        
         $result = false;
         $i      = 0;
         while ($i < self::MAX_COORDINAT_REPEAT && $result === false) {
@@ -100,12 +100,12 @@ class PseudoRandomKey extends AbstractStegoKey
                 $result = array('x' => $x,'y' => $y);
                 $this->coordinats[$x][] = $y;
             }
-            
+                        
             $i++;
         }
          
         if ($result === false) {
-            throw new Exception('Coordinat generation was failed. Attempted ' 
+            throw new Exception('Coordinat generation was failed. The ' 
                 . self::MAX_COORDINAT_REPEAT . ' times to get new one was used.');
         }
         
