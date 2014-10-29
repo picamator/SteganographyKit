@@ -170,7 +170,7 @@ abstract class AbstractLsb implements StegoSystemInterface
         // get original pixel in binary
         $originalPixel = $coverText->getDecimalData($coordinate['x'], $coordinate['y']);
              
-        // modified pixel could not have all chanels
+        // modified pixel could not have all channels
         $modifiedPixel      = $originalPixel;
         $channel            = $this->getChannel($coordinate);
         $secretItemSize     = strlen($secretItem);

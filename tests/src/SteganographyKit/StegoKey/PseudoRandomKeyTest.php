@@ -71,7 +71,7 @@ class PseudoRandomKeyTest extends BaseTest
     {
         $this->stegoKey->generateSecretKey(true);
         for ($i = 0; $i < $count; $i ++) {
-            $coordinats = $this->stegoKey->getCoordinate($xMax, $yMax);
+            $coordinats = $this->stegoKey->getCoordinate(['x' => 1, 'y' => 1], $xMax, $yMax);
                         
             $this->assertTrue(is_array($coordinats));
             $this->assertCount(2, $coordinats);
@@ -104,7 +104,7 @@ class PseudoRandomKeyTest extends BaseTest
     public function providerGetCoordinate() 
     {
         return array(
-            array(200, 200, 10)
+            array(2000, 2000, 100)
         );
     }
 }

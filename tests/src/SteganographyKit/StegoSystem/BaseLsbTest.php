@@ -9,6 +9,9 @@
 namespace SteganographyKit\StegoSystem;
 
 use SteganographyKit\BaseTest;
+use SteganographyKit\SecretText\Ascii;
+use SteganographyKit\CoverText\PngImg;
+use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
 
 class BaseLsbTest extends BaseTest 
 {    
@@ -28,6 +31,39 @@ class BaseLsbTest extends BaseTest
         'path'      => 'original_200_200.png',
         'savePath'  => 'stego/original_%s.png'
     ); 
+    
+    /**
+     * Base Encode Decode
+     * 
+     * @param array                 $optionsCoverText
+     * @param array                 $optionsSecretText
+     * @param array                 $useChannel
+     * @param StegoSystemInterface  $stegoSystem
+     */
+    protected function encodeDecode(array $optionsCoverText, 
+        array $optionsSecretText, array $useChannel, StegoSystemInterface $stegoSystem    
+    ) {           
+        // encode
+        $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
+        $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
+            . $optionsCoverText['savePath'];
+               
+        $coverText      = new PngImg($optionsCoverText);  
+        $secretText     = new Ascii($optionsSecretText);
+            
+        $stegoImgPath   = $stegoSystem->setUseChannel($useChannel)
+            ->encode($secretText, $coverText);
+        
+        $this->assertTrue(file_exists($stegoImgPath));
+        
+        // decode
+        $stegoText  = new StegoTextPngImg(array(
+            'path' => $stegoImgPath
+        ));
+        $decodeText = $stegoSystem->decode($stegoText, new Ascii());
+        
+        $this->assertEquals($optionsSecretText['text'], $decodeText);
+    }
     
     /**
      * Generate data provider

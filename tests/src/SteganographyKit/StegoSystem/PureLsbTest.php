@@ -71,26 +71,7 @@ class PureLsbTest extends BaseLsbTest
     public function testEncodeDecode(array $optionsCoverText, 
         array $optionsSecretText, array $useChannel    
     ) {           
-        // encode
-        $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
-        $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
-            . $optionsCoverText['savePath'];
-               
-        $coverText      = new PngImg($optionsCoverText);  
-        $secretText     = new Ascii($optionsSecretText);
-            
-        $stegoImgPath   = $this->pureLsb->setUseChannel($useChannel)
-            ->encode($secretText, $coverText);
-        
-        $this->assertTrue(file_exists($stegoImgPath));
-        
-        // decode
-        $stegoText  = new StegoTextPngImg(array(
-            'path' => $stegoImgPath
-        ));
-        $decodeText = $this->pureLsb->decode($stegoText, new Ascii());
-        
-        $this->assertEquals($optionsSecretText['text'], $decodeText);
+        $this->encodeDecode($optionsCoverText, $optionsSecretText, $useChannel, $this->pureLsb);
     }
     
     public function providerDecode() 

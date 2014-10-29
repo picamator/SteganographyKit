@@ -3,23 +3,21 @@ SteganographyKit
 
 Introduction
 ------------
-Steganography - is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
-SteganographyKit - package of implementation several stegoSystems for image steganography.
-SteganographyKit is used terminology that was described in Christian Cachin [1].
+Steganography is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
+SteganographyKit is a package with implementation several stegoSystems for image steganography.
+SteganographyKit is used terminology that was described by Christian Cachin [1].
 
 SteganographyKit contains:
 * Least Significant Bit (LSB) 
   * Pure Steganography 
   * Secret Key Steganography 
 
-Each algorithm of SteganographyKit is well documented and based on research. 
 General overview of Steganography and existing tools described by Sean-Philip Oriyano [3].
 
 Least Significant Bit (LSB)
 ---------------------------
 LSB method is modified least significant bit of coverText to get stegoText. 
 Detailed description with example can be found in [6] or in "Steganography in Depth" section [7].
-LSB is easy to hide information but also easy to reveal.
 
 SteganographyKit has implementation of LSB with such conditions:
 * png image [4] as coverText,
@@ -47,21 +45,18 @@ Additionally it's possible to configurate channel that will be used in algorithm
 * Therefore knowledge what channels are used is like Secret Key. 
 * Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
 Such conclusion is based on experiment [8]. But it should be taken critically because first of all stegoanalyze use computer technique to identify picture 
-with hidden information, the second digital picture is displayed on a screen that has enough light to differ Blue channel as a best choose.
+with hidden information, the second digital picture is displayed on a screen that has enough light.
 
 ### Secret Key Steganography
 For Secret Key Steganography is similar with Pure Steganography but Secret Key is used for encode-decode process [2].
 
 SteganographyKit is used approach described in [2], accordingly them Secret Key is a seed for pseudo-random generator. 
 Such seed is used to create sequences of numbers that shows in what order coverText's pixels should be taken for embed secretText. 
-Moreover all pseudo-random sequences have period 2^(n/2) in average where n is a number of bits in seed.
 
 SteganogrpahyKit implements Secret Key Steganography with such conditions:
 * Max length of secretText is 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
 Such restriction helps to make room for better random distribution of secretText. 
-* SecretKey is a seed for ``mt_srand`` function should have max 8 digits (20 bits) and min 4 digits (10 bits) therefore average period of pseudo-random numbers are 
-2^10. Taking into account that x and y coordinates in CoverText are tokens for pseudo-random sequence so we have at least 2^20 period for coordinates.  
-
+* SecretKey has limit on seed: from 4 to 8 numbers. It uses ``mt_srand`` that has period 2^19937 - 1.
 Of course such conditions should be investigated to find out optimize min parameters.
 
 Encode/Decode algorithm is differ from Pure Steganography by:
@@ -71,6 +66,13 @@ Encode/Decode algorithm is differ from Pure Steganography by:
 If pixel coordinates X and Y and array of channels is ['red', 'green', 'blue'] then 'red' will have (X + Y) % 3 index in channel array the 
 channel that had (X + Y) % 3 would be moved to old red's place. For instance X = 4, Y = 10 them (2 + 10) % 3 = 2 then new channels array is
 ['blue', 'green', 'red']. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
+
+*Note*: If php install has suhosin-patch then it's essential to make configuration
+```
+  suhosin.srand.ignore = Off
+  suhosin.mt_srand.ignore = Off
+```
+Because suhosin-patch by default ignores seed settings for `srand` and `mt_srand`.
  
 UnitTest
 --------

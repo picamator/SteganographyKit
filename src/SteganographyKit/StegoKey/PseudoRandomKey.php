@@ -25,14 +25,14 @@ class PseudoRandomKey extends AbstractStegoKey
     /**
      * Max number of repeat coordinate for for trying get new one
      */
-    const MAX_COORDINAT_REPEAT = 20;
+    const MAX_COORDINAT_REPEAT = 10;
     
     /**
      * Container of coordinats that have been generated before
      * 
      * @var array 
      */
-    protected $coordinats = array();
+    protected $coordinates = array();
     
     /**
      * Sets secretKey
@@ -47,12 +47,7 @@ class PseudoRandomKey extends AbstractStegoKey
             throw new Exception('Invalid secretKey: "' . $secretKey . '"');
         }
         
-        $this->secretKey    = $secretKey;
-        // reset coordinats container
-        $this->coordinats   = array();
-        
-        // set seet to random generator
-        mt_srand($secretKey);
+        $this->secretKey = $secretKey;
         
         return $this;
     }
@@ -79,33 +74,35 @@ class PseudoRandomKey extends AbstractStegoKey
     /**
      * Geta coordinate
      * 
+     * @param array   $prevCoordinate
      * @param integer $xMax
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
      * @throw Exception
      * @FIXME It's possible that secretkey was not set
      */
-    public function getCoordinate($xMax, $yMax)
-    {        
-        $result = false;
+    public function getCoordinate(array $prevCoordinate, $xMax, $yMax)
+    {   
+        // reset coordinate
+        if ($prevCoordinate['x'] === 0 && $prevCoordinate['y'] === 0) {
+            $this->resetCoordinate();           
+        }
+        
+        // generate
+        $result = null;
         $i      = 0;
-        while ($i < self::MAX_COORDINAT_REPEAT && $result === false) {
+        while (is_null($result) && $i < self::MAX_COORDINAT_REPEAT) {
             $x = mt_rand(0, $xMax);
             $y = mt_rand(0, $yMax);
             
-            // check if it's new one
-            if(!key_exists($x, $this->coordinats) 
-                || !in_array($y, $this->coordinats[$x])
-            ) {
-                $result = array('x' => $x,'y' => $y);
-                $this->coordinats[$x][] = $y;
+            if($this->validateCoordinate($x, $y) === true) {
+                $result = array('x' => $x, 'y' => $y);    
             }
-                        
             $i++;
         }
          
-        if ($result === false) {
-            throw new Exception('Coordinat generation was failed. The ' 
+        if (is_null($result)) {
+            throw new Exception('Coordinate generation was failed. The ' 
                 . self::MAX_COORDINAT_REPEAT . ' times to get new one was used.');
         }
         
@@ -125,9 +122,39 @@ class PseudoRandomKey extends AbstractStegoKey
         }
         
         $length = strlen($secretKey);
-        $result =  $length >= self::MIN_SECRET_KEY_LENGTH && $length <= self::MAX_SECRET_KEY_LENGTH;
+        $result = $length >= self::MIN_SECRET_KEY_LENGTH && $length <= self::MAX_SECRET_KEY_LENGTH;
      
         return $result;
     }
+    
+    /**
+     * Validate coordinate
+     * 
+     * @param integer $x
+     * @param integer $y
+     * @return boolean - true if vaild false otherwise
+     */
+    protected function validateCoordinate($x, $y) 
+    {
+        if (key_exists($x, $this->coordinates) && in_array($y, $this->coordinates[$x])) {
+            return false;
+        } 
+        $this->coordinates[$x][] = $y;
+        
+        return true;
+    }
+    
+    /**
+     * Reset pseudo-random coordinate sequence
+     */
+    protected function resetCoordinate()
+    {
+        $secretKey = $this->getSecretKey();
+        
+        // reset coordinats container
+        $this->coordinates   = array();
+        
+        // set seet to random generator
+        mt_srand($secretKey);
+    }
 }
-

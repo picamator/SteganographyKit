@@ -18,7 +18,7 @@ class SecretLsb extends AbstractLsb
     protected function getNextCoordinate(array $prevCoordinate, $xMax, $yMax) 
     {
         $result = $this->getStegoKey()
-            ->getCoordinate($xMax, $yMax);
+            ->getCoordinate($prevCoordinate, $xMax, $yMax);
         
         return $result;
     }
@@ -54,6 +54,6 @@ class SecretLsb extends AbstractLsb
         $result[$index] = $this->useChannel[0];
         $result[0]      = $this->useChannel[$index];
         
-        return $this->useChannel;
+        return $result;
     }
 }

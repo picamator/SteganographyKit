@@ -34,7 +34,7 @@ class SecretLsbTest extends BaseLsbTest
      * 
      * @var integer 
      */
-    protected $secretKey = 12345678;
+    protected $secretKey = 1234;
     
     public function setUp() 
     {
@@ -54,28 +54,7 @@ class SecretLsbTest extends BaseLsbTest
     public function testEncodeDecode(array $optionsCoverText, 
         array $optionsSecretText, array $useChannel    
     ) {           
-        // encode
-        $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
-        $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
-            . $optionsCoverText['savePath'];
-               
-        $coverText      = new PngImg($optionsCoverText);  
-        $secretText     = new Ascii($optionsSecretText);
-            
-        $stegoImgPath   = $this->secretLsb->setUseChannel($useChannel)
-            ->encode($secretText, $coverText);
-        
-        $this->assertTrue(file_exists($stegoImgPath));
-        
-        // decode
-        $stegoText  = new StegoTextPngImg(array(
-            'path' => $stegoImgPath
-        ));
-        
-        $this->stegoKey->setSecretKey($this->secretKey);
-        $decodeText = $this->secretLsb->decode($stegoText, new Ascii());
-        
-        $this->assertEquals($optionsSecretText['text'], $decodeText);
+        $this->encodeDecode($optionsCoverText, $optionsSecretText, $useChannel, $this->secretLsb);
     }
     
     /**
