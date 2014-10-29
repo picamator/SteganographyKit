@@ -43,7 +43,8 @@ Decode algorithm can be described by steps:
 *Note*:
 Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
 So knowledge about use channels can be interpreted as Secret Key. 
-  Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
+
+Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
 Such conclusion is based on experiment [8]. But it should be taken critically because first of all stegoanalyze use computer technique to identify picture 
 with hidden information, the second digital picture is displayed on a screen that has enough light.
 
