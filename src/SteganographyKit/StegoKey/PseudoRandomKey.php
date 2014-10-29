@@ -63,7 +63,7 @@ class PseudoRandomKey extends AbstractStegoKey
         $min = pow(10, self::MAX_SECRET_KEY_LENGTH - 1);
         $max = (int) str_replace(array(1, 0), 9, $min);
         
-        $secretKey = mt_rand($min, $max);        
+        $secretKey = self::generateRandom($min, $max);        
         if ($autoSet === true) {
             $this->setSecretKey($secretKey);
         }
@@ -92,10 +92,10 @@ class PseudoRandomKey extends AbstractStegoKey
         $result = null;
         $i      = 0;
         while (is_null($result) && $i < self::MAX_COORDINAT_REPEAT) {
-            $x = mt_rand(0, $xMax);
-            $y = mt_rand(0, $yMax);
+            $x = self::generateRandom(0, $xMax);
+            $y = self::generateRandom(0, $yMax);
             
-            if($this->validateCoordinate($x, $y) === true) {
+            if(self::validateCoordinate($x, $y) === true) {
                 $result = array('x' => $x, 'y' => $y);    
             }
             $i++;
@@ -115,7 +115,7 @@ class PseudoRandomKey extends AbstractStegoKey
      * @param string|integer $secretKey
      * @return boolean - true for ok or false otherwise
      */
-    protected function validateSecretKey($secretKey) 
+    static protected function validateSecretKey($secretKey) 
     {
         if (!is_int($secretKey)) {
             return false;
@@ -125,6 +125,19 @@ class PseudoRandomKey extends AbstractStegoKey
         $result = $length >= self::MIN_SECRET_KEY_LENGTH && $length <= self::MAX_SECRET_KEY_LENGTH;
      
         return $result;
+    }
+    
+    /**
+     * Generate random data
+     * 
+     * @param integer $min
+     * @param integer $max
+     * @return integer
+     * @see PseudoRandomKeyTest::testRandomImg
+     */
+    static protected function generateRandom($min, $max) 
+    {
+        return mt_rand($min, $max);
     }
     
     /**

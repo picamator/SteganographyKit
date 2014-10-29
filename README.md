@@ -1,8 +1,5 @@
 SteganographyKit
 ================
-
-Introduction
-------------
 Steganography is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
 SteganographyKit is a package with implementation several stegoSystems for image steganography.
 SteganographyKit is used terminology that was described by Christian Cachin [1].
@@ -13,6 +10,16 @@ SteganographyKit contains:
   * Secret Key Steganography 
 
 General overview of Steganography and existing tools described by Sean-Philip Oriyano [3].
+
+Requirements
+------------
+* PHP 5.4+
+* GDLib
+* Only for Suhosin patch special configuration should be added:
+```
+  suhosin.srand.ignore = Off
+  suhosin.mt_srand.ignore = Off
+```
 
 Least Significant Bit (LSB)
 ---------------------------
@@ -67,13 +74,6 @@ Encode/Decode algorithm is differ from Pure Steganography by:
 If pixel coordinates `X` and `Y` and array of channels is `['red', 'green', 'blue']` then 'red' will have `(X + Y) % 3` index in channel array the 
 channel that had `(X + Y) % 3` would be moved to old red's place. For instance `X = 4, Y = 10` them `(2 + 10) % 3 = 2` then new channels array is
 `['blue', 'green', 'red']`. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
-
-*Note*: If php install has suhosin-patch then it's essential to make configuration
-```
-  suhosin.srand.ignore = Off
-  suhosin.mt_srand.ignore = Off
-```
-Because suhosin-patch by default ignores seed settings for `srand` and `mt_srand`.
  
 UnitTest
 --------

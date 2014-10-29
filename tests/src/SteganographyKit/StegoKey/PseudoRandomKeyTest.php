@@ -84,6 +84,38 @@ class PseudoRandomKeyTest extends BaseTest
         }
     }
     
+    /**
+     * Draw picture with random pixels to check how "randomply" algorithm is
+     * comparison between rand and mt_rand can be found here http://ua2.php.net/manual/en/function.mt-rand.php#107738
+     */
+    public function testRandomImg() 
+    {
+        $this->stegoKey->generateSecretKey(true);
+        
+        // picture config
+        $maxX       = 400;
+        $maxY       = 400;
+        $iterations = $maxX * $maxY / 4;
+        
+        $localPath  = 'random/' . sprintf('img_%d_%d_%f.png', $maxX, $maxY, microtime(true));
+        $fullPath   = $this->getDataPath($localPath) ? : $this->getDataPath('') . '/' . $localPath;
+        
+        // generate picture
+        $img = imagecreatetruecolor($maxX, $maxY);
+        $ink = imagecolorallocate($img, 255, 255, 255);
+        
+        $coordinate = array('x' => 0, 'y' => 0);
+        for ($i = 0; $i <= $iterations; $i++) {
+            $coordinate = $this->stegoKey->getCoordinate($coordinate, $maxX, $maxY);
+            imagesetpixel($img, $coordinate['x'], $coordinate['y'], $ink);      
+        }
+      
+        imagepng($img, $fullPath);
+        imagedestroy($img); 
+        
+        $this->assertTrue(file_exists($fullPath));
+    }
+    
     public function providerFailedSecretKey() 
     {
         return array(

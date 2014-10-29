@@ -30,10 +30,17 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * Gets full path to data
      * 
      * @param string $path
-     * @retutn string
+     * @retutn string|boolean - full path or false if failed
      */
     protected function getDataPath($path)
-    {        
-        return realpath($this->dataPath . $path);
+    {       
+        $fullPath = $this->dataPath . $path;
+        $dirPath  = dirname($fullPath);
+       
+        if (!file_exists($dirPath)) {
+            mkdir($dirPath, 0777, true);
+        }
+            
+        return realpath($fullPath);
     }
 }
