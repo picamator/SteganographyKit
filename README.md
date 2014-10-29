@@ -42,8 +42,8 @@ Decode algorithm can be described by steps:
 
 *Note*:
 Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
-* Therefore knowledge what channels are used is like Secret Key. 
-* Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
+So knowledge about use channels can be interpreted as Secret Key. 
+  Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
 Such conclusion is based on experiment [8]. But it should be taken critically because first of all stegoanalyze use computer technique to identify picture 
 with hidden information, the second digital picture is displayed on a screen that has enough light.
 
@@ -54,7 +54,7 @@ SteganographyKit is used approach described in [2], accordingly them Secret Key 
 Such seed is used to create sequences of numbers that shows in what order coverText's pixels should be taken for embed secretText. 
 
 SteganogrpahyKit implements Secret Key Steganography with such conditions:
-* Max length of secretText is 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
+* Max length of secretText is in 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
 Such restriction helps to make room for better random distribution of secretText. 
 * SecretKey has limit on seed: from 4 to 8 numbers. It uses `mt_srand` that has period `2^19937 - 1`.
 Of course such conditions should be investigated to find out optimize min parameters.
