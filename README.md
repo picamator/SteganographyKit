@@ -78,7 +78,7 @@ Because suhosin-patch by default ignores seed settings for `srand` and `mt_srand
 UnitTest
 --------
 Tests can be found in '/tests' folder. 
-It should be noticed that `LsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
+It should be noticed that `PureLsbTest::testEncodeDecode` or `SecretLsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
 
 BackLog
 -------
