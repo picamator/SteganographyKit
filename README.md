@@ -27,18 +27,18 @@ SteganographyKit has implementation of LSB with such conditions:
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
  
 Encode algorithm can be described by steps:
-# Convert secretText to binary string
-# Add to secretText end text mark (it is used for decode algorithm)
-# Get number of bits accordingly number of channels from secretText
-# Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
-# Save changing if step 3 really change RGB bit
-# Move to next coverText pixel and change last bit of each RGB channel
-# Repeat step 3-6 for each secretText item
+1. Convert secretText to binary string
+2. Add to secretText end text mark (it is used for decode algorithm)
+3 Get number of bits accordingly number of channels from secretText
+4. Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
+5. Save changing if step 3 really change RGB bit
+6. Move to next coverText pixel and change last bit of each RGB channel
+7. Repeat step 3-6 for each secretText item
 
 Decode algorithm can be described by steps:
-# Read every last bit for RGB channel of stegoText
-# Stop step 1 if end text mark was found or it's read last pixel of stegoText
-# Convert binary secretText to ASCII characters
+1. Read every last bit for RGB channel of stegoText
+2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
+3. Convert binary secretText to ASCII characters
 
 *Note*:
 Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
@@ -56,16 +56,16 @@ Such seed is used to create sequences of numbers that shows in what order coverT
 SteganogrpahyKit implements Secret Key Steganography with such conditions:
 * Max length of secretText is 4 times less in compare with Pure Steganography. It means that only half of pixels are going to modify.
 Such restriction helps to make room for better random distribution of secretText. 
-* SecretKey has limit on seed: from 4 to 8 numbers. It uses ``mt_srand`` that has period 2^19937 - 1.
+* SecretKey has limit on seed: from 4 to 8 numbers. It uses `mt_srand` that has period `2^19937 - 1`.
 Of course such conditions should be investigated to find out optimize min parameters.
 
 Encode/Decode algorithm is differ from Pure Steganography by:
 * Method of choosing pixels in CoverText. In Pure Steganography it gets one by one but in Secret Key Steganography gets accordingly pseudo-random algorithm.
 * Method of use RGB channels. In Pure Steganography order is the same as user set but for Secret Key Steganography is changes accordingly pixel's coordinates. 
 
-If pixel coordinates X and Y and array of channels is ['red', 'green', 'blue'] then 'red' will have (X + Y) % 3 index in channel array the 
-channel that had (X + Y) % 3 would be moved to old red's place. For instance X = 4, Y = 10 them (2 + 10) % 3 = 2 then new channels array is
-['blue', 'green', 'red']. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
+If pixel coordinates `X` and `Y` and array of channels is `['red', 'green', 'blue']` then 'red' will have `(X + Y) % 3` index in channel array the 
+channel that had `(X + Y) % 3` would be moved to old red's place. For instance `X = 4, Y = 10` them `(2 + 10) % 3 = 2` then new channels array is
+`['blue', 'green', 'red']`. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
 
 *Note*: If php install has suhosin-patch then it's essential to make configuration
 ```
