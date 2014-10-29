@@ -27,18 +27,18 @@ SteganographyKit has implementation of LSB with such conditions:
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
  
 Encode algorithm can be described by steps:
-1. Convert secretText to binary string
-2. Add to secretText end text mark (it is used for decode algorithm)
-3 Get number of bits accordingly number of channels from secretText
-4. Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
-5. Save changing if step 3 really change RGB bit
-6. Move to next coverText pixel and change last bit of each RGB channel
-7. Repeat step 3-6 for each secretText item
+  1. Convert secretText to binary string
+  2. Add to secretText end text mark (it is used for decode algorithm)
+  3. Get number of bits accordingly number of channels from secretText
+  4. Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
+  5. Save changing if step 3 really change RGB bit
+  6. Move to next coverText pixel and change last bit of each RGB channel
+  7. Repeat step 3-6 for each secretText item
 
 Decode algorithm can be described by steps:
-1. Read every last bit for RGB channel of stegoText
-2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
-3. Convert binary secretText to ASCII characters
+  1. Read every last bit for RGB channel of stegoText
+  2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
+  3. Convert binary secretText to ASCII characters
 
 *Note*:
 Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
