@@ -1,6 +1,6 @@
 <?php
 /**
- * Stego Text - image in png format
+ * Stego Text - image
  * 
  * PNG specification can be found here http://www.w3.org/TR/PNG-Structure.html
  * 
@@ -9,11 +9,11 @@
  */
 
 namespace SteganographyKit\StegoText;
-use SteganographyKit\Image\PngTrait;
+use SteganographyKit\Image\ImageTrait;
 
-class PngImg extends AbstractStegoText 
+class StegoImage extends AbstractStegoText 
 { 
-    use PngTrait;
+    use ImageTrait;
     
     /**
      * Options
@@ -25,24 +25,13 @@ class PngImg extends AbstractStegoText
     );
     
     /**
-     * Supported Mime format
-     * 
-     * @var string
-     */
-    protected $supportedMime = 'image/png';
-    
-    /**
      * @param array $options
      */
     public function __construct(array $options) 
     {
         parent::__construct($options);
         
-        self::validatePath($options);       
-        $this->setOptions($options);
-        
-        $this->setImgSize($options['path']);
-        $this->setImage($options['path']);
+        $this->init();
     }    
     
     /**
@@ -59,5 +48,19 @@ class PngImg extends AbstractStegoText
     public function getBinaryData($xIndex, $yIndex) 
     {        
         return $this->getBinaryColor($xIndex, $yIndex);
+    }
+    
+    /**
+     * Initialize and validation
+     */
+    protected function init() 
+    {        
+        $this->validateGbLib();
+        $this->validatePath($this->options['path']);
+        
+        $this->setImgSize($this->options['path']);
+        $this->validateType();
+        
+        $this->setImage($this->options['path']);
     }
 }

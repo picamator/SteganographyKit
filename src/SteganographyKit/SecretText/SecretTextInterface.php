@@ -22,7 +22,7 @@ interface SecretTextInterface
     /**
      * @param array $options
      */
-    public function __construct(array $options = array());
+    public function __construct(array $options);
     
     /**
      * Gets converted data to binary format

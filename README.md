@@ -27,7 +27,7 @@ LSB method is modified least significant bit of coverText to get stegoText.
 Detailed description with example can be found in [6] or in "Steganography in Depth" section [7].
 
 SteganographyKit has implementation of LSB with such conditions:
-* png image [4] as coverText,
+* png, jpg or gif images [4] as coverText,
 * text with ASCII characters [5] as a secretText.
 
 ### Pure Steganography

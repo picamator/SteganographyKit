@@ -10,8 +10,8 @@ namespace SteganographyKit\StegoSystem;
 
 use SteganographyKit\BaseTest;
 use SteganographyKit\SecretText\Ascii;
-use SteganographyKit\CoverText\PngImg;
-use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
+use SteganographyKit\CoverText\CoverImage;
+use SteganographyKit\StegoText\StegoImage;
 
 class BaseLsbTest extends BaseTest 
 {    
@@ -48,7 +48,7 @@ class BaseLsbTest extends BaseTest
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
                
-        $coverText      = new PngImg($optionsCoverText);  
+        $coverText      = new CoverImage($optionsCoverText);  
         $secretText     = new Ascii($optionsSecretText);
             
         $stegoImgPath   = $stegoSystem->setUseChannel($useChannel)
@@ -57,7 +57,7 @@ class BaseLsbTest extends BaseTest
         $this->assertTrue(file_exists($stegoImgPath));
         
         // decode
-        $stegoText  = new StegoTextPngImg(array(
+        $stegoText  = new StegoImage(array(
             'path' => $stegoImgPath
         ));
         $decodeText = $stegoSystem->decode($stegoText, new Ascii());

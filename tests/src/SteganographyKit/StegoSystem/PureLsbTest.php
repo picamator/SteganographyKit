@@ -9,8 +9,8 @@
 namespace SteganographyKit\StegoSystem;
 
 use SteganographyKit\SecretText\Ascii;
-use SteganographyKit\CoverText\PngImg;
-use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
+use SteganographyKit\CoverText\CoverImage;
+use SteganographyKit\StegoText\StegoImage;
 
 class PureLsbTest extends BaseLsbTest
 {   
@@ -38,7 +38,7 @@ class PureLsbTest extends BaseLsbTest
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
                 
-        $coverText      = new PngImg($optionsCoverText);  
+        $coverText      = new CoverIamge($optionsCoverText);  
         $secretText     = new Ascii($optionsSecretText);
            
         $result = $this->pureLsb->encode($secretText, $coverText);
@@ -55,7 +55,7 @@ class PureLsbTest extends BaseLsbTest
     {      
         $optionsStegoText['path'] = $this->getDataPath($optionsStegoText['path']);
 
-        $stegoText  = new StegoTextPngImg($optionsStegoText); 
+        $stegoText  = new StegoImage($optionsStegoText); 
         $result     = $this->pureLsb->decode($stegoText, new Ascii());
         
         $this->assertEquals($expected, $result);

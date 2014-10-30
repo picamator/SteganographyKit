@@ -8,17 +8,16 @@
 
 namespace SteganographyKit\CoverText;
 use SteganographyKit\Options\OptionsTrait;
-use SteganographyKit\Image\GeneralTrait;
 
 abstract class AbstractCoverText implements CoverTextInterface 
 {
-    use OptionsTrait, GeneralTrait;
-
+    use OptionsTrait;
+   
     /**
      * @param array $options
      */
     public function __construct(array $options) 
     {
-        self::validateGbLib();
+        $this->setOptions($options);
     }
 }

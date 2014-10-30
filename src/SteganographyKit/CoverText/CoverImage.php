@@ -1,19 +1,18 @@
 <?php
 /**
- * Cover Text - image in png format
- * 
- * PNG specification can be found here http://www.w3.org/TR/PNG-Structure.html
+ * Cover Text
+ * Image is saved in png format
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
 
 namespace SteganographyKit\CoverText;
-use SteganographyKit\Image\PngTrait;
+use SteganographyKit\Image\ImageTrait;
 
-class PngImg extends AbstractCoverText 
+class CoverImage extends AbstractCoverText 
 { 
-    use PngTrait;
+    use ImageTrait;
     
     /**
      * Options
@@ -26,25 +25,13 @@ class PngImg extends AbstractCoverText
     );
     
     /**
-     * Supported Mime format
-     * 
-     * @var string
-     */
-    protected $supportedMime = 'image/png';
-    
-    /**
      * @param array $options
      */
     public function __construct(array $options) 
     {
         parent::__construct($options);
         
-        self::validatePath($options);
-        self::validateSavePath($options);
-        $this->setOptions($options);
-        
-        $this->setImgSize($options['path']);
-        $this->setImage($options['path']);
+        $this->init();
     }    
     
     /**
@@ -104,5 +91,20 @@ class PngImg extends AbstractCoverText
         }
         
         return $this->options['savePath'];
+    }
+    
+    /**
+     * Initialize and validation
+     */
+    protected function init() 
+    {
+        $this->validateGbLib();
+        $this->validatePath($this->options['path']);
+        $this->validateSavePath($this->options['savePath']);
+        
+        $this->setImgSize($this->options['path']);
+        $this->validateType();
+        
+        $this->setImage($this->options['path']);
     }
 }
