@@ -9,6 +9,7 @@
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\SecretText\SecretTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
+use SteganographyKit\RuntimeException;
 
 class SecretLsb extends AbstractLsb
 {    
@@ -26,15 +27,13 @@ class SecretLsb extends AbstractLsb
     /**
      * {@inheritDoc} 4 time less then in PureLsb
      */
-    protected function validateCapacity(SecretTextInterface $secretText, 
-        CoverTextInterface $coverText
-    ) {
-         $secretSize     = $secretText->getSize();
-         $coverCapacity  = $coverText->getCoverCapacity($this->useChannelSize) / 4;        
-         if ($secretSize > $coverCapacity) {
-             throw new Exception('Not enouph room to keep all secretText. CoverText can handle '
-                . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
-         }
+    protected function validateCapacity($secretSize, CoverTextInterface $coverText) 
+    {
+        $coverCapacity  = $coverText->getCoverCapacity($this->useChannelSize) / 4;        
+        if ($secretSize > $coverCapacity) {
+            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
+               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
+        }
     }
     
     /**

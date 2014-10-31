@@ -24,7 +24,6 @@ interface CoverTextInterface
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ...);
      * </code>
-     * @throws Exception
      */
     public function getBinaryData($xIndex, $yIndex);
     
@@ -37,7 +36,6 @@ interface CoverTextInterface
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ...);
      * </code>
-     * @throws Exception
      */
     public function getDecimalData($xIndex, $yIndex);
     
@@ -60,7 +58,7 @@ interface CoverTextInterface
      * Save modified image
      * 
      * @return string - path to image
-     * @throws Exception
+     * @throws SteganographyKit\RuntimeException
      */
     public function save();
 }

@@ -36,7 +36,7 @@ class StegoImageTest extends BaseTest
     
     /**
      * @dataProvider providerFailed
-     * @expectedException SteganographyKit\Image\Exception
+     * @expectedException SteganographyKit\InvalidArgumentException
      * @param array $options
      */
     public function testFailed(array $options) 

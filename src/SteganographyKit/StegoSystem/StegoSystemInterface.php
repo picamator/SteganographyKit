@@ -27,6 +27,7 @@ interface StegoSystemInterface
      * 
      * @param array $useChannel
      * @return self
+     * @throws SteganographyKit\InvalidArgumentException
      */
     public function setUseChannel(array $useChannel);
     

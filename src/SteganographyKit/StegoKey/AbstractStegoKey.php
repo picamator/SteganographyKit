@@ -7,6 +7,7 @@
  */
 
 namespace SteganographyKit\StegoKey;
+use SteganographyKit\LogicException;
 
 abstract class AbstractStegoKey implements StegoKeyInterface 
 {
@@ -31,12 +32,12 @@ abstract class AbstractStegoKey implements StegoKeyInterface
      * Gets secretKey
      * 
      * @return string|integer
-     * @throw Exception
+     * @throw SteganographyKit\LogicException
      */
     public function getSecretKey() 
     {
         if (is_null($this->secretKey)) {
-            throw new Exception('Coordinats can not be generated. SecretKey was not set.');
+            throw new LogicException('Coordinats can not be generated. SecretKey was not set.');
         }
         
         return $this->secretKey;

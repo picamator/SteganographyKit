@@ -43,7 +43,6 @@ class StegoImage extends AbstractStegoText
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ...);
      * </code>
-     * @throws Exception
      */
     public function getBinaryData($xIndex, $yIndex) 
     {        

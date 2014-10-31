@@ -15,6 +15,7 @@ Requirements
 ------------
 * PHP 5.4+
 * GDLib
+* ZLib
 * Only for Suhosin patch special configuration should be added:
 ```
   suhosin.srand.ignore = Off

@@ -20,7 +20,7 @@ interface StegoKeyInterface
      * 
      * @param string|integer $secretKey
      * @return self
-     * @throw Exception
+     * @throw SteganographyKit\InvalidArgumentException
      */
     public function setSecretKey($secretKey);
     
@@ -28,7 +28,7 @@ interface StegoKeyInterface
      * Gets secretKey
      * 
      * @return string|integer
-     * @throw Exception
+     * @throw SteganographyKit\LogicException
      */
     public function getSecretKey();
     
@@ -47,7 +47,7 @@ interface StegoKeyInterface
      * @param integer   $xMax
      * @param integer   $yMax
      * @return array - array('x' => 10, 'y' => 5)
-     * @throw Exception
+     * @throw SteganographyKit\RuntimeException
      */
     public function getCoordinate(array $prevCoordinate, $xMax, $yMax);
 }

@@ -1,14 +1,14 @@
 <?php
 /**
- * StegoSystem Exception
+ * SteganographyKit InvalidArgumentException
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
 
-namespace SteganographyKit\StegoSystem;
+namespace SteganographyKit;
 
-class Exception extends \SteganographyKit\Exception 
+class LogicException extends \InvalidArgumentException 
 {
     
 }

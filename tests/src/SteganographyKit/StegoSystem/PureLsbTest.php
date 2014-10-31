@@ -8,7 +8,7 @@
 
 namespace SteganographyKit\StegoSystem;
 
-use SteganographyKit\SecretText\Ascii;
+use SteganographyKit\SecretText\PlainText;
 use SteganographyKit\CoverText\CoverImage;
 use SteganographyKit\StegoText\StegoImage;
 
@@ -38,9 +38,10 @@ class PureLsbTest extends BaseLsbTest
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
                 
-        $coverText      = new CoverIamge($optionsCoverText);  
-        $secretText     = new Ascii($optionsSecretText);
-           
+        $coverText      = new CoverImage($optionsCoverText);  
+        $secretText     = new PlainText();
+        
+        $secretText->setDataOptions($optionsSecretText);
         $result = $this->pureLsb->encode($secretText, $coverText);
         
         $this->assertTrue(file_exists($result));
@@ -56,7 +57,7 @@ class PureLsbTest extends BaseLsbTest
         $optionsStegoText['path'] = $this->getDataPath($optionsStegoText['path']);
 
         $stegoText  = new StegoImage($optionsStegoText); 
-        $result     = $this->pureLsb->decode($stegoText, new Ascii());
+        $result     = $this->pureLsb->decode($stegoText, new PlainText());
         
         $this->assertEquals($expected, $result);
 //        var_dump($result);
@@ -79,7 +80,7 @@ class PureLsbTest extends BaseLsbTest
         return array(
             array(
                 array(
-                    'path' => 'stego/lorem_ipsum_li_200_200.png',
+                    'path' => 'lsb/pure/lorem_ipsum_li_200_200.png',
                 ),
                 'Lorem ipsum Li'
             )

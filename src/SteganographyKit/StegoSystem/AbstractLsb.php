@@ -11,6 +11,8 @@ use SteganographyKit\SecretText\SecretTextInterface;
 use SteganographyKit\StegoText\StegoTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 use SteganographyKit\StegoKey\StegoKeyInterface;
+use SteganographyKit\InvalidArgumentException;
+use SteganographyKit\LogicException;
 
 abstract class AbstractLsb implements StegoSystemInterface 
 {
@@ -56,13 +58,13 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param array $useChannel
      * @return self
-     * @throws Exception
+     * @throws SteganographyKit\InvalidArgumentException
      */
     public function setUseChannel(array $useChannel) 
     {
         $diffChannel = array_diff($useChannel, $this->supportedChannel);
         if (!empty($diffChannel)) {
-            throw new Exception('Unsupported channels: ' . implode(',', $diffChannel));
+            throw new InvalidArgumentException('Unsupported channels: ' . implode(',', $diffChannel));
         }
         
         $this->useChannel       = $useChannel;
@@ -103,18 +105,18 @@ abstract class AbstractLsb implements StegoSystemInterface
      */
     public function encode(SecretTextInterface $secretText, 
         CoverTextInterface $coverText
-    ) {
-        // validate
-        $this->validateCapacity($secretText, $coverText);
-        
+    ) {        
         // convert secret data to binary
-        $secretData = $secretText->getBinaryData();    
+        $secretData = $secretText->getBinaryData(); 
+        
+        // validate
+        $secretDataSize = strlen($secretData);
+        $this->validateCapacity($secretDataSize, $coverText);
         
         $imageSize          = $coverText->getImageSize();   
         $coordinate         = array('x' => 0, 'y' => 0);
         $xMax               = $imageSize['width'] - 1;
         $yMax               = $imageSize['height'] - 1;  
-        $secretDataSize     = strlen($secretData);
         
         // encode
         for ($i = 0; $i <= $secretDataSize; $i = $i + $this->useChannelSize) {
@@ -221,12 +223,12 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Gets stegoKey
      * 
      * @return StegoKeyInterface
-     * @throws  Exception
+     * @throws SteganographyKit\LogicException
      */
     protected function getStegoKey() 
     {
         if (is_null($this->stegoKey)) {
-            throw new Exception('StegoKey was not set');
+            throw new LogicException('StegoKey was not set');
         }
         
         return $this->stegoKey;
@@ -235,13 +237,11 @@ abstract class AbstractLsb implements StegoSystemInterface
     /**
      * Validate is it enouph room into coverText to keep secret one
      * 
-     * @param   SecretTextInterface $secretText
+     * @param   integer             $secretSize
      * @param   CoverTextInterface  $coverText
-     * @throws  Exception
+     * @throws  SteganographyKit\RuntimeException
      */
-    abstract protected function validateCapacity(SecretTextInterface $secretText, 
-        CoverTextInterface $coverText
-    );
+    abstract protected function validateCapacity($secretSize, CoverTextInterface $coverText);
     
     /**
      * Gets next image coordinate

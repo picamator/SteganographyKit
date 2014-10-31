@@ -26,7 +26,7 @@ class PseudoRandomKeyTest extends BaseTest
     
     /**
      * @dataProvider providerFailedSecretKey
-     * @expectedException Exception
+     * @expectedException SteganographyKit\InvalidArgumentException
      * @param string $secretKey
      */
     public function testFailedSecretKey($secretKey)  

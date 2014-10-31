@@ -7,9 +7,11 @@
  */
 
 namespace SteganographyKit\Image;
+use SteganographyKit\RuntimeException;
+use SteganographyKit\InvalidArgumentException;
 
 trait ImageTrait
-{
+{   
     /**
      * Image size
      * 
@@ -126,7 +128,7 @@ trait ImageTrait
      * @param integer $yIndex
      * @param array $pixel
      * @return self
-     * @throws Exception
+     * @throws SteganographyKit\RuntimeException
      */
     public function setPixel($xIndex, $yIndex, array $pixel) 
     {
@@ -134,7 +136,7 @@ trait ImageTrait
 
         $result = imagesetpixel($this->image, $xIndex, $yIndex, $color);
         if ($result === false) {
-            throw new Exception('Failed to modify pixel [' .$xIndex .', ' . $yIndex . '].' );
+            throw new RuntimeException('Failed to modify pixel [' .$xIndex .', ' . $yIndex . '].' );
         }
         
         return $this;
@@ -154,7 +156,7 @@ trait ImageTrait
      * Sets Image
      * 
      * @param string $path
-     * @throws Exception
+     * @throws SteganographyKit\InvalidArgumentException
      */
     protected function setImage($path) 
     {
@@ -176,7 +178,7 @@ trait ImageTrait
         }
         
         if($image === false) {
-            throw new Exception('Can not create image by path ' . $path);
+            throw new InvalidArgumentException('Can not create image by path ' . $path);
         }
         
         $this->image = $image;
@@ -203,12 +205,13 @@ trait ImageTrait
      * Sets image size
      * 
      * @param string $path
+     * @throws SteganographyKit\RuntimeException
      */
     protected function setImgSize($path) 
     {
         $result = getimagesize($path);
         if($result === false) {
-            throw new Exception('Imposible to calculate image size: '.$path);
+            throw new RuntimeException('Imposible to calculate image size: ' . $path);
         }
         
         $this->imgSize = array_combine(
@@ -220,12 +223,12 @@ trait ImageTrait
     /**
      * Verify is GB Lib extension was loaded
      * 
-     * @throws Exception
+     * @throws SteganographyKit\RuntimeException
      */
     protected function validateGbLib() 
     {
         if(extension_loaded('gd') === false) {
-            throw new Exception('GD php extension was not loaded: http://www.php.net/manual/en/book.image.php');
+            throw new RuntimeException('GD php extension was not loaded: http://www.php.net/manual/en/book.image.php');
         } 
     }
     
@@ -233,12 +236,12 @@ trait ImageTrait
      * Validate path
      * 
      * @param string $path
-     * @throws Exception
+     * @throws SteganographyKit\InvalidArgumentException
      */
     protected function validatePath($path)
     {
         if(!file_exists($path) || !is_readable($path)) {    
-            throw new Exception('Incorrect path "' . $path . '". Image does not exsit or not readable.');
+            throw new InvalidArgumentException('Incorrect path "' . $path . '". Image does not exsit or not readable.');
         }
     }
     
@@ -246,27 +249,27 @@ trait ImageTrait
      * Validate savePath
      * 
      * @param string $savePath
-     * @throws Exception
+     * @throws SteganographyKit\InvalidArgumentException
      */
     protected function validateSavePath($savePath) 
     {
         $dirPath = dirname($savePath);      
         if(!file_exists($dirPath) && !mkdir($dirPath, 0755, true)) {
-            throw new Exception('Impossible create subfolders structure for destination "' . $savePath . '"');
+            throw new InvalidArgumentException('Impossible create subfolders structure for destination: ' . $savePath);
         } else if(!is_writable($dirPath)) {
-            throw new Exception('Destination does not have writable permission "' . $savePath . '"');
+            throw new InvalidArgumentException('Destination does not have writable permission: ' . $savePath);
         }
     }
     
     /**
      * Validate supported type
      * 
-     * @throws Exception
+     * @throws SteganographyKit\InvalidArgumentException
      */
     protected function validateType() 
     {
         if (!in_array($this->imgSize['type'], $this->supportedType)) {
-            throw new Exception('Image with type: "' . $this->imgSize['type'] 
+            throw new InvalidArgumentException('Image with type: "' . $this->imgSize['type'] 
                 . '", mime: "' . $this->imgSize['mime'] . '" is not supported.'
             );
         }

@@ -9,34 +9,35 @@
 namespace SteganographyKit\SecretText;
 
 interface SecretTextInterface 
-{ 
-    /**
-     * Gets decretText from binary data
-     * 
-     * @param string    $binaryData - raw secretText with endMark
-     * @param integer   $endMarkPos - position of endMark
-     * @return string
-     */
-    public function getFromBinaryData($binaryData, $endMarkPos);
-    
+{    
     /**
      * @param array $options
      */
-    public function __construct(array $options);
+    public function __construct(array $options = array());
+    
+    /**
+     * Sets Data Options
+     * 
+     * @param array $dataOptions
+     * @return self
+     */
+    public function setDataOptions(array $dataOptions);
     
     /**
      * Gets converted data to binary format
      * 
-     * @return string binary representation of secret data
+     * @param array $dataOptions - contains data or path to data
+     * @return string - binary representation of secret data
      */
     public function getBinaryData();
     
     /**
-     * Gets size data in bit
+     * Gets decretText from binary data
      * 
-     * @return integer
+     * @param string    $binaryData - raw secretText with endMark
+     * @return string
      */
-    public function getSize();
+    public function getFromBinaryData($binaryData);
     
     /** 
      * Gets position of end mark

@@ -1,14 +1,14 @@
 <?php
 /**
- * Image Exception
+ * SteganographyKit RuntimeException
  * 
  * @link        https://github.com/picamator/SteganographyKit
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
 
-namespace SteganographyKit\Image;
+namespace SteganographyKit;
 
-class Exception extends \SteganographyKit\Exception  
+class RuntimeException extends \RuntimeException 
 {
     
 }

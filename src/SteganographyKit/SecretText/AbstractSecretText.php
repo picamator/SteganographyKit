@@ -18,45 +18,22 @@ abstract class AbstractSecretText implements SecretTextInterface
      * it helps to identify where secret text end
      */
     const END_TEXT_MARK = '0000000000000000';
-    
+        
     /**
-     * Length of secretText item
-     */
-    const TEXT_ITEM_LENGTH = 8;
-    
-    /**
-     * Encoded text to ASCII
-     *
-     * @var string 
-     */
-    protected $encodedText;
-    
-    /**
-     * Cache container
+     * Data Options
      * 
      * @var array 
      */
-    static protected $cache = array();
+    protected $dataOptions = array();
     
     /**
      * @param array $options
      */
-    public function __construct(array $options) 
+    public function __construct(array $options = array()) 
     {
         $this->setOptions($options);
     }
-    
-    /**
-     * Gets size data in bit
-     * 
-     * @return integer
-     */
-    public function getSize() 
-    {
-        return strlen($this->encodedText) * self::TEXT_ITEM_LENGTH 
-            + strlen(self::END_TEXT_MARK);
-    }
-    
+        
     /**
      * Gets position of end mark
      * 
@@ -67,46 +44,18 @@ abstract class AbstractSecretText implements SecretTextInterface
     {
         return strpos($secretText, self::END_TEXT_MARK);
     }
-       
+     
     /**
-     * Remove text endMark
+     * Sets Data Options
      * 
-     * @param string    $binaryData - raw secretText with endMark
-     * @param integer   $endMarkPos - position of endMark
-     * @return string
+     * @param array $dataOptions
+     * @return self
+     * @throws SteganographyKit\InvalidArgumentException
      */
-    static protected function removeEndMark($binaryData, $endMarkPos) 
+    public function setDataOptions(array $dataOptions) 
     {
-        // remove endText mark
-        $result = substr($binaryData, 0, $endMarkPos);
+        $this->dataOptions = array_merge($this->dataOptions, $dataOptions);
         
-        // it's possible remove some zeros from last character
-        $missingZero = self::TEXT_ITEM_LENGTH - (strlen($result) % self::TEXT_ITEM_LENGTH);
-        if ($missingZero !== self::TEXT_ITEM_LENGTH) {
-            $result .= str_repeat('0', $missingZero);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * Set to cache
-     * 
-     * @param string $key
-     * @param string $value
-     */
-    static protected function setToCache($key, $value) 
-    {
-        self::$cache[$key] = $value;
-    }
-    
-    /**
-     * Gets from cache
-     * 
-     * @return string|false
-     */
-    static protected function getFromCache($key) 
-    {
-        return (key_exists($key, self::$cache)) ? self::$cache[$key] : false;
+        return $this;
     }
 }

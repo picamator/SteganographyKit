@@ -9,6 +9,8 @@
  */
 
 namespace SteganographyKit\StegoKey;
+use SteganographyKit\InvalidArgumentException;
+use SteganographyKit\RuntimeException;
 
 class PseudoRandomKey extends AbstractStegoKey
 { 
@@ -39,12 +41,12 @@ class PseudoRandomKey extends AbstractStegoKey
      * 
      * @param string|integer $secretKey
      * @return self
-     * @throw Exception
+     * @throw SteganographyKit\InvalidArgumentException
      */
     public function setSecretKey($secretKey)
     {
         if ($this->validateSecretKey($secretKey) === false) {
-            throw new Exception('Invalid secretKey: "' . $secretKey . '"');
+            throw new InvalidArgumentException('Invalid secretKey: "' . $secretKey . '"');
         }
         
         $this->secretKey = $secretKey;
@@ -78,7 +80,7 @@ class PseudoRandomKey extends AbstractStegoKey
      * @param integer $xMax
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
-     * @throw Exception
+     * @throw SteganographyKit\RuntimeException
      * @FIXME It's possible that secretkey was not set
      */
     public function getCoordinate(array $prevCoordinate, $xMax, $yMax)
@@ -102,7 +104,7 @@ class PseudoRandomKey extends AbstractStegoKey
         }
          
         if (is_null($result)) {
-            throw new Exception('Coordinate generation was failed. The ' 
+            throw new RuntimeException('Coordinate generation was failed. The ' 
                 . self::MAX_COORDINAT_REPEAT . ' times to get new one was used.');
         }
         

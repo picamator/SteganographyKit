@@ -9,7 +9,7 @@
 namespace SteganographyKit\StegoSystem;
 
 use SteganographyKit\BaseTest;
-use SteganographyKit\SecretText\Ascii;
+use SteganographyKit\SecretText\PlainText;
 use SteganographyKit\CoverText\CoverImage;
 use SteganographyKit\StegoText\StegoImage;
 
@@ -49,8 +49,9 @@ class BaseLsbTest extends BaseTest
             . $optionsCoverText['savePath'];
                
         $coverText      = new CoverImage($optionsCoverText);  
-        $secretText     = new Ascii($optionsSecretText);
-            
+        $secretText     = new PlainText();
+        
+        $secretText->setDataOptions($optionsSecretText);
         $stegoImgPath   = $stegoSystem->setUseChannel($useChannel)
             ->encode($secretText, $coverText);
         
@@ -60,7 +61,7 @@ class BaseLsbTest extends BaseTest
         $stegoText  = new StegoImage(array(
             'path' => $stegoImgPath
         ));
-        $decodeText = $stegoSystem->decode($stegoText, new Ascii());
+        $decodeText = $stegoSystem->decode($stegoText, $secretText);
         
         $this->assertEquals($optionsSecretText['text'], $decodeText);
     }

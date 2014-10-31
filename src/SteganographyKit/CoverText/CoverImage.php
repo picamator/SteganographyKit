@@ -9,6 +9,7 @@
 
 namespace SteganographyKit\CoverText;
 use SteganographyKit\Image\ImageTrait;
+use SteganographyKit\RuntimeException;
 
 class CoverImage extends AbstractCoverText 
 { 
@@ -43,7 +44,6 @@ class CoverImage extends AbstractCoverText
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...,);
      * </code>
-     * @throws Exception
      */
     public function getBinaryData($xIndex, $yIndex) 
     {        
@@ -59,7 +59,6 @@ class CoverImage extends AbstractCoverText
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
      * </code>
-     * @throws Exception
      */
     public function getDecimalData($xIndex, $yIndex) 
     {        
@@ -81,12 +80,12 @@ class CoverImage extends AbstractCoverText
      * Save modified image
      * 
      * @return string - path to image
-     * @throws Exception
+     * @throws SteganographyKit\RuntimeException
      */
     public function save() 
     {
         if(!imagepng($this->image, $this->options['savePath'])) {
-            throw new Exception('Can not save result image to destination '
+            throw new RuntimeException('Can not save result image to destination: '
                 . $this->options['savePath']);
         }
         
