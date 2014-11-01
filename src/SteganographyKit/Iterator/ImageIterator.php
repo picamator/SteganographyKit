@@ -52,7 +52,7 @@ class ImageIterator implements \Iterator
      * 
      * @var integer 
      */
-    protected $index = '0,0';
+    protected $index = 0;
     
     /**
      * @param integer $xMax
@@ -71,11 +71,11 @@ class ImageIterator implements \Iterator
     /**
      * Return the current element
      * 
-     * @return integer
+     * @return array
      */
     public function current() 
     {
-        return imagecolorat($this->image, $this->x, $this->y);
+        return array('x' => $this->x, 'y' => $this->y);
     }
 
     /**
@@ -85,6 +85,10 @@ class ImageIterator implements \Iterator
      */
     public function key() 
     {
+        if ($this->index === 0) {
+            $this->updateIndex();
+        }
+        
         return $this->index;
     }
     
@@ -132,6 +136,6 @@ class ImageIterator implements \Iterator
     
     protected function updateIndex() 
     {
-        $this->index = $this->x . ',' . $this->y;
+        $this->index = imagecolorat($this->image, $this->x, $this->y);
     }
 }

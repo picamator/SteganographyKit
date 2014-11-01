@@ -138,8 +138,7 @@ abstract class AbstractLsb implements StegoSystemInterface
         
         return $secretText->getFromBinaryData($result, $endMarkPos);
     }
-        
-    
+         
     /**
      * Encode secret text item
      * 
@@ -151,8 +150,8 @@ abstract class AbstractLsb implements StegoSystemInterface
         ImageInterface $coverText, $secretItem
     ) {  
         // get original pixel and coordinat
-        $original = $coverText->getDecimalColor($coverTextIterator->current());
-        list($coordinate['x'], $coordinate['y']) = explode(',', $coverTextIterator->key());
+        $original   = $coverText->getDecimalColor($coverTextIterator->key());
+        $coordinate = $coverTextIterator->current();
              
         // modified pixel could not have all channels
         $modified       = $original;
@@ -190,10 +189,10 @@ abstract class AbstractLsb implements StegoSystemInterface
      */
     protected function decodeItem(\Iterator $coverTextIterator, ImageInterface $stegoText) 
     {
-        $pixelData = $stegoText->getBinaryColor($coverTextIterator->current());
+        $pixelData = $stegoText->getBinaryColor($coverTextIterator->key());
        
-        list($coordinate['x'], $coordinate['y']) = explode(',', $coverTextIterator->key());
-        $channel   = $this->getChannels($coordinate);    
+        $coordinate = $coverTextIterator->current();
+        $channel    = $this->getChannels($coordinate);    
         
         $result = '';
         foreach($channel as $item) {
