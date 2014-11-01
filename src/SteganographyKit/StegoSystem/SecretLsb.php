@@ -7,7 +7,6 @@
  */
 
 namespace SteganographyKit\StegoSystem;
-use SteganographyKit\SecretText\SecretTextInterface;
 use SteganographyKit\CoverText\CoverTextInterface;
 use SteganographyKit\RuntimeException;
 

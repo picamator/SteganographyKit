@@ -37,7 +37,7 @@ abstract class AbstractStegoKey implements StegoKeyInterface
     public function getSecretKey() 
     {
         if (is_null($this->secretKey)) {
-            throw new LogicException('Coordinats can not be generated. SecretKey was not set.');
+            throw new LogicException('SecretKey was not set');
         }
         
         return $this->secretKey;

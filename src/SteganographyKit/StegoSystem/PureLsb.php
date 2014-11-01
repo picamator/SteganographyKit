@@ -7,46 +7,35 @@
  */
 
 namespace SteganographyKit\StegoSystem;
-use SteganographyKit\CoverText\CoverTextInterface;
+use SteganographyKit\Image\ImageInterface;
 use SteganographyKit\RuntimeException;
 
 class PureLsb extends AbstractLsb
-{    
+{
     /**
      * {@inheritDoc}
      */
-    protected function getNextCoordinate(array $prevCoordinate, $xMax, $yMax) 
+    protected function validateCapacity($secretSize, ImageInterface $coverText) 
     {
-        $prevCoordinate['x']++;
-        if ($prevCoordinate['x'] > $xMax) {
-            $prevCoordinate['x'] = 0;
-            $prevCoordinate['y']++;
-        } 
+        $imgSize        = $coverText->getSize();
+        $coverCapacity  = $this->channelsSize * $imgSize['width'] * $imgSize['height'];    
         
-        if ($prevCoordinate['y'] > $yMax) {
-            return false;
+        if ($secretSize > $coverCapacity) {
+            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
+               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
         }
-        
-        return $prevCoordinate;
     }
     
     /**
      * {@inheritDoc}
      */
-    protected function validateCapacity($secretSize, CoverTextInterface $coverText) 
+    protected function getChannels(array $coordinate) 
     {
-         $coverCapacity  = $coverText->getCoverCapacity($this->useChannelSize);        
-         if ($secretSize > $coverCapacity) {
-             throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
-                . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
-         }
+        return $this->channels;
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    protected function getChannel(array $coordinate) 
+    protected function getImageIterator(ImageInterface $image) 
     {
-        return $this->useChannel;
+        return $image->getIterator();
     }
 }

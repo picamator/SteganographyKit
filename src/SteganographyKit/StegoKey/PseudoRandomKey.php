@@ -81,7 +81,6 @@ class PseudoRandomKey extends AbstractStegoKey
      * @param integer $yMax
      * @return array - array('x' => 10, 'y' => 5)
      * @throw SteganographyKit\RuntimeException
-     * @FIXME It's possible that secretkey was not set
      */
     public function getCoordinate(array $prevCoordinate, $xMax, $yMax)
     {   

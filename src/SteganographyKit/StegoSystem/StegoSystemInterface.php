@@ -8,8 +8,7 @@
 
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\SecretText\SecretTextInterface;
-use SteganographyKit\StegoText\StegoTextInterface;
-use SteganographyKit\CoverText\CoverTextInterface;
+use SteganographyKit\Image\ImageInterface;
 use SteganographyKit\StegoKey\StegoKeyInterface;
 
 interface StegoSystemInterface 
@@ -25,36 +24,27 @@ interface StegoSystemInterface
     /**
      * Sets channels that are going to use for encode-decode
      * 
-     * @param array $useChannel
+     * @param array $channels
      * @return self
      * @throws SteganographyKit\InvalidArgumentException
      */
-    public function setUseChannel(array $useChannel);
-    
-    /**
-     * Gets supported channels
-     * 
-     * @return array
-     */
-    public function getSupportedChannel();
-    
+    public function setChannels(array $channels);
+        
     /**
      * Encode secretText
      * 
      * @param   SecretTextInterface $secretText
-     * @param   CoverTextInterface  $coverText
+     * @param   ImageInterface      $coverText
      * @return  string
      */
-    public function encode(SecretTextInterface $secretText, 
-        CoverTextInterface $coverText);
+    public function encode(SecretTextInterface $secretText, ImageInterface $coverText);
     
     /**
      * Decode stegoText
      * 
-     * @param   StegoTextInterface  $stegoText
+     * @param   ImageInterface      $stegoText
      * @param   SecretTextInterface $secretText
      * @return  string
      */
-    public function decode(StegoTextInterface $stegoText, 
-        SecretTextInterface $secretText);
+    public function decode(ImageInterface $stegoText, SecretTextInterface $secretText);
 }

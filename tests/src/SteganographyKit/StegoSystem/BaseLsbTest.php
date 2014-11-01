@@ -10,8 +10,7 @@ namespace SteganographyKit\StegoSystem;
 
 use SteganographyKit\BaseTest;
 use SteganographyKit\SecretText\PlainText;
-use SteganographyKit\CoverText\CoverImage;
-use SteganographyKit\StegoText\StegoImage;
+use SteganographyKit\Image\Image;
 
 class BaseLsbTest extends BaseTest 
 {    
@@ -37,30 +36,27 @@ class BaseLsbTest extends BaseTest
      * 
      * @param array                 $optionsCoverText
      * @param array                 $optionsSecretText
-     * @param array                 $useChannel
+     * @param array                 $channels
      * @param StegoSystemInterface  $stegoSystem
      */
     protected function encodeDecode(array $optionsCoverText, 
-        array $optionsSecretText, array $useChannel, StegoSystemInterface $stegoSystem    
+        array $optionsSecretText, array $channels, StegoSystemInterface $stegoSystem    
     ) {           
         // encode
         $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
         $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
             . $optionsCoverText['savePath'];
                
-        $coverText      = new CoverImage($optionsCoverText);  
+        $coverText      = new Image($optionsCoverText);  
         $secretText     = new PlainText();
         
         $secretText->setDataOptions($optionsSecretText);
-        $stegoImgPath   = $stegoSystem->setUseChannel($useChannel)
-            ->encode($secretText, $coverText);
+        $encode = $stegoSystem->setChannels($channels)->encode($secretText, $coverText);
         
-        $this->assertTrue(file_exists($stegoImgPath));
+        $this->assertTrue($encode);
         
         // decode
-        $stegoText  = new StegoImage(array(
-            'path' => $stegoImgPath
-        ));
+        $stegoText  = new Image(array('path' => $optionsCoverText['savePath']));
         $decodeText = $stegoSystem->decode($stegoText, $secretText);
         
         $this->assertEquals($optionsSecretText['text'], $decodeText);

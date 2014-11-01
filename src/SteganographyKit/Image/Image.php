@@ -7,11 +7,15 @@
  */
 
 namespace SteganographyKit\Image;
+use SteganographyKit\Options\OptionsTrait;
+use SteganographyKit\Iterator\ImageIterator;
 use SteganographyKit\RuntimeException;
 use SteganographyKit\InvalidArgumentException;
 
-trait ImageTrait
+class Image implements ImageInterface, \IteratorAggregate
 {   
+    use OptionsTrait;
+    
     /**
      * Image size
      * 
@@ -52,6 +56,34 @@ trait ImageTrait
      * @var resource 
      */
     protected $image = null;
+   
+    /**
+     * Options
+     * 
+     * @var array
+     */
+    protected $options = array(
+        'path'      => '',
+        'savePath'  => ''
+    );
+    
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options) 
+    {
+        $this->setOptions($options);
+        $this->init();
+    }
+    
+    /**
+     * Gets iterator
+     * 
+     * @return ImageIterator;
+     */
+    public function getIterator() {
+        return new ImageIterator($this);
+    }
     
     /**
      * Gets image
@@ -68,58 +100,11 @@ trait ImageTrait
      * 
      * @return array
      */
-    public function getImageSize()
+    public function getSize()
     {
         return $this->imgSize;
     }        
-    
-    /**
-     * Gets rgb and alpha of pixel as binary for current pixel coordinat
-     * 
-     * @param integer $xIndex    x coordinat
-     * @param integer $yIndex    y coordinat
-     * @return array
-     * <code>
-            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
-     * </code>
-     */
-    public function getBinaryColor($xIndex, $yIndex) 
-    {        
-        $result = $this->getDecimalColor($xIndex, $yIndex);
-        foreach($result as &$item) {
-            $item = sprintf('%08d', decbin($item));
-        }
-        unset($item);
-        
-        return $result;
-    } 
-    
-    /**
-     * Gets rgb and alpha of pixel as decimal for current pixel coordinat
-     * It works only for truecolor otherwise it should be used imagecolorsforindex
-     * 
-     * @param integer $xIndex    x coordinat
-     * @param integer $yIndex    y coordinat
-     * @return array contains
-     * <code>
-            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
-     * </code>
-     */
-    public function getDecimalColor($xIndex, $yIndex) 
-    {
-        $colorIndex = imagecolorat($this->image, $xIndex, $yIndex);
-        
-        $result = array(
-            'red'   => ($colorIndex >> 16) & 0xFF,
-            'green' => ($colorIndex >> 8) & 0xFF,
-            'blue'  => $colorIndex & 0xFF,
-            'alpha' => ($colorIndex & 0x7F000000) >> 24
-        );
-//        $result = imagecolorsforindex($this->image, $colorIndex);
-        
-        return $result;
-    }
-        
+           
     /**
      * Sets pixel
      * Modify image pixel
@@ -141,6 +126,65 @@ trait ImageTrait
         
         return $this;
     }
+        
+    /**
+     * Gets color in rgb by colorIndex
+     * It works only for truecolor otherwise it should be used imagecolorsforindex
+     * 
+     * @param integer $colorIndex result of imagecolorate
+     * @return array
+     * <code>
+            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
+     * </code>
+     */
+    public function getDecimalColor($colorIndex) 
+    {   
+        $result = array(
+            'red'   => ($colorIndex >> 16) & 0xFF,
+            'green' => ($colorIndex >> 8) & 0xFF,
+            'blue'  => $colorIndex & 0xFF,
+            'alpha' => ($colorIndex & 0x7F000000) >> 24
+        );
+//        $result = imagecolorsforindex($this->image, $colorIndex);
+        
+        return $result;
+    }
+    
+    /**
+     * Encode decimalPixel to binary
+     * 
+     * @param integer $colorIndex result of imagecolorate
+     * @return array
+     * <code>
+            array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
+     * </code>
+     */
+    public function getBinaryColor($colorIndex)
+    {   
+        $result = $this->getDecimalColor($colorIndex);
+        foreach($result as &$item) {
+            $item = sprintf('%08d', decbin($item));
+        }
+        unset($item);
+        
+        return $result;
+    } 
+    
+    /**
+     * Save image
+     * 
+     * @return boolean true if ok or false otherwise
+     */
+    public function save() 
+    {
+        if (empty($this->options['savePath']) || 
+            imagepng($this->image, $this->options['savePath']) === false    
+        ) {
+            return false;
+        }
+        
+        return true;
+    } 
     
     /**
      * Destroy image
@@ -178,7 +222,7 @@ trait ImageTrait
         }
         
         if($image === false) {
-            throw new InvalidArgumentException('Can not create image by path ' . $path);
+            throw new InvalidArgumentException('Can not create image by path: ' . $path);
         }
         
         $this->image = $image;
@@ -221,6 +265,21 @@ trait ImageTrait
     }
     
     /**
+     * Initialize and validation
+     */
+    protected function init() 
+    {        
+        $this->validateGbLib();
+        $this->validatePath($this->options['path']);
+        $this->validateSavePath($this->options['savePath']);
+        
+        $this->setImgSize($this->options['path']);
+        $this->validateType();
+        
+        $this->setImage($this->options['path']);
+    }
+    
+    /**
      * Verify is GB Lib extension was loaded
      * 
      * @throws SteganographyKit\RuntimeException
@@ -253,16 +312,20 @@ trait ImageTrait
      */
     protected function validateSavePath($savePath) 
     {
+        if (empty($savePath)) {
+            return;
+        }
+        
         $dirPath = dirname($savePath);      
         if(!file_exists($dirPath) && !mkdir($dirPath, 0755, true)) {
             throw new InvalidArgumentException('Impossible create subfolders structure for destination: ' . $savePath);
         } else if(!is_writable($dirPath)) {
-            throw new InvalidArgumentException('Destination does not have writable permission: ' . $savePath);
+            throw new InvalidArgumentException('Destination does not have writable permission: ' . $dirPath);
         }
     }
     
     /**
-     * Validate supported type
+     * Validate supported types
      * 
      * @throws SteganographyKit\InvalidArgumentException
      */
