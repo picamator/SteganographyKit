@@ -8,7 +8,7 @@
 
 namespace SteganographyKit\Image;
 
-interface ImageInterface 
+interface ImageInterface extends \IteratorAggregate
 {
     /**
      * Gets image

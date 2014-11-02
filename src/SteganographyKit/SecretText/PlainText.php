@@ -8,6 +8,7 @@
  */
 
 namespace SteganographyKit\SecretText;
+use SteganographyKit\Iterator\SecretTextIterator;
 use SteganographyKit\RuntimeException;
 use SteganographyKit\InvalidArgumentException;
 
@@ -51,6 +52,16 @@ class PlainText extends AbstractSecretText
         parent::__construct($options);
         
         $this->validateZLib();
+    }
+    
+   /**
+    * Gets Iterator
+    * 
+    * @return SecretTextIterator
+    */ 
+    public function getIterator() 
+    {
+        return new SecretTextIterator($this);
     }
 
     /**
@@ -107,7 +118,7 @@ class PlainText extends AbstractSecretText
         
         return $result;
     }
-    
+        
     /**
      * Convert data
      * 

@@ -55,8 +55,7 @@ class ImageIterator implements \Iterator
     protected $index = 0;
     
     /**
-     * @param integer $xMax
-     * @param integer $yMax
+     * @param ImageInterface $image
      */
     public function __construct(ImageInterface $image) 
     {
@@ -75,7 +74,9 @@ class ImageIterator implements \Iterator
      */
     public function current() 
     {
-        return array('x' => $this->x, 'y' => $this->y);
+        $color = imagecolorat($this->image, $this->x, $this->y);
+        
+        return array('x' => $this->x, 'y' => $this->y, 'color' => $color);
     }
 
     /**
@@ -84,11 +85,7 @@ class ImageIterator implements \Iterator
      * @return scalar scalar on success, or null on failure
      */
     public function key() 
-    {
-        if ($this->index === 0) {
-            $this->updateIndex();
-        }
-        
+    {   
         return $this->index;
     }
     
@@ -101,12 +98,12 @@ class ImageIterator implements \Iterator
     {
         if ($this->x + 1 >= $this->xMax) {
             $this->x = 0;
-            $this->y++;
+            $this->y ++;
         } else {
-            $this->x++;
+            $this->x ++;
         }
         
-        $this->updateIndex(); 
+        $this->index ++;
     }
 
     /**
@@ -118,7 +115,7 @@ class ImageIterator implements \Iterator
     {
         $this->x        = 0;
         $this->y        = 0;
-        $this->updateIndex();
+        $this->index    = 0;
     }
 
     /**
@@ -132,10 +129,5 @@ class ImageIterator implements \Iterator
         $yValid = $this->y < $this->yMax || $this->y === 0;
         
         return  $xValid && $yValid;
-    }
-    
-    protected function updateIndex() 
-    {
-        $this->index = imagecolorat($this->image, $this->x, $this->y);
     }
 }

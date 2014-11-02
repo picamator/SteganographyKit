@@ -27,6 +27,13 @@ abstract class AbstractSecretText implements SecretTextInterface
     protected $dataOptions = array();
     
     /**
+     * Binary Item Size
+     * 
+     * @var integer 
+     */
+    protected $binaryItemSize = 3;
+    
+    /**
      * @param array $options
      */
     public function __construct(array $options = array()) 
@@ -57,5 +64,30 @@ abstract class AbstractSecretText implements SecretTextInterface
         $this->dataOptions = array_merge($this->dataOptions, $dataOptions);
         
         return $this;
+    }
+    
+    /**
+     * Sets binary item size
+     * It's used for iteration process
+     * 
+     * @param integer $size
+     * @return self
+     */
+    public function setBinaryItemSize($size) 
+    {
+        $this->binaryItemSize = $size;
+        
+        return $this;
+    }
+    
+    /**
+     * Gets binary item size
+     * It's used for iteration process
+     * 
+     * @return integer
+     */
+    public function getBinaryItemSize() 
+    {
+        return $this->binaryItemSize;
     }
 }

@@ -12,7 +12,7 @@ use SteganographyKit\Iterator\ImageIterator;
 use SteganographyKit\RuntimeException;
 use SteganographyKit\InvalidArgumentException;
 
-class Image implements ImageInterface, \IteratorAggregate
+class Image implements ImageInterface
 {   
     use OptionsTrait;
     

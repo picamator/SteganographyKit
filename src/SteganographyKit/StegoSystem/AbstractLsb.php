@@ -94,25 +94,14 @@ abstract class AbstractLsb implements StegoSystemInterface
      */
     public function encode(SecretTextInterface $secretText, ImageInterface $coverText)
     {        
-        // convert secret data to binary
-        $secretData     = $secretText->getBinaryData(); 
-        $secretSize     = strlen($secretData);    
-        $iterator       = $this->getImageIterator($coverText);
+        $iterator = new \MultipleIterator(\MultipleIterator::MIT_NEED_ALL|\MultipleIterator::MIT_KEYS_ASSOC);
+        $iterator->attachIterator($this->getImageIterator($coverText), 'img');
+        $iterator->attachIterator($secretText->getIterator(), 'secText');
         
-        // validate
-        $this->validateCapacity($secretSize, $coverText); 
-        
-        // encode
-        for ($i = 0; $i <= $secretSize; $i = $i + $this->channelsSize) {
-            // get item
-            $secretItem = substr($secretData, $i, $this->channelsSize);
-            // encode item
-            $this->encodeItem($iterator, $coverText, $secretItem); 
-            // move to next pixel
-            $iterator->next();
+        foreach ($iterator as $item) {
+            $this->encodeItem($item['img'], $coverText, $item['secText']);
         }
 
-        // save StegoText
         return $coverText->save();
     }
     
@@ -142,42 +131,33 @@ abstract class AbstractLsb implements StegoSystemInterface
     /**
      * Encode secret text item
      * 
-     * @param \Iterator         $coverTextIterator
+     * @param array             $pixelData coordinate with color ex. ['x' => 0, 'y' => 0, 'color' => 732327]
      * @param ImageInterface    $coverText
      * @param string            $secretItem - e.g. "100"
      */
-    protected function encodeItem(\Iterator $coverTextIterator, 
+    protected function encodeItem(array $pixelData, 
         ImageInterface $coverText, $secretItem
     ) {  
-        // get original pixel and coordinat
-        $original   = $coverText->getDecimalColor($coverTextIterator->key());
-        $coordinate = $coverTextIterator->current();
-             
-        // modified pixel could not have all channels
-        $modified       = $original;
-        $channel        = $this->getChannels($coordinate);
+        $colorData      = $coverText->getDecimalColor($pixelData['color']);
+        $channels       = $this->getChannels($pixelData);
         $secretSize     = strlen($secretItem);
         
         // encode
         for ($i = 0; $i < $secretSize; $i++) {
             // get channel and modify bit
-            $channelItem  = array_shift($channel);
-            if ($original[$channelItem] & 1) {
+            $channelItem  = array_shift($channels);
+            if ($colorData[$channelItem] & 1) {
                 // odd
-                $modified[$channelItem] = ($secretItem[$i] === '1') ? 
-                    $original[$channelItem] : $original[$channelItem] - 1;  
+                $colorData[$channelItem] = ($secretItem[$i] === '1') ? 
+                    $colorData[$channelItem] : $colorData[$channelItem] - 1;  
             } else {
                 // even
-                $modified[$channelItem] = ($secretItem[$i] === '1') ? 
-                    $original[$channelItem] + 1 : $original[$channelItem]; 
+                $colorData[$channelItem] = ($secretItem[$i] === '1') ? 
+                    $colorData[$channelItem] + 1 : $colorData[$channelItem]; 
             }
         }
         
-        // modify pixel if it's neccesary
-        $diff = array_diff_assoc($original, $modified);
-        if (!empty($diff)) {
-            $coverText->setPixel($coordinate['x'], $coordinate['y'], $modified);
-        }
+        $coverText->setPixel($pixelData['x'], $pixelData['y'], $colorData);
     }
     
     /**
@@ -189,14 +169,13 @@ abstract class AbstractLsb implements StegoSystemInterface
      */
     protected function decodeItem(\Iterator $coverTextIterator, ImageInterface $stegoText) 
     {
-        $pixelData = $stegoText->getBinaryColor($coverTextIterator->key());
-       
-        $coordinate = $coverTextIterator->current();
-        $channel    = $this->getChannels($coordinate);    
+        $pixelData  = $coverTextIterator->current();
+        $colorRgb   = $stegoText->getBinaryColor($pixelData['color']);     
+        $channel    = $this->getChannels($pixelData);    
         
         $result = '';
         foreach($channel as $item) {
-            $result .= substr($pixelData[$item], -1, 1);
+            $result .= substr($colorRgb[$item], -1, 1);
         }
         
         return $result;
