@@ -16,15 +16,13 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * @var string 
      */
     protected $dataPath = './data/';
-        
+       
     /**
-     * Template methods runs once for each test method
-     * of the test case class 
+     * Path to steganography folder
+     * 
+     * @var string 
      */
-    protected function setUp()
-    {
-
-    }
+    static protected $stegoPath = 'stego';
     
     /**
      * Gets full path to data
@@ -42,5 +40,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         }
             
         return realpath($fullPath);
+    }
+    
+    /**
+     * Clear stego path
+     */
+    protected function clearStegoPath()
+    {
+        $path = $this->getDataPath(self::$stegoPath); 
+        foreach (new \DirectoryIterator($path) as $fileInfo) {
+            if($fileInfo->isDot()) {
+                continue;
+            }
+            
+            unlink($fileInfo->getPathname());
+        }
     }
 }

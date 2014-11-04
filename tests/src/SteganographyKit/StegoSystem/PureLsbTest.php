@@ -34,7 +34,7 @@ class PureLsbTest extends BaseLsbTest
     public function testEncode(array $optionsCoverText, array $optionsSecretText) 
     {                  
         $optionsCoverText['path']       = $this->getDataPath($optionsCoverText['path']);
-        $optionsCoverText['savePath']   = dirname($optionsCoverText['path']) . '/'
+        $optionsCoverText['savePath']   = $this->getDataPath(self::$stegoPath) . '/'
             . $optionsCoverText['savePath'];
                 
         $coverText      = new Image($optionsCoverText);  
@@ -91,7 +91,7 @@ class PureLsbTest extends BaseLsbTest
             array(
                 array(
                     'path'      => 'original_200_200.png',
-                    'savePath'  => 'stego/original_' . date('Y_m_d_H_i_s') . '.png'
+                    'savePath'  => 'original_' . date('Y_m_d_H_i_s') . '.png'
                 ),
                 array('text' => 'Lorem ipsum Li'),
             )

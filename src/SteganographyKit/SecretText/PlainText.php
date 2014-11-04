@@ -45,9 +45,6 @@ class PlainText extends AbstractSecretText
         parent::__construct($options);
         
         $this->validateZLib();
-        if (!empty($this->options['text'])) {
-            $this->setBinaryData();
-        }
     }
     
    /**
@@ -69,6 +66,17 @@ class PlainText extends AbstractSecretText
     public function count($mode = 'COUNT_NORMAL') 
     {
         return strlen($this->binaryData);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function setOptions(array $options) {
+        parent::setOptions($options);
+        
+        if (!empty($options['text'])) {
+            $this->setBinaryData();
+        }
     }
     
     /**

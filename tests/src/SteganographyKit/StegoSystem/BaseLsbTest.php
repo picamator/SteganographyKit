@@ -28,8 +28,16 @@ class BaseLsbTest extends BaseTest
      */
     static protected $optionsCoverText = array(
         'path'      => 'original_200_200.png',
-        'savePath'  => 'stego/original_%s.png'
+        'savePath'  => 'original_%s.png'
     ); 
+    
+    /**
+     * Remove files in stegoPath after runs each test
+     */
+    public function tearDown()
+    {
+        $this->clearStegoPath();
+    }
     
     /**
      * Base Encode Decode
@@ -160,7 +168,7 @@ class BaseLsbTest extends BaseTest
         
         $result =  array(
             'path'      => self::$optionsCoverText['path'],
-            'savePath'  => sprintf(self::$optionsCoverText['savePath'], $args)
+            'savePath'  => self::$stegoPath . '/' . sprintf(self::$optionsCoverText['savePath'], $args)
         );
         
         return $result;
