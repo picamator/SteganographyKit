@@ -38,6 +38,65 @@ The best way to install SteganographyKit is use composer:
 
 * Run `composer update`
 
+Usage
+-----
+### Encode
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+$stegoContainer = new Picamator\SteganographyKit\StegoContainer();
+
+// cover-image.png|.jpg|.gif - path to existing image to cover secretText
+// stego-image.png  - path where new stegoImage should be generated
+$stegoContainer->encode('/path/to/cover-image.png', '/path/to/stego-image.png', 'secret test');
+
+// output raw image 
+$stegoContainer->renderImage();
+
+```
+
+### Decode
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+$stegoContainer = new Picamator\SteganographyKit\StegoContainer();
+
+// stego-image.png
+$secretText = $stegoContainer->decode('/path/to/stego-image.png');
+
+echo $secretText;
+
+```
+
+### Use other stegoSystem
+``` php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+$stegoContainer = new Picamator\SteganographyKit\StegoContainer();
+$stegoSystem    = new Picamator\SteganographyKit\StegoSystem\SecretLsb();
+
+// configure secret key
+$secretKey = 123456;
+$stegoKey   = new Picamator\SteganographyKit\StegoKey\RandomKey($secretKey);
+
+$stegoSystem->setStegoKey($stegoKey);
+$stegoContainer->setStegoSystem($stegoSystem);
+
+// it's not necessary to set second parameter if result will put in stream 
+$stegoContainer->encode('/path/to/cover-image.png', '', 'secret test');
+
+// output raw image
+header('Content-Type: image/png');
+$stegoContainer->renderImage();
+
+```
+
 Least Significant Bit (LSB)
 ---------------------------
 LSB method is modified least significant bit of coverText to get stegoText. 

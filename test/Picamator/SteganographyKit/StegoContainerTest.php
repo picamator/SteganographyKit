@@ -60,6 +60,26 @@ class StegoContainerTest extends BaseTest
         $this->assertEquals($expected, $actual);
     }
     
+    /**
+     * @dataProvider providerRenderImage
+     * @param string $coverPath
+     * @param string $stegoPath
+     * @param string $text
+     */
+    public function testRenderImage($coverPath, $text) 
+    {       
+        $coverPath = $this->getDataPath($coverPath);    
+        $this->stegoContainer->encode($coverPath, '', $text);
+        
+        ob_start();
+            $this->stegoContainer->renderImage();
+
+            $result = ob_get_contents();
+        ob_end_clean();
+        
+        $this->assertEquals(strlen($result), 85472);
+    }
+    
     public function providerEncode()
     {
         return array(
@@ -71,6 +91,13 @@ class StegoContainerTest extends BaseTest
     {
         return array(
             array('lsb/pure/stego_origin_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm')
+        );
+    }
+    
+    public function providerRenderImage()
+    {
+        return array(
+            array('original_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm')
         );
     }
 }

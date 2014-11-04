@@ -26,6 +26,13 @@ class StegoContainer
     protected $stegoSystem = null;    
     
     /**
+     * Image
+     * 
+     * @var Image 
+     */
+    protected $image;
+    
+    /**
      * Encode
      * 
      * @param string $coverPath
@@ -35,16 +42,16 @@ class StegoContainer
      */
     public function encode($coverPath, $stegoPath, $text) 
     {
-        $coverText  = new Image(array(
+        $this->setImage(array(
             'path'      => $coverPath,
             'savePath'  => $stegoPath
-        ));  
+        ));
         $secretText = new PlainText(array(
             'text' => $text
         ));
         
         return $this->getStegoSystem()
-            ->encode($secretText, $coverText);
+            ->encode($secretText, $this->image);
     }
     
     /**
@@ -55,13 +62,22 @@ class StegoContainer
      */
     public function decode($stegoPath) 
     {
-        $stegoText  = new Image(array(
+        $this->setImage(array(
             'path'=> $stegoPath,
         ));  
         $secretText = new PlainText();
         
         return $this->getStegoSystem()
-            ->decode($stegoText, $secretText);
+            ->decode($this->image, $secretText);
+    }
+    
+    /**
+     * Render image
+     * raw image stream will be outputted directly
+     */
+    public function renderImage() 
+    {
+        imagepng($this->image->getImage());
     }
     
     /**
@@ -90,5 +106,15 @@ class StegoContainer
         }
         
         return  $this->stegoSystem;
+    }
+    
+    /**
+     * Sets image
+     * 
+     * @param array $options
+     */
+    protected function setImage(array $options) 
+    {
+        $this->image = new Image($options);
     }
 }
