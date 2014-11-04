@@ -22,6 +22,22 @@ Requirements
   suhosin.mt_srand.ignore = Off
 ```
 
+Installation
+------------
+The best way to install SteganographyKit is use composer:
+
+* Update your `composer.json`
+
+```json
+{
+    "require": {
+        "picamator/steganographykit": "dev-master"
+    }
+}
+```
+
+* Run `composer update`
+
 Least Significant Bit (LSB)
 ---------------------------
 LSB method is modified least significant bit of coverText to get stegoText. 
