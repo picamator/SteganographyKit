@@ -31,11 +31,10 @@ SteganographyKit has implementation of LSB with such conditions:
 * png, jpg or gif images as coverText,
 * text as a secretText.
 
-Encode diagram:
-![LSB encode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/LSB-encode.png "LSB Encode")
+Encode-Decode diagram:
 
-Decode diagram:
-![LSB Decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/LSB-decode.png "LSB Decode")
+![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/lsb-encode-decode.png "LSB encode-decode")
+
 
 ### Pure Steganography
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
@@ -74,6 +73,7 @@ It should be noticed that `PureLsbTest::testEncodeDecode` or `SecretLsbTest::tes
 UML Diagram
 -----------
 UML diagrams can be found in `/docs/uml` folder:
+
 * Class diagram was created by [ArgoUML](http://argouml.tigris.org)
 * Workflow diagram was written by Google Drawing 
 
