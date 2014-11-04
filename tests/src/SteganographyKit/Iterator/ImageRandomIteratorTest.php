@@ -8,9 +8,9 @@
 
 namespace SteganographyKit\Iterator;
 use SteganographyKit\BaseTest;
-use SteganographyKit\Iterator\ImageIterator;
+use SteganographyKit\Iterator\ImageRandomIterator;
 
-class ImageIteratorTest extends BaseTest 
+class ImageRandomIteratorTest extends BaseTest 
 {
     /**
      * @dataProvider providerIterator
@@ -36,7 +36,7 @@ class ImageIteratorTest extends BaseTest
             ->method('getImage')->will($this->returnValue($imageSrc)); 
 
         // cretate iterator
-        $iterator   = new ImageIterator($image);
+        $iterator   = new ImageRandomIterator($image, 123456);
         $actual     = iterator_to_array($iterator);
                 
         $this->assertEquals($expectedSize, count($actual)); 
@@ -45,11 +45,11 @@ class ImageIteratorTest extends BaseTest
     public function providerIterator()
     {
         return array(
-            array('original_200_200.png', array('width' => 1, 'height' =>  3), 3),
-            array('original_200_200.png', array('width' => 3, 'height' =>  1), 3),
-            array('original_200_200.png', array('width' => 1, 'height' =>  1), 1),
-            array('original_200_200.png', array('width' => 1, 'height' =>  2), 2),
-            array('original_50_50.png', array('width' => 50, 'height' =>  50), 2500),
+            array('original_50_50.png', array('width' => 1, 'height' =>  3), 3),
+            array('original_50_50.png', array('width' => 3, 'height' =>  1), 3),
+            array('original_50_50.png', array('width' => 1, 'height' =>  1), 1),
+            array('original_50_50.png', array('width' => 1, 'height' =>  2), 2),
+            array('original_50_50.png', array('width' => 50, 'height' =>  50), 2500)
         );
     }
 }

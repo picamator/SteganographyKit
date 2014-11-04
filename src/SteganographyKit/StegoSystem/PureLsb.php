@@ -8,32 +8,20 @@
 
 namespace SteganographyKit\StegoSystem;
 use SteganographyKit\Image\ImageInterface;
-use SteganographyKit\RuntimeException;
 
 class PureLsb extends AbstractLsb
-{
+{   
     /**
      * {@inheritDoc}
      */
-    protected function validateCapacity($secretSize, ImageInterface $coverText) 
-    {
-        $imgSize        = $coverText->getSize();
-        $coverCapacity  = $this->channelsSize * $imgSize['width'] * $imgSize['height'];    
-        
-        if ($secretSize > $coverCapacity) {
-            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
-               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
-        }
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected function getChannels(array $coordinate) 
+    protected function getChannels($x, $y) 
     {
         return $this->channels;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     protected function getImageIterator(ImageInterface $image) 
     {
         return $image->getIterator();

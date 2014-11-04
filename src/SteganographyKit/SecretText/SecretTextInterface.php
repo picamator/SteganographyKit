@@ -8,20 +8,12 @@
 
 namespace SteganographyKit\SecretText;
 
-interface SecretTextInterface extends \IteratorAggregate
+interface SecretTextInterface 
 {    
     /**
      * @param array $options
      */
     public function __construct(array $options = array());
-    
-    /**
-     * Sets Data Options
-     * 
-     * @param array $dataOptions
-     * @return self
-     */
-    public function setDataOptions(array $dataOptions);
     
     /**
      * Sets binary item size

@@ -48,9 +48,8 @@ class BaseLsbTest extends BaseTest
             . $optionsCoverText['savePath'];
                
         $coverText      = new Image($optionsCoverText);  
-        $secretText     = new PlainText();
+        $secretText     = new PlainText($optionsSecretText);
         
-        $secretText->setDataOptions($optionsSecretText);
         $encode = $stegoSystem->setChannels($channels)->encode($secretText, $coverText);
         
         $this->assertTrue($encode);

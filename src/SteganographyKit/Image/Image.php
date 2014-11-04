@@ -12,7 +12,7 @@ use SteganographyKit\Iterator\ImageIterator;
 use SteganographyKit\RuntimeException;
 use SteganographyKit\InvalidArgumentException;
 
-class Image implements ImageInterface
+class Image implements ImageInterface, \Countable, \IteratorAggregate 
 {   
     use OptionsTrait;
     
@@ -86,6 +86,17 @@ class Image implements ImageInterface
     }
     
     /**
+     * Count elements
+     * 
+     * @param string $mode
+     * @return int The custom count as an integer
+     */
+    public function count($mode = 'COUNT_NORMAL') 
+    {
+        return $this->imgSize['width'] * $this->imgSize['height'];
+    }
+    
+    /**
      * Gets image
      * 
      * @return resource
@@ -126,10 +137,9 @@ class Image implements ImageInterface
         
         return $this;
     }
-        
+            
     /**
-     * Gets color in rgb by colorIndex
-     * It works only for truecolor otherwise it should be used imagecolorsforindex
+     * Encode color index to rgb array with binary values
      * 
      * @param integer $colorIndex result of imagecolorate
      * @return array

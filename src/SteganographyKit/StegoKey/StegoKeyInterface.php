@@ -39,15 +39,4 @@ interface StegoKeyInterface
      * @return string|integer
      */
     public function generateSecretKey($autoSet = false);
-    
-    /**
-     * Gets coordinate
-     * 
-     * @param array     $prevCoordinate
-     * @param integer   $xMax
-     * @param integer   $yMax
-     * @return array - array('x' => 10, 'y' => 5)
-     * @throw SteganographyKit\RuntimeException
-     */
-    public function getCoordinate(array $prevCoordinate, $xMax, $yMax);
 }

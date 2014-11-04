@@ -7,34 +7,12 @@
  */
 
 namespace SteganographyKit\StegoSystem;
-use SteganographyKit\CoverText\CoverTextInterface;
+use SteganographyKit\Image\ImageInterface;
+use SteganographyKit\Iterator\ImageRandomIterator;
 use SteganographyKit\RuntimeException;
 
 class SecretLsb extends AbstractLsb
-{    
-    /**
-     * {@inheritDoc}
-     */
-    protected function getNextCoordinate(array $prevCoordinate, $xMax, $yMax) 
-    {
-        $result = $this->getStegoKey()
-            ->getCoordinate($prevCoordinate, $xMax, $yMax);
-        
-        return $result;
-    }
-    
-    /**
-     * {@inheritDoc} 4 time less then in PureLsb
-     */
-    protected function validateCapacity($secretSize, CoverTextInterface $coverText) 
-    {
-        $coverCapacity  = $coverText->getCoverCapacity($this->useChannelSize) / 4;        
-        if ($secretSize > $coverCapacity) {
-            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
-               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
-        }
-    }
-    
+{  
     /**
      * {@inheritDoc}
      * 
@@ -44,14 +22,25 @@ class SecretLsb extends AbstractLsb
      *  
      * For instance X = 4, Y = 10 them (2 + 10) % 3 = 2 so we have ['blue', 'green', 'red'].
      */
-    protected function getChannel(array $coordinate) 
+    protected function getChannels($x, $y) 
     {
-        $index          = array_sum($coordinate) % $this->useChannelSize;
+        $index = ($x + $y) % $this->channelsSize;
         
-        $result         = $this->useChannel;
-        $result[$index] = $this->useChannel[0];
-        $result[0]      = $this->useChannel[$index];
+        $result         = $this->channels;
+        $result[$index] = $this->channels[0];
+        $result[0]      = $this->channels[$index];
         
         return $result;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function getImageIterator(ImageInterface $image) 
+    {
+        $stegoKey = $this->getStegoKey();
+        $iterator = new ImageRandomIterator($image, $stegoKey->getSecretKey());
+        
+        return $iterator;
     }
 }

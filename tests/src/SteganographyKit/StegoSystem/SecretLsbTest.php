@@ -7,11 +7,7 @@
  */
 
 namespace SteganographyKit\StegoSystem;
-
-use SteganographyKit\StegoKey\PseudoRandomKey;
-use SteganographyKit\SecretText\Ascii;
-use SteganographyKit\CoverText\PngImg;
-use SteganographyKit\StegoText\PngImg as StegoTextPngImg;
+use SteganographyKit\StegoKey\RandomKey;
 
 class SecretLsbTest extends BaseLsbTest 
 {   
@@ -40,7 +36,7 @@ class SecretLsbTest extends BaseLsbTest
     {
         parent::setUp();
         
-        $this->stegoKey   = new PseudoRandomKey($this->secretKey);
+        $this->stegoKey   = new RandomKey($this->secretKey);
         $this->secretLsb  = new SecretLsb();
         $this->secretLsb->setStegoKey($this->stegoKey);
     }
@@ -66,7 +62,7 @@ class SecretLsbTest extends BaseLsbTest
     public function providerEncodeDecode()
     {
 //       return $this->generateProvider(100, 1000, array('red', 'green', 'blue'));
-       return $this->generateProvider(1, 3500, array('red', 'green', 'blue'));
+       return $this->generateProvider(1, 100, array('red', 'green', 'blue'));
     }
 }
 

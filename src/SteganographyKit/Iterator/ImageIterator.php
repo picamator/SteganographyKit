@@ -125,8 +125,8 @@ class ImageIterator implements \Iterator
      */
     public function valid()
     {     
-        $xValid = $this->x < $this->xMax || $this->x === 0;
-        $yValid = $this->y < $this->yMax || $this->y === 0;
+        $xValid = $this->x < $this->xMax;
+        $yValid = $this->y < $this->yMax;
         
         return  $xValid && $yValid;
     }

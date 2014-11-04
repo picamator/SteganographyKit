@@ -9,7 +9,7 @@
 namespace SteganographyKit\SecretText;
 use SteganographyKit\Options\OptionsTrait;
 
-abstract class AbstractSecretText implements SecretTextInterface 
+abstract class AbstractSecretText implements SecretTextInterface, \Countable, \IteratorAggregate 
 {    
     use OptionsTrait;
     
@@ -18,7 +18,12 @@ abstract class AbstractSecretText implements SecretTextInterface
      * it helps to identify where secret text end
      */
     const END_TEXT_MARK = '0000000000000000';
-        
+       
+    /**
+     * Length of secretText item in binary
+     */
+    const BINARY_ITEM_LENGTH = 8;
+    
     /**
      * Data Options
      * 
@@ -51,20 +56,6 @@ abstract class AbstractSecretText implements SecretTextInterface
     {
         return strpos($secretText, self::END_TEXT_MARK);
     }
-     
-    /**
-     * Sets Data Options
-     * 
-     * @param array $dataOptions
-     * @return self
-     * @throws SteganographyKit\InvalidArgumentException
-     */
-    public function setDataOptions(array $dataOptions) 
-    {
-        $this->dataOptions = array_merge($this->dataOptions, $dataOptions);
-        
-        return $this;
-    }
     
     /**
      * Sets binary item size
@@ -89,5 +80,37 @@ abstract class AbstractSecretText implements SecretTextInterface
     public function getBinaryItemSize() 
     {
         return $this->binaryItemSize;
+    }
+    
+    /**
+     * Add end mark
+     * 
+     * @param string $secretText
+     * @return string
+     */
+    protected function addEndMark($secretText) 
+    {
+        return $secretText . self::END_TEXT_MARK;
+    }
+    
+    /**
+     * Remove end mark
+     * 
+     * @param string $secretText
+     * @return string
+     */
+    protected function removeEndMark($secretText) 
+    {
+        $endMarkPos  = $this->getEndMarkPos($secretText);
+        $result      = substr($secretText, 0, $endMarkPos);
+        
+        // when last characters has last bits zeros then it could be a part of EndMark
+        // therefore it's possible to remove bits from last character
+        $repeat  = strlen($result) % self::BINARY_ITEM_LENGTH;
+        if ($repeat !== 0) {
+            $result .= str_repeat('0', self::BINARY_ITEM_LENGTH - $repeat);
+        }
+        
+        return $result;
     }
 }

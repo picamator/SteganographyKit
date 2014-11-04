@@ -93,7 +93,10 @@ abstract class AbstractLsb implements StegoSystemInterface
      * @return  string
      */
     public function encode(SecretTextInterface $secretText, ImageInterface $coverText)
-    {        
+    {     
+        $this->validateCapacity($secretText, $coverText);
+        $secretText->setBinaryItemSize($this->channelsSize);
+        
         $iterator = new \MultipleIterator(\MultipleIterator::MIT_NEED_ALL|\MultipleIterator::MIT_KEYS_ASSOC);
         $iterator->attachIterator($this->getImageIterator($coverText), 'img');
         $iterator->attachIterator($secretText->getIterator(), 'secText');
@@ -113,19 +116,18 @@ abstract class AbstractLsb implements StegoSystemInterface
      * @return  string
      */
     public function decode(ImageInterface $stegoText, SecretTextInterface $secretText)
-    { 
+    {         
+        $secretText->setBinaryItemSize($this->channelsSize);
         $iterator   = $this->getImageIterator($stegoText); 
         $result     = '';
         do {
             // get lasts bits value of pixel accordingly confugurated channel
-            $result     .= $this->decodeItem($iterator, $stegoText);
-            $endMarkPos  = $secretText->getEndMarkPos($result);
-                             
+            $result .= $this->decodeItem($iterator, $stegoText);
             // move to next pixel
             $iterator->next();          
-        } while ($endMarkPos === false);
-        
-        return $secretText->getFromBinaryData($result, $endMarkPos);
+        } while ($secretText->getEndMarkPos($result) === false);
+                    
+        return $secretText->getFromBinaryData($result);
     }
          
     /**
@@ -139,7 +141,7 @@ abstract class AbstractLsb implements StegoSystemInterface
         ImageInterface $coverText, $secretItem
     ) {  
         $colorData      = $coverText->getDecimalColor($pixelData['color']);
-        $channels       = $this->getChannels($pixelData);
+        $channels       = $this->getChannels($pixelData['x'], $pixelData['y']);
         $secretSize     = strlen($secretItem);
         
         // encode
@@ -163,21 +165,21 @@ abstract class AbstractLsb implements StegoSystemInterface
     /**
      * Decode item
      * 
-     * @param \Iterator             $coverTextIterator
-     * @param ImageInterface        $stegoText
+     * @param \Iterator         $coverTextIterator
+     * @param ImageInterface    $stegoText
      * @return string
      */
     protected function decodeItem(\Iterator $coverTextIterator, ImageInterface $stegoText) 
     {
-        $pixelData  = $coverTextIterator->current();
+        $pixelData  = $coverTextIterator->current();       
         $colorRgb   = $stegoText->getBinaryColor($pixelData['color']);     
-        $channel    = $this->getChannels($pixelData);    
-        
+        $channels   = $this->getChannels($pixelData['x'], $pixelData['y']);    
+               
         $result = '';
-        foreach($channel as $item) {
+        foreach($channels as $item) {
             $result .= substr($colorRgb[$item], -1, 1);
         }
-        
+               
         return $result;
     }
      
@@ -199,20 +201,30 @@ abstract class AbstractLsb implements StegoSystemInterface
     /**
      * Validate is it enouph room into coverText to keep secret one
      * 
-     * @param   integer             $secretSize
+     * @param   SecretTextInterface $secretText
      * @param   ImageInterface      $coverText
      * @throws  SteganographyKit\RuntimeException
      */
-    abstract protected function validateCapacity($secretSize, ImageInterface $coverText);
+    protected function validateCapacity(SecretTextInterface $secretText, ImageInterface $coverText)
+    {
+        $coverCapacity  = $this->channelsSize * count($coverText);    
+        $secretSize     = count($secretText);
+        
+        if ($secretSize > $coverCapacity) {
+            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
+               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
+        }
+    }
      
     /**
      * Gets channel that should be used for current coordinate
      * It's possible that channel is choosed with dependence on coordinate
      * 
-     * @param array $coordinate
+     * @param integer $x
+     * @param integer $y
      * @return array
      */
-    abstract protected function getChannels(array $coordinate);
+    abstract protected function getChannels($x, $y);
     
     /**
      * Gets image iterator

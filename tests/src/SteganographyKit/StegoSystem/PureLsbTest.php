@@ -38,9 +38,8 @@ class PureLsbTest extends BaseLsbTest
             . $optionsCoverText['savePath'];
                 
         $coverText      = new Image($optionsCoverText);  
-        $secretText     = new PlainText();
+        $secretText     = new PlainText($optionsSecretText);
         
-        $secretText->setDataOptions($optionsSecretText);
         $result = $this->pureLsb->encode($secretText, $coverText);
         
         $this->assertTrue(file_exists($result));

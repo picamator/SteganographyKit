@@ -10,7 +10,7 @@ namespace SteganographyKit\Image;
 use SteganographyKit\BaseTest;
 
 class ImageTest extends BaseTest 
-{   
+{    
     /**
      * @dataProvider providerPath
      * @param array $options

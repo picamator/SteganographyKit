@@ -8,7 +8,7 @@
 
 namespace SteganographyKit\Image;
 
-interface ImageInterface extends \IteratorAggregate
+interface ImageInterface
 {
     /**
      * Gets image
@@ -37,8 +37,7 @@ interface ImageInterface extends \IteratorAggregate
     public function setPixel($xIndex, $yIndex, array $pixel);
     
     /**
-     * Gets color in rgb by colorIndex
-     * It works only for truecolor otherwise it should be used imagecolorsforindex
+     * Encode color index to rbb array with binary values
      * 
      * @param integer $colorIndex result of imagecolorate
      * @return array

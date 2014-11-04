@@ -10,32 +10,25 @@
 namespace SteganographyKit\SecretText;
 use SteganographyKit\Iterator\SecretTextIterator;
 use SteganographyKit\RuntimeException;
-use SteganographyKit\InvalidArgumentException;
 
 class PlainText extends AbstractSecretText 
-{   
-    /**
-     * Length of secretText item in binary
-     */
-    const BINARY_ITEM_LENGTH = 8;
-    
+{       
     /**
      * Options
      * 
      * @var array
      */
     protected $options = array(
-        'compressLevel' => -1
+        'compressLevel' => -1,
+        'text'          => ''
     );
       
     /**
-     * Data Options
+     * Binary data
      * 
-     * @var array 
+     * @var string 
      */
-    protected $dataOptions = array(
-        'text' => ''
-    );
+    protected $binaryData;
     
     /**
      * Cache container
@@ -52,6 +45,9 @@ class PlainText extends AbstractSecretText
         parent::__construct($options);
         
         $this->validateZLib();
+        if (!empty($this->options['text'])) {
+            $this->setBinaryData();
+        }
     }
     
    /**
@@ -65,6 +61,17 @@ class PlainText extends AbstractSecretText
     }
 
     /**
+     * Count elements
+     * 
+     * @param string $mode
+     * @return int The custom count as an integer
+     */
+    public function count($mode = 'COUNT_NORMAL') 
+    {
+        return strlen($this->binaryData);
+    }
+    
+    /**
      * Gets converted data to binary format
      * 
      * @return string - binary representation of secret data
@@ -72,26 +79,7 @@ class PlainText extends AbstractSecretText
      */
     public function getBinaryData()
     {       
-        $dataOptions = $this->getDataOptions();
-        
-        // encode
-        $encode         = $this->encode($dataOptions['text']);
-        $encodeLength   = strlen($encode);
-  
-        $format     = '%0' . self::BINARY_ITEM_LENGTH . 'd';
-        $converter  = function($data) use ($format) {
-            return sprintf($format, decbin(ord($data)));
-        };
-        
-        $result = '';
-        for ($i = 0; $i < $encodeLength; $i ++) {
-            $result .= self::convertData($encode[$i], $converter);
-        }
-                       
-        // add end text mark
-        $result .= self::END_TEXT_MARK;
-                    
-        return $result;        
+        return $this->binaryData;
     }
             
     /**
@@ -101,8 +89,10 @@ class PlainText extends AbstractSecretText
      * @return string
      */
     public function getFromBinaryData($binaryData) 
-    {
+    {      
+        $binaryData     = $this->removeEndMark($binaryData);       
         $binaryLength   = strlen($binaryData);
+        
         $converter      = function($data) {
             return chr(bindec($data));
         };
@@ -112,11 +102,35 @@ class PlainText extends AbstractSecretText
             $binaryItem  = substr($binaryData, $i, self::BINARY_ITEM_LENGTH);
             $text       .= self::convertData($binaryItem, $converter);
         }
-                
+             
         // decode
         $result = $this->decode($text);
         
         return $result;
+    }
+    
+    /**
+     * Sets binary data
+     * 
+     * @return type
+     */
+    protected function setBinaryData()
+    {   
+        // encode
+        $encode         = $this->encode($this->options['text']);
+        $encodeLength   = strlen($encode);
+  
+        $format     = '%0' . self::BINARY_ITEM_LENGTH . 'd';
+        $converter  = function($data) use ($format) {
+            return sprintf($format, decbin(ord($data)));
+        };
+        
+        $binaryData = '';
+        for ($i = 0; $i < $encodeLength; $i ++) {
+            $binaryData .= self::convertData($encode[$i], $converter);
+        }
+                       
+        $this->binaryData = $this->addEndMark($binaryData);      
     }
         
     /**
@@ -178,7 +192,8 @@ class PlainText extends AbstractSecretText
      */
     protected function encode($text) 
     {
-        return base64_encode(gzcompress($text, $this->options['compressLevel']));
+//        return base64_encode(gzcompress($text, $this->options['compressLevel']));
+        return $text;
     }
     
     /**
@@ -188,22 +203,8 @@ class PlainText extends AbstractSecretText
      * @return string
      */
     protected function decode($text) 
-    {
-        return gzuncompress(base64_decode($text));
-    }
-    
-    /**
-     * Gets DataOptions
-     * 
-     * @return array
-     * @throws SteganographyKit\InvalidArgumentException
-     */
-    protected function getDataOptions() 
-    {
-        if (empty($this->dataOptions['text'])) {
-            throw new InvalidArgumentException('Text was not set in Data Options');
-        }
-        
-        return $this->dataOptions;
+    {   
+//        return gzuncompress(base64_decode($text));
+        return $text;
     }
 }
