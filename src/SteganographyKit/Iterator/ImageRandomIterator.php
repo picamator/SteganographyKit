@@ -206,8 +206,11 @@ class ImageRandomIterator implements \Iterator
      */
     protected function setCoordinates() 
     {        
-        $yList = array_fill(0,  $this->imgSize['height'], 0);
-        $this->coordinates = array_fill(0, $this->imgSize['width'], $yList);
+        $yList              = array_fill(0,  $this->imgSize['height'], 0);
+        $coordinates        = array_fill(0, $this->imgSize['width'], $yList);
+        $coordinates[0][0]  = 1;
+        
+        $this->coordinates = $coordinates;
     }
     
     protected function getNextCoordinate()

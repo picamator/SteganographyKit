@@ -89,7 +89,7 @@ class PlainText extends AbstractSecretText
      * @return string
      */
     public function getFromBinaryData($binaryData) 
-    {      
+    {        
         $binaryData     = $this->removeEndMark($binaryData);       
         $binaryLength   = strlen($binaryData);
         
@@ -192,8 +192,7 @@ class PlainText extends AbstractSecretText
      */
     protected function encode($text) 
     {
-//        return base64_encode(gzcompress($text, $this->options['compressLevel']));
-        return $text;
+        return base64_encode(gzcompress($text, $this->options['compressLevel']));
     }
     
     /**
@@ -204,7 +203,6 @@ class PlainText extends AbstractSecretText
      */
     protected function decode($text) 
     {   
-//        return gzuncompress(base64_decode($text));
-        return $text;
+        return gzuncompress(base64_decode($text));
     }
 }

@@ -61,8 +61,8 @@ class SecretLsbTest extends BaseLsbTest
      */
     public function providerEncodeDecode()
     {
-//       return $this->generateProvider(100, 1000, array('red', 'green', 'blue'));
-       return $this->generateProvider(1, 100, array('red', 'green', 'blue'));
+       return $this->generateProvider(100, 1000, array('red', 'green', 'blue'));
+//       return $this->generateProvider(1, 3500, array('red', 'green', 'blue'));
     }
 }
 
