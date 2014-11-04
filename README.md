@@ -109,7 +109,7 @@ SteganographyKit has implementation of LSB with such conditions:
 
 Encode-Decode diagram:
 
-![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/doc/uml/lsb-encode-decode.png "LSB encode-decode")
+![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/dev/doc/uml/lsb-encode-decode.png "LSB encode-decode")
 
 
 ### Pure Steganography
