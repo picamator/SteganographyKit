@@ -1,0 +1,21 @@
+{
+    "name": "picamator/steganographykit",
+    "description": "Implementation of several steganography algorithms",
+    "keywords": ["steganography"],
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Sergii Pryz",
+            "email": "picamator@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0"
+    }
+}

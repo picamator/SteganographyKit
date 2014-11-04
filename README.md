@@ -33,7 +33,7 @@ SteganographyKit has implementation of LSB with such conditions:
 
 Encode-Decode diagram:
 
-![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/lsb-encode-decode.png "LSB encode-decode")
+![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/doc/uml/lsb-encode-decode.png "LSB encode-decode")
 
 
 ### Pure Steganography
@@ -67,12 +67,12 @@ channel that had `(X + Y) % 3` would be moved to old red's place. For instance `
  
 UnitTest
 --------
-Tests can be found in `/tests` folder. 
+Tests can be found in `/test` folder. 
 It should be noticed that `PureLsbTest::testEncodeDecode` or `SecretLsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
 
 UML Diagram
 -----------
-UML diagrams can be found in `/docs/uml` folder:
+UML diagrams can be found in `/doc/uml` folder:
 
 * Class diagram was created by [ArgoUML](http://argouml.tigris.org)
 * Workflow diagram was written by Google Drawing 
