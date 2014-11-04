@@ -32,10 +32,10 @@ SteganographyKit has implementation of LSB with such conditions:
 * text as a secretText.
 
 Encode diagram:
-![alt text](https://github.com/picamator/SteganographyKit/tree/refactor/docs/LSB-encode.png "LSB Encode")
+![LSB encode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/LSB-encode.png "LSB Encode")
 
 Decode diagram:
-![alt text](https://github.com/picamator/SteganographyKit/tree/refactor/docs/LSB-decode.png "LSB Encode")
+![LSB Decode diagram](https://github.com/picamator/SteganographyKit/raw/refactor/docs/uml/LSB-decode.png "LSB Decode")
 
 ### Pure Steganography
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
