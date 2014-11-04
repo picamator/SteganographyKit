@@ -31,27 +31,20 @@ SteganographyKit has implementation of LSB with such conditions:
 * png, jpg or gif images as coverText,
 * text as a secretText.
 
+Encode diagram:
+![alt text](https://github.com/picamator/SteganographyKit/tree/refactor/docs/LSB-encode.png "LSB Encode")
+
+Decode diagram:
+![alt text](https://github.com/picamator/SteganographyKit/tree/refactor/docs/LSB-decode.png "LSB Encode")
+
 ### Pure Steganography
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
  
-Encode algorithm can be described by steps:
-  1. Convert secretText to binary string
-  2. Add to secretText end text mark (it is used for decode algorithm)
-  3. Get number of bits accordingly number of channels from secretText
-  4. Change last bit of each RGB cannel for first pixel of coverText by bits from step 3
-  5. Save changing if step 3 really change RGB bit
-  6. Move to next coverText pixel and change last bit of each RGB channel
-  7. Repeat step 3-6 for each secretText item
-
-Decode algorithm can be described by steps:
-  1. Read every last bit for RGB channel of stegoText
-  2. Stop step 1 if end text mark was found or it's read last pixel of stegoText
-  3. Convert binary secretText to ASCII characters
+Additionally it's possible to configurate channels that will be used in algorithm. 
+For instance secretText can use only Red or Green and Blue or Red, Green, Blue. Moreover order in witch channels are used is important.
+So channels can be interpreted as Secret Key. 
 
 *Note*:
-Additionally it's possible to configurate channel that will be used in algorithm, for instance Red, Green or Green only, etc.
-So knowledge about use channels can be interpreted as Secret Key. 
-
 Some researches use only Blue channel for steganography because that color is less perceived by human eye. 
 Such conclusion is based on experiment [6]. But it should be taken critically because first of all stegoanalyze use computer technique to identify picture 
 with hidden information, the second digital picture is displayed on a screen that has enough light.
@@ -75,8 +68,14 @@ channel that had `(X + Y) % 3` would be moved to old red's place. For instance `
  
 UnitTest
 --------
-Tests can be found in '/tests' folder. 
+Tests can be found in `/tests` folder. 
 It should be noticed that `PureLsbTest::testEncodeDecode` or `SecretLsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
+
+UML Diagram
+-----------
+UML diagrams can be found in `/docs/uml` folder:
+* Class diagram was created by [ArgoUML](http://argouml.tigris.org)
+* Workflow diagram was written by Google Drawing 
 
 References
 ----------
