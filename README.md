@@ -49,8 +49,9 @@ require __DIR__ . '/vendor/autoload.php';
 $stegoContainer = new Picamator\SteganographyKit\StegoContainer();
 
 // cover-image.png|.jpg|.gif - path to existing image to cover secretText
-// stego-image.png  - path where new stegoImage should be generated
-$stegoContainer->encode('/path/to/cover-image.png', '/path/to/stego-image.png', 'secret test');
+// stego-image.png  - path where new stegoImage should be saved
+$stegoContainer->encode('/path/to/cover-image.png', 
+    '/path/to/stego-image.png', 'secret test');
 
 // output raw image 
 $stegoContainer->renderImage();
@@ -83,7 +84,7 @@ $stegoSystem    = new Picamator\SteganographyKit\StegoSystem\SecretLsb();
 
 // configure secret key
 $secretKey = 123456;
-$stegoKey   = new Picamator\SteganographyKit\StegoKey\RandomKey($secretKey);
+$stegoKey  = new Picamator\SteganographyKit\StegoKey\RandomKey($secretKey);
 
 $stegoSystem->setStegoKey($stegoKey);
 $stegoContainer->setStegoSystem($stegoSystem);
