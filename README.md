@@ -6,13 +6,14 @@ SteganographyKit
 [![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
 [![Coverage Status](https://coveralls.io/repos/picamator/SteganographyKit/badge.png)](https://coveralls.io/r/picamator/SteganographyKit)
 
+SteganographyKit is a package with implementation several stegoSystems for image Steganography.
+
 Steganography is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
 General overview of Steganography and existing tools can be found in [3], [7].
-
-SteganographyKit is a package with implementation several stegoSystems for image Steganography.
-SteganographyKit is used terminology that was described by Christian Cachin [1].
+SteganographyKit is used terminology described by Christian Cachin [1].
 
 SteganographyKit contains:
+
 * Least Significant Bit (LSB) 
   * Pure Steganography 
   * Secret Key Steganography 
@@ -151,7 +152,7 @@ UML diagrams can be found in `/doc/uml` folder:
 
 License
 -------
-BSD 3-Clause License
+BSD-3-Clause
 
 References
 ----------
