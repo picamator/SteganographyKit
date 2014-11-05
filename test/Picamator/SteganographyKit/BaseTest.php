@@ -31,7 +31,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function getDataPath($path)
     {       
         $fullPath = $this->dataPath . $path;
-        $dirPath  = dirname($fullPath);
+        $dirPath  = (is_file($fullPath)) ? dirname($fullPath) : $fullPath;
        
         if (!file_exists($dirPath)) {
             mkdir($dirPath, 0777, true);
