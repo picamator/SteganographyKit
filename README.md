@@ -5,6 +5,7 @@ SteganographyKit
 [![License](https://poser.pugx.org/picamator/steganographykit/license.svg)](https://packagist.org/packages/picamator/steganographykit)
 [![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
 [![Coverage Status](https://coveralls.io/repos/picamator/SteganographyKit/badge.png)](https://coveralls.io/r/picamator/SteganographyKit)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b/mini.png)](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b)
 
 SteganographyKit is a package with implementation several stegoSystems for image Steganography.
 
