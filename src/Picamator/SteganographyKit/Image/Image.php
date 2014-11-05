@@ -155,7 +155,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
             'blue'  => $colorIndex & 0xFF,
             'alpha' => ($colorIndex & 0x7F000000) >> 24
         );
-//        $result = imagecolorsforindex($this->image, $colorIndex);
         
         return $result;
     }
@@ -250,7 +249,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     protected function getColorallocate($red, $green, $blue)
     {
         $result = ($red << 16) | ($green << 8) | $blue;
-//        $result = imagecolorallocate($this->image, $red, $green, $blue)
         
         return $result;
     }

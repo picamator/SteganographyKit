@@ -2,7 +2,7 @@
     "name": "picamator/steganographykit",
     "description": "Implementation of several steganography algorithms",
     "keywords": ["steganography"],
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Sergii Pryz",

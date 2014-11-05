@@ -12,6 +12,7 @@ use Picamator\SteganographyKit\Image\ImageInterface;
 use Picamator\SteganographyKit\StegoKey\StegoKeyInterface;
 use Picamator\SteganographyKit\InvalidArgumentException;
 use Picamator\SteganographyKit\LogicException;
+use Picamator\SteganographyKit\RuntimeException;
 
 abstract class AbstractLsb implements StegoSystemInterface 
 {
