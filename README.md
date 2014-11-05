@@ -4,13 +4,13 @@ SteganographyKit
 [![Latest Stable Version](https://poser.pugx.org/picamator/steganographykit/v/stable.svg)](https://packagist.org/packages/picamator/steganographykit)
 [![License](https://poser.pugx.org/picamator/steganographykit/license.svg)](https://packagist.org/packages/picamator/steganographykit)
 [![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
-[![Coverage Status](https://coveralls.io/repos/picamator/SteganographyKit/badge.png)](https://coveralls.io/r/picamator/SteganographyKit)
+[![Coverage Status](https://img.shields.io/coveralls/picamator/SteganographyKit.svg)](https://coveralls.io/r/picamator/SteganographyKit?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b/mini.png)](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b)
 
-SteganographyKit is a package with implementation several stegoSystems for image Steganography.
+SteganographyKit is a package with implementation several algorithms for image Steganography.
 
 Steganography is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
-General overview of Steganography and existing tools can be found in [3], [7].
+General overview of Steganography can be found in [3], [7].
 SteganographyKit is used terminology described by Christian Cachin [1].
 
 SteganographyKit contains:
