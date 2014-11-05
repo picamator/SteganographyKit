@@ -5,4 +5,12 @@ php:
   
 before_script:
   - composer update --dev --no-interaction
+  - composer require --no-update satooshi/php-coveralls:dev-master
   - sudo chmod -R 777 test/Picamator/SteganographyKit/data
+
+script:
+  - mkdir -p build/logs
+  - phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xmlt
+
+after_script:
+  - php vendor/bin/coveralls
