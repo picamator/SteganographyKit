@@ -1,5 +1,10 @@
 SteganographyKit
 ================
+
+[![Latest Stable Version](https://poser.pugx.org/picamator/steganographykit/v/stable.svg)](https://packagist.org/packages/picamator/steganographykit)
+[![License](https://poser.pugx.org/picamator/steganographykit/license.svg)](https://packagist.org/packages/picamator/steganographykit)
+[![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
+
 Steganography is the art and science of hiding information by embedding messages within other, seemingly harmless messages [1].
 General overview of Steganography and existing tools can be found in [3], [7].
 

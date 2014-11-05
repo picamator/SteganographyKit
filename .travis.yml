@@ -5,3 +5,4 @@ php:
   
 before_script:
   - composer update --dev --no-interaction
+  
