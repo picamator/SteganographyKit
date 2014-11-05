@@ -10,7 +10,7 @@ use Picamator\SteganographyKit\SecretText\PlainText;
 use Picamator\SteganographyKit\Image\Image;
 use Picamator\SteganographyKit\StegoSystem\StegoSystemInterface;
 
-class BaseLsbTest extends BaseTest 
+abstract class BaseLsbTest extends BaseTest 
 {    
     /**
      * SecretText file

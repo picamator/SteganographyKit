@@ -71,8 +71,9 @@ class PlainText extends AbstractSecretText
     /**
      * {@inheritDoc}
      */
-    public function setOptions(array $options) {
-        parent::setOptions($options);
+    public function setOptions(array $options, array $optionsDefault = array()) 
+    {
+        parent::setOptions($options, $optionsDefault);
         
         if (!empty($options['text'])) {
             $this->setBinaryData();

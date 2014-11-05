@@ -6,7 +6,7 @@
  * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
 
-class BaseTest extends PHPUnit_Framework_TestCase 
+abstract class BaseTest extends PHPUnit_Framework_TestCase 
 {
     /**
      * Path to the data folder
@@ -31,7 +31,7 @@ class BaseTest extends PHPUnit_Framework_TestCase
     protected function getDataPath($path)
     {       
         $fullPath = $this->dataPath . $path;
-        $dirPath  = dirname($fullPath);
+        $dirPath  = (is_file($fullPath)) ? dirname($fullPath) : $fullPath;
        
         if (!file_exists($dirPath)) {
             mkdir($dirPath, 0777, true);
