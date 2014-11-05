@@ -107,11 +107,6 @@ SteganographyKit has implementation of LSB with such conditions:
 * png, jpg or gif images as coverText,
 * text as a secretText.
 
-Encode-Decode diagram:
-
-![LSB encode-decode diagram](https://github.com/picamator/SteganographyKit/raw/dev/doc/uml/lsb-encode-decode.png "LSB encode-decode")
-
-
 ### Pure Steganography
 Pure Steganography is a Steganography system that doesn't require prior exchange of some secret information before sending message [2].
  
@@ -141,17 +136,16 @@ If pixel coordinates `X` and `Y` and array of channels is `['red', 'green', 'blu
 channel that had `(X + Y) % 3` would be moved to old red's place. For instance `X = 4, Y = 10` them `(2 + 10) % 3 = 2` then new channels array is
 `['blue', 'green', 'red']`. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
  
-UnitTest
---------
-Tests can be found in `/test` folder. 
-It should be noticed that `PureLsbTest::testEncodeDecode` or `SecretLsbTest::testEncodeDecode` includes random generated dataProvider with 100 items.
-
 UML Diagram
 -----------
 UML diagrams can be found in `/doc/uml` folder:
 
 * Class diagram was created by [ArgoUML](http://argouml.tigris.org)
 * Workflow diagram was written by Google Drawing 
+
+License
+-------
+BSD 3-Clause License
 
 References
 ----------
