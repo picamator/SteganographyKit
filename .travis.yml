@@ -5,4 +5,4 @@ php:
   
 before_script:
   - composer update --dev --no-interaction
-  
+  - sudo chmod -R 777 test/Picamator/SteganographyKit/data

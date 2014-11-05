@@ -28,7 +28,7 @@ class RandomKey extends AbstractStegoKey
      * 
      * @param string|integer $secretKey
      * @return self
-     * @throw SteganographyKit\InvalidArgumentException
+     * @throw InvalidArgumentException
      */
     public function setSecretKey($secretKey)
     {

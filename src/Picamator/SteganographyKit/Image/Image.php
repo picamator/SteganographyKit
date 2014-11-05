@@ -58,11 +58,11 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     protected $image = null;
    
     /**
-     * Options
+     * Default Options
      * 
      * @var array
      */
-    protected $options = array(
+    protected $optionsDefault = array(
         'path'      => '',
         'savePath'  => ''
     );
@@ -72,7 +72,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      */
     public function __construct(array $options) 
     {
-        $this->setOptions($options);
+        $this->setOptions($options, $this->optionsDefault);
         $this->init();
     }
     
@@ -124,7 +124,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * @param integer $yIndex
      * @param array $pixel
      * @return self
-     * @throws SteganographyKit\RuntimeException
+     * @throws RuntimeException
      */
     public function setPixel($xIndex, $yIndex, array $pixel) 
     {
@@ -210,7 +210,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Sets Image
      * 
      * @param string $path
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function setImage($path) 
     {
@@ -259,7 +259,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Sets image size
      * 
      * @param string $path
-     * @throws SteganographyKit\RuntimeException
+     * @throws RuntimeException
      */
     protected function setImgSize($path) 
     {
@@ -292,7 +292,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     /**
      * Verify is GB Lib extension was loaded
      * 
-     * @throws SteganographyKit\RuntimeException
+     * @throws RuntimeException
      */
     protected function validateGbLib() 
     {
@@ -305,7 +305,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Validate path
      * 
      * @param string $path
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function validatePath($path)
     {
@@ -318,7 +318,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Validate savePath
      * 
      * @param string $savePath
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function validateSavePath($savePath) 
     {
@@ -337,7 +337,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     /**
      * Validate supported types
      * 
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function validateType() 
     {

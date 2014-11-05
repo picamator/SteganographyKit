@@ -14,11 +14,11 @@ use Picamator\SteganographyKit\RuntimeException;
 class PlainText extends AbstractSecretText 
 {       
     /**
-     * Options
+     * Default Options
      * 
      * @var array
      */
-    protected $options = array(
+    protected $optionsDefault = array(
         'compressLevel' => -1,
         'text'          => ''
     );
@@ -83,7 +83,6 @@ class PlainText extends AbstractSecretText
      * Gets converted data to binary format
      * 
      * @return string - binary representation of secret data
-     * @throws SteganographyKit\InvalidArgumentException
      */
     public function getBinaryData()
     {       
@@ -183,7 +182,7 @@ class PlainText extends AbstractSecretText
     /**
      * Validate compress library
      * 
-     * @throws SteganographyKit\RuntimeException
+     * @throws RuntimeException
      */
     protected function validateZLib()
     {

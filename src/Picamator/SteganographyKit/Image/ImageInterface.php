@@ -32,7 +32,7 @@ interface ImageInterface
      * @param integer $yIndex
      * @param array $pixel
      * @return self
-     * @throws SteganographyKit\RuntimeException
+     * @throws RuntimeException
      */
     public function setPixel($xIndex, $yIndex, array $pixel);
     

@@ -20,7 +20,7 @@ interface StegoKeyInterface
      * 
      * @param string|integer $secretKey
      * @return self
-     * @throw SteganographyKit\InvalidArgumentException
+     * @throw InvalidArgumentException
      */
     public function setSecretKey($secretKey);
     
@@ -28,7 +28,7 @@ interface StegoKeyInterface
      * Gets secretKey
      * 
      * @return string|integer
-     * @throw SteganographyKit\LogicException
+     * @throw LogicException
      */
     public function getSecretKey();
     

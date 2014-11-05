@@ -25,13 +25,6 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
     const BINARY_ITEM_LENGTH = 8;
     
     /**
-     * Data Options
-     * 
-     * @var array 
-     */
-    protected $dataOptions = array();
-    
-    /**
      * Binary Item Size
      * 
      * @var integer 
@@ -39,11 +32,18 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
     protected $binaryItemSize = 3;
     
     /**
+     * Default Options
+     * 
+     * @var array
+     */
+    protected $optionsDefault = array();
+    
+    /**
      * @param array $options
      */
     public function __construct(array $options = array()) 
     {
-        $this->setOptions($options);
+        $this->setOptions($options, $this->optionsDefault);
     }
         
     /**

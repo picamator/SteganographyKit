@@ -26,7 +26,7 @@ interface StegoSystemInterface
      * 
      * @param array $channels
      * @return self
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setChannels(array $channels);
         

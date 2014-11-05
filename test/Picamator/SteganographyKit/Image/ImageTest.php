@@ -97,7 +97,7 @@ class ImageTest extends BaseTest
     
     /**
      * @dataProvider providerInitFailed
-     * @expectedException SteganographyKit\InvalidArgumentException
+     * @expectedException Picamator\SteganographyKit\InvalidArgumentException
      * @param array $options
      */
     public function testInitFailed(array $options) 

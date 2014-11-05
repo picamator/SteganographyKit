@@ -35,7 +35,6 @@ interface SecretTextInterface
     /**
      * Gets converted data to binary format
      * 
-     * @param array $dataOptions - contains data or path to data
      * @return string - binary representation of secret data
      */
     public function getBinaryData();

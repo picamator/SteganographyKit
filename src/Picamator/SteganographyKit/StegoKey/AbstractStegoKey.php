@@ -32,7 +32,7 @@ abstract class AbstractStegoKey implements StegoKeyInterface
      * Gets secretKey
      * 
      * @return string|integer
-     * @throw SteganographyKit\LogicException
+     * @throw LogicException
      */
     public function getSecretKey() 
     {

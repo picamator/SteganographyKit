@@ -57,7 +57,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param array $channels
      * @return self
-     * @throws SteganographyKit\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setChannels(array $channels) 
     {
@@ -187,7 +187,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Gets stegoKey
      * 
      * @return StegoKeyInterface
-     * @throws SteganographyKit\LogicException
+     * @throws LogicException
      */
     protected function getStegoKey() 
     {
@@ -203,7 +203,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param   SecretTextInterface $secretText
      * @param   ImageInterface      $coverText
-     * @throws  SteganographyKit\RuntimeException
+     * @throws  RuntimeException
      */
     protected function validateCapacity(SecretTextInterface $secretText, ImageInterface $coverText)
     {

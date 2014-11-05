@@ -22,9 +22,10 @@ trait OptionsTrait
      * Sets options
      * 
      * @param array $options
+     * @param array $optionsDefault
      */
-    protected function setOptions(array $options) 
+    protected function setOptions(array $options, array $optionsDefault = array()) 
     {        
-        $this->options = array_merge($this->options, $options);
+        $this->options = array_merge($optionsDefault, $options);
     }
 }
