@@ -10,7 +10,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist
+  - phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xmlt
 
 after_script:
   - php vendor/bin/coveralls
