@@ -1,5 +1,6 @@
 CHANGELOG
 =========
-v1.0.0 (2014-0?-??)
+v1.0.0 (2014-11-05)
 -------------------
-
++ LSB Pure Steganography
++ LSB Secret Steganography 
