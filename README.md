@@ -151,6 +151,15 @@ UML diagrams can be found in `/doc/uml` folder:
 * Class diagram was created by [ArgoUML](http://argouml.tigris.org)
 * Workflow diagram was written by Google Drawing 
 
+Vagrant
+-------
+It is used [Vagrand](https://www.vagrantup.com) for development environment to prevent issues linked with software inconsistencies.
+
+PHPUnit
+-------
+After composer installation unitTests can be running by ``vendor/bin/phpunit`` command or ``vendor/bin/phpunit --filter ClassNameTest::testName`` 
+where ``ClassNameTest::testName`` name of class and particular test respectively.
+
 License
 -------
 BSD-3-Clause

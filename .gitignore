@@ -1,3 +1,24 @@
+# composer
+vendor/
+composer.lock
+composer.phar
+
+# phpstorm
+.idea
+
+# zend studio
+.buildpath
+.project
+.settings
+
+# netbeans
+nbproject
+
+# ArgoUML temp files
 *.*~
-/vendor/
-/test/Picamator/SteganographyKit/data/stego/
+
+# Windows thumbnail cache
+Thumbs.db
+
+# test data
+test/Picamator/SteganographyKit/data/stego/
