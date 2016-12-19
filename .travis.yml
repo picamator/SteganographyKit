@@ -10,8 +10,8 @@ cache:
 
 before_script:
   - composer install
-  - sudo chown :travis dev/tests/integration/src/data/stego
-  - sudo chmod g+rw dev/tests/integration/src/data/stego
+  - sudo chown :travis dev/tests/integration/src/data
+  - sudo chmod g+rw dev/tests/integration/src/data
 
 script:
   - mkdir -p build/logs
