@@ -8,6 +8,7 @@ v1.1.0 (2016-12-2*)
 * Split tests to unit and integration
 * Moved `test` to `dev\tests`
 * Added developing details, contribution to readme
+* Added documentation generation
 * Deprecated support PHP 5.4, 5.5
 
 v1.0.0 (2014-11-05)

@@ -155,6 +155,7 @@ Documentation
 -------------
 * UML class diagram: [class.diagram.png](doc/uml/class.diagram.png)
 * LSB encode/decode: [lsb-encode-decode.png](doc/uml/lsb-encode-decode.png)
+* Generated documentation: [phpdoc](doc/phpdoc), please build it following [instruction](dev/phpdoc)
 
 Developing
 ----------
