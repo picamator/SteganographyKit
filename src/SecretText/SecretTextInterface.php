@@ -1,13 +1,9 @@
 <?php
-/**
- * Interface for Secret Text
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\SecretText;
 
+/**
+ * Interface for Secret Text
+ */
 interface SecretTextInterface 
 {    
     /**

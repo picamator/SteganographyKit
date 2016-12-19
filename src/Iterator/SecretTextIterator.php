@@ -1,14 +1,11 @@
 <?php
-/**
- * Secret Text Binary Iterator
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\Iterator;
+
 use Picamator\SteganographyKit\SecretText\SecretTextInterface;
 
+/**
+ * Secret Text Binary Iterator
+ */
 class SecretTextIterator implements \Iterator
 {
     /**

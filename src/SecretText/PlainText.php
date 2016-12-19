@@ -1,16 +1,12 @@
 <?php
-/**
- * Secret Text - Plain text
- * 
- * @see         http://www.asciitable.com/
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\SecretText;
+
 use Picamator\SteganographyKit\Iterator\SecretTextIterator;
 use Picamator\SteganographyKit\RuntimeException;
 
+/**
+ * Secret Text - Plain text
+ */
 class PlainText extends AbstractSecretText 
 {       
     /**
@@ -91,7 +87,7 @@ class PlainText extends AbstractSecretText
     }
             
     /**
-     * Gets decretText from binary data
+     * Gets secretText from binary data
      * 
      * @param string    $binaryData - raw secretText with endMark
      * @return string

@@ -1,16 +1,13 @@
 <?php
-/**
- * Stego Pseudo-Random Key
- * Gets coordinats as a  element of pseudo-random sequences where seed is a secretKey
- * It's used function mt_srand (Mersenne Twister implementation in PHP)
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\StegoKey;
+
 use Picamator\SteganographyKit\InvalidArgumentException;
 
+/**
+ * Stego Pseudo-Random Key
+ * Gets coordinates as a  element of pseudo-random sequences where seed is a secretKey
+ * It's used function mt_srand (Mersenne Twister implementation in PHP)
+ */
 class RandomKey extends AbstractStegoKey
 { 
     /**

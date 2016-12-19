@@ -1,17 +1,14 @@
 <?php
-/**
- * Image Trait
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\Image;
+
 use Picamator\SteganographyKit\Options\OptionsTrait;
 use Picamator\SteganographyKit\Iterator\ImageIterator;
 use Picamator\SteganographyKit\RuntimeException;
 use Picamator\SteganographyKit\InvalidArgumentException;
 
+/**
+ * Image Trait
+ */
 class Image implements ImageInterface, \Countable, \IteratorAggregate 
 {   
     use OptionsTrait;

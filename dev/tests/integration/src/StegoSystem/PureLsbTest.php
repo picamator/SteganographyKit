@@ -1,11 +1,4 @@
 <?php
-/**
- * StegoSystem Pure LSB UnitTest
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\Tests\Integration\StegoSystem;
 
 use Picamator\SteganographyKit\StegoSystem\PureLsb;
@@ -58,7 +51,6 @@ class PureLsbTest extends BaseLsbTest
         $result     = $this->pureLsb->decode($stegoText, new PlainText());
         
         $this->assertEquals($expected, $result);
-//        var_dump($result);
     }
     
     /**

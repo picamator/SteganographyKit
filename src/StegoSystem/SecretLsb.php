@@ -1,15 +1,12 @@
 <?php
-/**
- * Stego System of Secret LSB
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\StegoSystem;
+
 use Picamator\SteganographyKit\Image\ImageInterface;
 use Picamator\SteganographyKit\Iterator\ImageRandomIterator;
 
+/**
+ * Stego System of Secret LSB
+ */
 class SecretLsb extends AbstractLsb
 {  
     /**

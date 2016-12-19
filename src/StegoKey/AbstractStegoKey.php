@@ -1,14 +1,11 @@
 <?php
-/**
- * Abstract for Stego Key
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\StegoKey;
+
 use Picamator\SteganographyKit\LogicException;
 
+/**
+ * Abstract for Stego Key
+ */
 abstract class AbstractStegoKey implements StegoKeyInterface 
 {
     /**

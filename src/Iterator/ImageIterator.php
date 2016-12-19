@@ -1,15 +1,12 @@
 <?php
+namespace Picamator\SteganographyKit\Iterator;
+
+use Picamator\SteganographyKit\Image\ImageInterface;
+
 /**
  * Image iterator with natural order
  * ex. ['x' => 0, 'y' => 0], ['x' => 1, 'y' => 0], ['x' => 2, 'y' => 0], ...
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
  */
-
-namespace Picamator\SteganographyKit\Iterator;
-use Picamator\SteganographyKit\Image\ImageInterface;
-
 class ImageIterator implements \Iterator
 {
     /**

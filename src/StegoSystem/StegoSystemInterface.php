@@ -1,16 +1,13 @@
 <?php
-/**
- * Interface for Stego System
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\StegoSystem;
+
 use Picamator\SteganographyKit\SecretText\SecretTextInterface;
 use Picamator\SteganographyKit\Image\ImageInterface;
 use Picamator\SteganographyKit\StegoKey\StegoKeyInterface;
 
+/**
+ * Stego System
+ */
 interface StegoSystemInterface 
 {
     /**

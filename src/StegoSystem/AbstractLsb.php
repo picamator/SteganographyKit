@@ -1,12 +1,6 @@
 <?php
-/**
- * Abstract for Least Segnificant Bit LSB (Least Segnificant Bit) Stego System
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\StegoSystem;
+
 use Picamator\SteganographyKit\SecretText\SecretTextInterface;
 use Picamator\SteganographyKit\Image\ImageInterface;
 use Picamator\SteganographyKit\StegoKey\StegoKeyInterface;
@@ -14,6 +8,9 @@ use Picamator\SteganographyKit\InvalidArgumentException;
 use Picamator\SteganographyKit\LogicException;
 use Picamator\SteganographyKit\RuntimeException;
 
+/**
+ * Abstract for Least Segnificant Bit LSB (Least Segnificant Bit) Stego System
+ */
 abstract class AbstractLsb implements StegoSystemInterface 
 {
     /**

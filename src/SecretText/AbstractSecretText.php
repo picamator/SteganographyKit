@@ -9,6 +9,9 @@
 namespace Picamator\SteganographyKit\SecretText;
 use Picamator\SteganographyKit\Options\OptionsTrait;
 
+/**
+ * Abstract for Secret Text
+ */
 abstract class AbstractSecretText implements SecretTextInterface, \Countable, \IteratorAggregate 
 {    
     use OptionsTrait;

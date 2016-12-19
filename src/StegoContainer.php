@@ -11,6 +11,9 @@ use Picamator\SteganographyKit\StegoSystem\StegoSystemInterface;
 use Picamator\SteganographyKit\SecretText\PlainText;
 use Picamator\SteganographyKit\Image\Image;
 
+/**
+ * Staganography Facade
+ */
 class StegoContainer
 {
     /**
