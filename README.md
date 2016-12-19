@@ -1,11 +1,20 @@
 SteganographyKit
 ================
 
+[![PHP 7 ready](http://php7ready.timesplinter.ch/picamator/SteganographyKit/dev/badge.svg)](https://travis-ci.org/picamator/SteganographyKit)
 [![Latest Stable Version](https://poser.pugx.org/picamator/steganographykit/v/stable.svg)](https://packagist.org/packages/picamator/steganographykit)
 [![License](https://poser.pugx.org/picamator/steganographykit/license.svg)](https://packagist.org/packages/picamator/steganographykit)
-[![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
-[![Coverage Status](https://img.shields.io/coveralls/picamator/SteganographyKit.svg)](https://coveralls.io/r/picamator/SteganographyKit?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b/mini.png)](https://insight.sensiolabs.com/projects/e71d0e53-1709-4449-9ae0-9cb1a838a63b)
+
+Master
+------
+[![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=master)](https://travis-ci.org/picamator/SteganographyKit)
+[![Coverage Status](https://coveralls.io/repos/github/picamator/SteganographyKit/badge.svg?branch=master)](https://coveralls.io/github/picamator/SteganographyKit?branch=master)
+
+Dev
+---
+[![Build Status](https://travis-ci.org/picamator/SteganographyKit.svg?branch=dev)](https://travis-ci.org/picamator/SteganographyKit)
+[![Coverage Status](https://coveralls.io/repos/github/picamator/SteganographyKit/badge.svg?branch=dev)](https://coveralls.io/github/picamator/SteganographyKit?branch=dev)
 
 SteganographyKit is a package with implementation several algorithms for image Steganography.
 
@@ -21,10 +30,10 @@ SteganographyKit contains:
 
 Requirements
 ------------
-* PHP 5.4+
-* GDLib
-* ZLib
-* Only for Suhosin patch special configuration should be added:
+* [PHP 5.6](http://php.net/manual/en/migration56.new-features.php) or [PHP 7.0](http://php.net/manual/en/migration70.new-features.php)
+* [GD](http://www.php.net/manual/en/book.image.php)
+* [Zip](http://ua2.php.net/manual/en/book.zip.php)
+* Only for [Suhosin](https://suhosin.org/stories/index.html):
 ```
   suhosin.srand.ignore = Off
   suhosin.mt_srand.ignore = Off
@@ -34,17 +43,15 @@ Installation
 ------------
 The best way to install SteganographyKit is use composer:
 
-* Update your `composer.json`
+Update your `composer.json` with:
 
 ```json
 {
     "require": {
-        "picamator/steganographykit": "dev-master"
+        "picamator/steganographykit": "~1.0"
     }
 }
 ```
-
-* Run `composer update`
 
 Usage
 -----
@@ -144,25 +151,30 @@ If pixel coordinates `X` and `Y` and array of channels is `['red', 'green', 'blu
 channel that had `(X + Y) % 3` would be moved to old red's place. For instance `X = 4, Y = 10` them `(2 + 10) % 3 = 2` then new channels array is
 `['blue', 'green', 'red']`. So using such approach secretText will be randomly spread through coverText bits but also through channels. 
  
-UML Diagram
------------
-UML diagrams can be found in `/doc/uml` folder:
+Documentation
+-------------
+* UML class diagram: [class.diagram.png](doc/uml/class.diagram.png)
+* LSB encode/decode: [lsb-encode-decode.png](doc/uml/lsb-encode-decode.png)
 
-* Class diagram was created by [ArgoUML](http://argouml.tigris.org)
-* Workflow diagram was written by Google Drawing 
+Developing
+----------
+To configure developing environment please:
 
-Vagrant
--------
-It is used [Vagrand](https://www.vagrantup.com) for development environment to prevent issues linked with software inconsistencies.
+1. Follow [Docker installation steps](dev/docker/README.md)
+2. Run inside Docker container `composer install`
 
-PHPUnit
--------
-After composer installation unitTests can be running by ``vendor/bin/phpunit`` command or ``vendor/bin/phpunit --filter ClassNameTest::testName`` 
-where ``ClassNameTest::testName`` name of class and particular test respectively.
+Contribution
+------------
+If you find this project worth to use please add a star. Follow changes to see all activities.
+And if you see room for improvement, proposals please feel free to create an issue or send pull request.
+Here is a great [guide to start contributing](https://guides.github.com/activities/contributing-to-open-source/).
+
+Please note that this project is released with a [Contributor Code of Conduct](http://contributor-covenant.org/version/1/4/).
+By participating in this project and its community you agree to abide by those terms.
 
 License
 -------
-BSD-3-Clause
+SteganographyKit is licensed under the BSD-3-Clause License. Please see the [LICENSE](LICENSE.txt) file for details.
 
 References
 ----------

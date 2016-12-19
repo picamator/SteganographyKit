@@ -1,17 +1,16 @@
 # composer
 vendor/
-composer.lock
-composer.phar
+*.phar
 
-# phpstorm
+# PhpStorm
 .idea
 
-# zend studio
+# Zend Studio
 .buildpath
 .project
 .settings
 
-# netbeans
+# Netbeans
 nbproject
 
 # ArgoUML temp files
@@ -20,5 +19,5 @@ nbproject
 # Windows thumbnail cache
 Thumbs.db
 
-# test data
-test/Picamator/SteganographyKit/data/stego/
+# MacOS cache
+.DS_Store

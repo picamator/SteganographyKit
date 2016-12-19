@@ -1,4 +1,0 @@
-base:
-  '*':
-    - basics
-    - php5
