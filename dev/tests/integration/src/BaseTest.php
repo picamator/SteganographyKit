@@ -2,6 +2,7 @@
 namespace Picamator\SteganographyKit\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
+use Picamator\SteganographyKit\ObjectManager\ObjectManager;
 
 abstract class BaseTest extends TestCase
 {
@@ -18,6 +19,11 @@ abstract class BaseTest extends TestCase
      * @var string
      */
     private $dataPath = '/data/';
+
+    protected function setUp()
+    {
+        ObjectManager::cleanInstance();
+    }
 
     /**
      * Gets full path to data
