@@ -9,6 +9,9 @@
             "email": "picamator@gmail.com"
         }
     ],
+    "support": {
+        "issues": "https://github.com/picamator/SteganographyKit/issues"
+    },
     "autoload": {
         "psr-4": {
             "Picamator\\SteganographyKit\\": "src/"

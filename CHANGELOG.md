@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-v1.1.0 (2016-12-2*)
--------------------
+1.1.0 (2016-12-20)
+------------------
 * Moved to PSR-4
 * Added Object Manager
 * Added Docker
