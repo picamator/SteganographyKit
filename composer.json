@@ -1,7 +1,7 @@
 {
     "name": "picamator/steganographykit",
-    "description": "Implementation of several steganography algorithms",
-    "keywords": ["steganography"],
+    "description": "Implementation several steganography algorithms",
+    "keywords": ["steganography", "cryptography"],
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -9,13 +9,32 @@
             "email": "picamator@gmail.com"
         }
     ],
+    "support": {
+        "issues": "https://github.com/picamator/SteganographyKit/issues"
+    },
     "autoload": {
-        "psr-0": {
-            "": "src/"
+        "psr-4": {
+            "Picamator\\SteganographyKit\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "/dev/tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Picamator\\SteganographyKit\\Tests\\Unit\\": "dev/tests/unit/src",
+            "Picamator\\SteganographyKit\\Tests\\Integration\\": "dev/tests/integration/src"
         }
     },
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.4.0"
+        "php": "~5.6|~7.0",
+        "ext-zip": "*",
+        "ext-gd": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.5",
+        "phpdocumentor/phpdocumentor": "~2.0",
+        "satooshi/php-coveralls": "~1.0"
     }
 }

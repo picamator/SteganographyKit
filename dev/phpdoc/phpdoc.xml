@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>SteganographyKit</title>
+    <parser>
+        <target>../../doc/phpdoc</target>
+    </parser>
+    <transformer>
+        <target>../../doc/phpdoc</target>
+    </transformer>
+    <files>
+        <directory>../../src</directory>
+    </files>
+    <transformations>
+        <template name="responsive" />
+    </transformations>
+</phpdoc>
