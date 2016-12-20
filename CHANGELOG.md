@@ -20,7 +20,7 @@ CHANGELOG
 * **Minor breaking backward compatibility** moved implementing ``\Countable, \IteratorAggregate`` by ``AbstractSecretText`` to extending by ``SecretTextInterface``
 * **Minor breaking backward compatibility** moved implementing ``\Countable, \IteratorAggregate`` by ``Image`` to extending by ``ImageInterface``
 
-v1.0.0 (2014-11-05)
--------------------
+1.0.0 (2014-11-07)
+------------------
 * Implemented LSB Pure Steganography
 * Implemented LSB Secret Steganography 
