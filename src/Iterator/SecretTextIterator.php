@@ -18,21 +18,21 @@ class SecretTextIterator implements \Iterator
     /**
      * Max Index
      * 
-     * @var integer 
+     * @var int
      */
     protected $maxIndex;
     
     /**
      * Size of bits in one item
      * 
-     * @var integer 
+     * @var int
      */
     protected $itemSize;
     
     /**
      * Current index
      * 
-     * @var integer 
+     * @var int
      */
     protected $index = 0;
     
@@ -90,7 +90,7 @@ class SecretTextIterator implements \Iterator
     /**
      * Checks if current position is valid
      * 
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      */
     public function valid()
     {

@@ -23,14 +23,18 @@ class RandomKey extends AbstractStegoKey
     /**
      * Sets secretKey
      * 
-     * @param string|integer $secretKey
+     * @param string | int $secretKey
+     *
      * @return self
-     * @throw InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public function setSecretKey($secretKey)
     {
         if ($this->validateSecretKey($secretKey) === false) {
-            throw new InvalidArgumentException('Invalid secretKey: "' . $secretKey . '"');
+            throw new InvalidArgumentException(
+                sprintf('Invalid secretKey "%s"', $secretKey)
+            );
         }
         
         $this->secretKey = $secretKey;
@@ -41,13 +45,14 @@ class RandomKey extends AbstractStegoKey
     /**
      * Generate secretKey
      * 
-     * @param boolean $autoSet - true auto set property secretKey, false only return value
-     * @return string|integer
+     * @param bool $autoSet - true auto set property secretKey, false only return value
+     *
+     * @return string | int
      */
     public function generateSecretKey($autoSet = false)
     {
         $min = pow(10, self::MAX_SECRET_KEY_LENGTH - 1);
-        $max = (int) str_replace(array(1, 0), 9, $min);
+        $max = (int) str_replace([1, 0], 9, $min);
         
         $secretKey = mt_rand($min, $max);        
         if ($autoSet === true) {
@@ -60,8 +65,9 @@ class RandomKey extends AbstractStegoKey
     /**
      * Validate SecretKey
      * 
-     * @param string|integer $secretKey
-     * @return boolean - true for ok or false otherwise
+     * @param string | int $secretKey
+     *
+     * @return bool - true for ok or false otherwise
      */
     protected function validateSecretKey($secretKey) 
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Picamator\SteganographyKit\Tests\Integration\Iterator;
+namespace Picamator\SteganographyKit\Tests\Unit\Iterator;
 
 use Picamator\SteganographyKit\Iterator\SecretTextIterator;
 use Picamator\SteganographyKit\Tests\Integration\BaseTest;
@@ -8,6 +8,7 @@ class SecretTextIteratorTest extends BaseTest
 {
     /**
      * @dataProvider providerIterator
+     *
      * @param string $binaryData
      * @param integer $itemSize
      * @param array $expected
@@ -24,7 +25,7 @@ class SecretTextIteratorTest extends BaseTest
         $secretText->expects($this->once())
             ->method('getBinaryItemSize')->will($this->returnValue($itemSize)); 
 
-        // cretate iterator
+        // create iterator
         $iterator   = new SecretTextIterator($secretText);
         $actual     = iterator_to_array($iterator);
         
@@ -33,11 +34,11 @@ class SecretTextIteratorTest extends BaseTest
     
     public function providerIterator()
     {
-        return array(
-            array(
+        return [
+            [
                 '10011101101010111111111000000000', 
                  3, 
-                array(
+                [
                     '100',
                     '111',
                     '011',
@@ -49,19 +50,19 @@ class SecretTextIteratorTest extends BaseTest
                     '000',
                     '000',
                     '00',
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 '10011', 
                  1, 
-                array(
+                [
                     '1',
                     '0',
                     '0',
                     '1',
                     '1'
-                )
-            ),
-        );
+                ]
+            ],
+        ];
     }
 }

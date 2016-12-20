@@ -1,12 +1,6 @@
 <?php
-/**
- * Abstract for Secret Text
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit\SecretText;
+
 use Picamator\SteganographyKit\Options\OptionsTrait;
 
 /**
@@ -30,7 +24,7 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
     /**
      * Binary Item Size
      * 
-     * @var integer 
+     * @var int
      */
     protected $binaryItemSize = 3;
     
@@ -39,12 +33,12 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * 
      * @var array
      */
-    protected $optionsDefault = array();
+    protected $optionsDefault = [];
     
     /**
      * @param array $options
      */
-    public function __construct(array $options = array()) 
+    public function __construct(array $options = [])
     {
         $this->setOptions($options, $this->optionsDefault);
     }
@@ -53,7 +47,8 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * Gets position of end mark
      * 
      * @param string $secretText
-     * @return integer|false
+     *
+     * @return int|false
      */
     public function getEndMarkPos($secretText) 
     {
@@ -64,7 +59,8 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * Sets binary item size
      * It's used for iteration process
      * 
-     * @param integer $size
+     * @param int $size
+     *
      * @return self
      */
     public function setBinaryItemSize($size) 
@@ -78,7 +74,7 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * Gets binary item size
      * It's used for iteration process
      * 
-     * @return integer
+     * @return int
      */
     public function getBinaryItemSize() 
     {
@@ -89,6 +85,7 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * Add end mark
      * 
      * @param string $secretText
+     *
      * @return string
      */
     protected function addEndMark($secretText) 
@@ -100,6 +97,7 @@ abstract class AbstractSecretText implements SecretTextInterface, \Countable, \I
      * Remove end mark
      * 
      * @param string $secretText
+     *
      * @return string
      */
     protected function removeEndMark($secretText) 

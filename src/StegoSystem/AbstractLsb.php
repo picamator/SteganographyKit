@@ -9,7 +9,7 @@ use Picamator\SteganographyKit\LogicException;
 use Picamator\SteganographyKit\RuntimeException;
 
 /**
- * Abstract for Least Segnificant Bit LSB (Least Segnificant Bit) Stego System
+ * Abstract for Least Significant Bit LSB (Least Significant Bit) Stego System
  */
 abstract class AbstractLsb implements StegoSystemInterface 
 {
@@ -19,9 +19,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @var array
      */
-    protected $supportedChannels = array(
-        'red', 'green', 'blue'
-    );
+    protected $supportedChannels = ['red', 'green', 'blue'];
     
     /**
      * Used channels for encode - decode with a certain order
@@ -33,7 +31,7 @@ abstract class AbstractLsb implements StegoSystemInterface
     /**
      * Channels size
      * 
-     * @var integer 
+     * @var int
      */
     protected $channelsSize;
     
@@ -54,14 +52,18 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Sets channels that are going to use for encode-decode
      * 
      * @param array $channels
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      */
     public function setChannels(array $channels) 
     {
         $diff = array_diff($channels, $this->supportedChannels);
         if (!empty($diff)) {
-            throw new InvalidArgumentException('Unsupported channels: ' . implode(',', $diff));
+            throw new InvalidArgumentException(
+                sprintf('Unsupported channels "%s"', implode(',', $diff))
+            );
         }
         
         $this->channels     = $channels;
@@ -74,6 +76,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Sets stegoKey
      * 
      * @param StegoKeyInterface $stegoKey
+     *
      * @return self
      */
     public function setStegoKey(StegoKeyInterface $stegoKey) 
@@ -88,6 +91,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param   SecretTextInterface $secretText
      * @param   ImageInterface      $coverText
+     *
      * @return  string
      */
     public function encode(SecretTextInterface $secretText, ImageInterface $coverText)
@@ -111,6 +115,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param   ImageInterface      $stegoText
      * @param   SecretTextInterface $secretText
+     *
      * @return  string
      */
     public function decode(ImageInterface $stegoText, SecretTextInterface $secretText)
@@ -165,6 +170,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * 
      * @param \Iterator         $coverTextIterator
      * @param ImageInterface    $stegoText
+     *
      * @return string
      */
     protected function decodeItem(\Iterator $coverTextIterator, ImageInterface $stegoText) 
@@ -185,6 +191,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Gets stegoKey
      * 
      * @return StegoKeyInterface
+     *
      * @throws LogicException
      */
     protected function getStegoKey() 
@@ -197,10 +204,11 @@ abstract class AbstractLsb implements StegoSystemInterface
     }
     
     /**
-     * Validate is it enouph room into coverText to keep secret one
+     * Validate is it enough room into coverText to keep secret one
      * 
      * @param   SecretTextInterface $secretText
      * @param   ImageInterface      $coverText
+     *
      * @throws  RuntimeException
      */
     protected function validateCapacity(SecretTextInterface $secretText, ImageInterface $coverText)
@@ -209,17 +217,19 @@ abstract class AbstractLsb implements StegoSystemInterface
         $secretSize     = count($secretText);
         
         if ($secretSize > $coverCapacity) {
-            throw new RuntimeException('Not enouph room to keep all secretText. CoverText can handle '
-               . $coverCapacity . ' bytes but SecretTest has ' . $secretSize . ' bytes');
+            throw new RuntimeException(
+                sprintf('Not enough room to keep all secretText. CoverText can handle "%s" bytes but SecretTest has "%s" bytes.', $coverCapacity, $secretSize)
+            );
         }
     }
      
     /**
      * Gets channel that should be used for current coordinate
-     * It's possible that channel is choosed with dependence on coordinate
+     * It's possible that channel is chosen with dependence on coordinate
      * 
-     * @param integer $x
-     * @param integer $y
+     * @param int $x
+     * @param int $y
+     *
      * @return array
      */
     abstract protected function getChannels($x, $y);
@@ -228,6 +238,7 @@ abstract class AbstractLsb implements StegoSystemInterface
      * Gets image iterator
      * 
      * @param ImageInterface $image
+     *
      * @return \Iterator
      */
     abstract protected function getImageIterator(ImageInterface $image);

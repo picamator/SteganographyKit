@@ -7,32 +7,36 @@ namespace Picamator\SteganographyKit\StegoKey;
 interface StegoKeyInterface 
 {
     /**
-     * @param string|integer $secretText
+     * @param string|int $secretText
      */
     public function __construct($secretText = null);
     
     /**
      * Sets secretKey
      * 
-     * @param string|integer $secretKey
+     * @param string | int $secretKey
+     *
      * @return self
-     * @throw InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public function setSecretKey($secretKey);
     
     /**
      * Gets secretKey
      * 
-     * @return string|integer
-     * @throw LogicException
+     * @return string | int
+     *
+     * @throws LogicException
      */
     public function getSecretKey();
     
     /**
      * Generate secretKey
      * 
-     * @param boolean $autoSet - true auto set property secretKey, false only return value
-     * @return string|integer
+     * @param bool $autoSet - true auto set property secretKey, false only return value
+     *
+     * @return string | int
      */
     public function generateSecretKey($autoSet = false);
 }

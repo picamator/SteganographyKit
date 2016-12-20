@@ -19,35 +19,35 @@ class ImageIterator implements \Iterator
     /**
      * Max value for X coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $xMax;
     
     /**
      * Max value for Y coordinate
      *
-     * @var integer 
+     * @var int
      */
     protected $yMax;
     
     /**
      * Current X coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $x = 0;
     
     /**
      * Current Y coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $y = 0;
     
     /**
      * Current index
      * 
-     * @var integer 
+     * @var int
      */
     protected $index = 0;
     
@@ -73,7 +73,7 @@ class ImageIterator implements \Iterator
     {
         $color = imagecolorat($this->image, $this->x, $this->y);
         
-        return array('x' => $this->x, 'y' => $this->y, 'color' => $color);
+        return ['x' => $this->x, 'y' => $this->y, 'color' => $color];
     }
 
     /**
@@ -118,7 +118,7 @@ class ImageIterator implements \Iterator
     /**
      * Checks if current position is valid
      * 
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      */
     public function valid()
     {     

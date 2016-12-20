@@ -1,13 +1,14 @@
 <?php
-namespace Picamator\SteganographyKit\Tests\Integration\Iterator;
+namespace Picamator\SteganographyKit\Tests\Unit\Iterator;
 
-use Picamator\SteganographyKit\Iterator\ImageIterator;
+use Picamator\SteganographyKit\Iterator\ImageRandomIterator;
 use Picamator\SteganographyKit\Tests\Integration\BaseTest;
 
-class ImageIteratorTest extends BaseTest
+class ImageRandomIteratorTest extends BaseTest
 {
     /**
      * @dataProvider providerIterator
+     *
      * @param string $path
      * @param array $imgSize
      * @param integer $expectedSize
@@ -21,7 +22,6 @@ class ImageIteratorTest extends BaseTest
             ->setMethods(['getSize', 'getImage'])
             ->setConstructorArgs([['path' => $path]])
             ->getMock();
-
         $image->expects($this->once())
             ->method('getSize')->will($this->returnValue($imgSize));    
         
@@ -30,20 +30,28 @@ class ImageIteratorTest extends BaseTest
             ->method('getImage')->will($this->returnValue($imageSrc)); 
 
         // create iterator
-        $iterator   = new ImageIterator($image);
-        $actual     = iterator_to_array($iterator);
-                
-        $this->assertEquals($expectedSize, count($actual)); 
+        $iterator   = new ImageRandomIterator($image, 123456);
+
+        $i = 0;
+        foreach($iterator as $item) {
+            $this->assertArrayHasKey('x', $item);
+            $this->assertArrayHasKey('y', $item);
+            $this->assertArrayHasKey('color', $item);
+
+            $i++;
+        }
+
+        $this->assertEquals($expectedSize, $i);
     }
     
     public function providerIterator()
     {
-        return array(
-            array('original_200_200.png', array('width' => 1, 'height' =>  3), 3),
-            array('original_200_200.png', array('width' => 3, 'height' =>  1), 3),
-            array('original_200_200.png', array('width' => 1, 'height' =>  1), 1),
-            array('original_200_200.png', array('width' => 1, 'height' =>  2), 2),
-            array('original_50_50.png', array('width' => 50, 'height' =>  50), 2500),
-        );
+        return [
+            ['original_50_50.png', ['width' => 1, 'height' =>  3], 3],
+            ['original_50_50.png', ['width' => 3, 'height' =>  1], 3],
+            ['original_50_50.png', ['width' => 1, 'height' =>  1], 1],
+            ['original_50_50.png', ['width' => 1, 'height' =>  2], 2],
+            ['original_50_50.png', ['width' => 50, 'height' =>  50], 2500]
+        ];
     }
 }

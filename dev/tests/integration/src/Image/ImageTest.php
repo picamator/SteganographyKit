@@ -8,14 +8,15 @@ class ImageTest extends BaseTest
 {    
     /**
      * @dataProvider providerPath
+     *
      * @param array $options
      */
     public function testGetDecimalColor(array $options) 
     {
         $options['path']    = $this->getDataPath($options['path']);
-        $rgb                = array('red', 'green', 'blue');
+        $rgb                = ['red', 'green', 'blue'];
         
-        $image              = new Image($options);
+        $image = new Image($options);
         foreach ($image as $item) {
             $decimalPixel = $image->getDecimalColor($item);            
             // assert rgb
@@ -29,12 +30,13 @@ class ImageTest extends BaseTest
     
     /**
      * @dataProvider providerPath
+     *
      * @param array $options
      */
     public function testGetBinaryColor(array $options) 
     {
         $options['path']    = $this->getDataPath($options['path']);
-        $rgb                = array('red', 'green', 'blue');
+        $rgb                = ['red', 'green', 'blue'];
         
         $image = new Image($options);
         foreach ($image as $item) {
@@ -50,6 +52,7 @@ class ImageTest extends BaseTest
     
     /**
      * @dataProvider providerPath
+     *
      * @param array $options
      */
     public function testSetPixel(array $options) 
@@ -57,7 +60,7 @@ class ImageTest extends BaseTest
         $options['path']    = $this->getDataPath($options['path']); 
         $image              = new Image($options);
         
-        $expectedPixel = array('red' => 100, 'green' => 0, 'blue' => 10, 'alpha' => 0); 
+        $expectedPixel = ['red' => 100, 'green' => 0, 'blue' => 10, 'alpha' => 0];
         $image->setPixel(0, 0, $expectedPixel);
         
         $dataPixel   = $image->getIterator()->current();
@@ -68,6 +71,7 @@ class ImageTest extends BaseTest
     
     /**
      * @dataProvider providerSaveFailed
+     *
      * @param array $options
      */
     public function testSaveFailed(array $options) 
@@ -80,6 +84,7 @@ class ImageTest extends BaseTest
     
     /**
      * @dataProvider providerSaveSuccess
+     *
      * @param array $options
      */
     public function testSaveSuccess(array $options) 
@@ -94,6 +99,7 @@ class ImageTest extends BaseTest
     /**
      * @dataProvider providerInitFailed
      * @expectedException \Picamator\SteganographyKit\InvalidArgumentException
+     *
      * @param array $options
      */
     public function testInitFailed(array $options) 
@@ -103,30 +109,30 @@ class ImageTest extends BaseTest
     
     public function providerPath() 
     {
-        return array(
-            array(array('path' => 'original_50_50.png'))
-        );
+        return [
+            [['path' => 'original_50_50.png']],
+        ];
     }
     
     public function providerInitFailed() 
     {
-        return array(
-            array(array('path' => 'non_existing_file.png')),
-            array(array('path' => 'secret_text.txt'))
-        );
+        return [
+            [['path' => 'non_existing_file.png']],
+            [['path' => 'secret_text.txt']],
+        ];
     }
     
     public function providerSaveFailed() 
     {
-        return array(
-            array(array('path' => 'original_50_50.png'))
-        );
+        return [
+            [['path' => 'original_50_50.png']],
+        ];
     }
     
     public function providerSaveSuccess() 
     {
-        return array(
-            array(array('path' => 'original_50_50.png', 'savePath' => 'stego'))
-        );
+        return [
+            [['path' => 'original_50_50.png', 'savePath' => 'stego']],
+        ];
     }
 }

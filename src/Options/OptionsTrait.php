@@ -20,7 +20,7 @@ trait OptionsTrait
      * @param array $options
      * @param array $optionsDefault
      */
-    protected function setOptions(array $options, array $optionsDefault = array()) 
+    protected function setOptions(array $options, array $optionsDefault = [])
     {        
         $this->options = array_merge($optionsDefault, $options);
     }

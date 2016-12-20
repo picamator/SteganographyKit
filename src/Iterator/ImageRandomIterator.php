@@ -18,42 +18,42 @@ class ImageRandomIterator implements \Iterator
     /**
      * Current X coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $x = 0;
     
     /**
      * Current Y coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $y = 0;
     
     /**
      * Max index of x coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $xMax;
     
     /**
      * Max index of y coordinate
      * 
-     * @var integer 
+     * @var int
      */
     protected $yMax;
     
     /**
      * Current index
      * 
-     * @var integer 
+     * @var int
      */
     protected $index = 0;
     
     /**
      * Max index
      * 
-     * @var integer 
+     * @var int
      */
     protected $indexMax;
     
@@ -62,10 +62,10 @@ class ImageRandomIterator implements \Iterator
      * 
      * @var array  
      */
-    protected $imageSize;
+    protected $imgSize;
     
     /**
-     * Container of coordinats that have been generated before
+     * Container of coordinates that have been generated before
      * 
      * @var array 
      */
@@ -105,7 +105,7 @@ class ImageRandomIterator implements \Iterator
     {
         $color = imagecolorat($this->image, $this->x, $this->y);
         
-        return array('x' => $this->x, 'y' => $this->y, 'color' => $color);
+        return ['x' => $this->x, 'y' => $this->y, 'color' => $color];
     }
 
     /**
@@ -157,7 +157,7 @@ class ImageRandomIterator implements \Iterator
     /**
      * Checks if current position is valid
      * 
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      */
     public function valid()
     {             
@@ -167,9 +167,10 @@ class ImageRandomIterator implements \Iterator
     /**
      * Gets random data
      * 
-     * @param integer $min
-     * @param integer $max
-     * @return integer
+     * @param int $min
+     * @param int $max
+     *
+     * @return int
      */
     protected function getRand($min, $max) 
     {
@@ -198,8 +199,6 @@ class ImageRandomIterator implements \Iterator
     
     /**
      * Sets coordinates
-     * 
-     * @param array $imgSize
      */
     protected function setCoordinates() 
     {        
@@ -222,6 +221,6 @@ class ImageRandomIterator implements \Iterator
             }
         }
         
-        return array($x, $y);
+        return [$x, $y];
     }
 }

@@ -9,13 +9,14 @@ interface SecretTextInterface
     /**
      * @param array $options
      */
-    public function __construct(array $options = array());
+    public function __construct(array $options = []);
     
     /**
      * Sets binary item size
      * It's used for iteration process
      * 
-     * @param integer $size
+     * @param int $size
+     *
      * @return self
      */
     public function setBinaryItemSize($size);
@@ -24,7 +25,7 @@ interface SecretTextInterface
      * Gets binary item size
      * It's used for iteration process
      * 
-     * @return integer
+     * @return int
      */
     public function getBinaryItemSize();
     
@@ -39,6 +40,7 @@ interface SecretTextInterface
      * Gets decretText from binary data
      * 
      * @param string    $binaryData - raw secretText with endMark
+     *
      * @return string
      */
     public function getFromBinaryData($binaryData);
@@ -47,7 +49,8 @@ interface SecretTextInterface
      * Gets position of end mark
      * 
      * @param string $secretText
-     * @return integer|false
+     *
+     * @return int|false
      */
     public function getEndMarkPos($secretText);
 }

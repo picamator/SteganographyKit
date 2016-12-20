@@ -20,10 +20,10 @@ abstract class BaseLsbTest extends BaseTest
      * 
      * @var array
      */
-    static protected $optionsCoverText = array(
+    static protected $optionsCoverText = [
         'path'      => 'original_200_200.png',
         'savePath'  => 'original_%s.png'
-    ); 
+    ];
     
     /**
      * Remove files in stegoPath after runs each test
@@ -57,7 +57,7 @@ abstract class BaseLsbTest extends BaseTest
         $this->assertTrue($encode);
         
         // decode
-        $stegoText  = new Image(array('path' => $optionsCoverText['savePath']));
+        $stegoText  = new Image(['path' => $optionsCoverText['savePath']]);
         $decodeText = $stegoSystem->decode($stegoText, $secretText);
         
         $this->assertEquals($optionsSecretText['text'], $decodeText);
@@ -77,7 +77,7 @@ abstract class BaseLsbTest extends BaseTest
     protected function generateProvider($resultCount, 
         $textLength = null, array $channel = []
     ) {              
-        $supportedChannel       = array('red', 'green', 'blue');
+        $supportedChannel       = ['red', 'green', 'blue'];
         $supportedChannelSize   = count($supportedChannel);
         
         // 200*200*3/8 = 15000 characters max to cover
@@ -86,7 +86,7 @@ abstract class BaseLsbTest extends BaseTest
         $secretTextLength   = strlen($secretText);
         
         // validate parameters
-        self::validatePrameters($textLength, $secretTextLength, $channel, $supportedChannelSize);
+        self::validateParameters($textLength, $secretTextLength, $channel, $supportedChannelSize);
         
         // generate provider data set
         $providerData = [];
@@ -105,7 +105,7 @@ abstract class BaseLsbTest extends BaseTest
             $providerData[$i][] = self::getProviderDataItem($useChannel, $secretTextItem);
             
             // set secretText option
-            $providerData[$i][] = array('text' => $secretTextItem);
+            $providerData[$i][] = ['text' => $secretTextItem];
             
             // set use channel
             $providerData[$i][] = $useChannel;                 
@@ -131,16 +131,20 @@ abstract class BaseLsbTest extends BaseTest
     }
     
     /**
-     * Validate provider paramters
+     * Validate provider parameters
      * 
      * @param integer $textLength
      * @param integer $secretTextLength
      * @param array $channel
      * @param integer $supportedChannelSize
+     *
      * @throws \PHPUnit_Framework_Exception
      */
-    static protected function validatePrameters($textLength, 
-        $secretTextLength, array $channel, $supportedChannelSize
+    static protected function validateParameters(
+        $textLength,
+        $secretTextLength,
+        array $channel,
+        $supportedChannelSize
     ) {
         if ((!is_null($textLength) &&  $textLength > $secretTextLength) 
             || (!empty($channel) && count($channel) > $supportedChannelSize)) {
@@ -155,6 +159,7 @@ abstract class BaseLsbTest extends BaseTest
      * 
      * @param array $useChannel
      * @param string $secretTextItem
+     *
      * @return array - array('path' => ..., 'savePath' => ...);
      */
     static protected function getProviderDataItem(array $useChannel, $secretTextItem) 
@@ -162,10 +167,10 @@ abstract class BaseLsbTest extends BaseTest
         $args = microtime(true) . '_secret_length_' . strlen($secretTextItem)
             . '_' . implode('_', $useChannel);
         
-        $result =  array(
+        $result =  [
             'path'      => self::$optionsCoverText['path'],
             'savePath'  => self::$stegoPath . '/' . sprintf(self::$optionsCoverText['savePath'], $args)
-        );
+        ];
         
         return $result;
     }

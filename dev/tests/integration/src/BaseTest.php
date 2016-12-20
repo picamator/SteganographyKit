@@ -23,6 +23,7 @@ abstract class BaseTest extends TestCase
      * Gets full path to data
      * 
      * @param string $path
+     *
      * @return string|boolean - full path or false if failed
      */
     protected function getDataPath($path)
@@ -34,7 +35,7 @@ abstract class BaseTest extends TestCase
             mkdir($dirPath, 0777, true);
         }
 
-        return realpath($fullPath);
+        return $fullPath;
     }
     
     /**
@@ -50,5 +51,7 @@ abstract class BaseTest extends TestCase
             
             unlink($fileInfo->getPathname());
         }
+
+        rmdir($path);
     }
 }

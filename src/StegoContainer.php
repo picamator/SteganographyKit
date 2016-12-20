@@ -1,18 +1,12 @@
 <?php
-/**
- * SteganographyKit Container
- * 
- * @link        https://github.com/picamator/SteganographyKit
- * @license     http://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 namespace Picamator\SteganographyKit;
+
 use Picamator\SteganographyKit\StegoSystem\StegoSystemInterface;
-use Picamator\SteganographyKit\SecretText\PlainText;
 use Picamator\SteganographyKit\Image\Image;
+use Picamator\SteganographyKit\ObjectManager\ObjectManager;
 
 /**
- * Staganography Facade
+ * Steganography Facade
  */
 class StegoContainer
 {
@@ -41,17 +35,19 @@ class StegoContainer
      * @param string $coverPath
      * @param string $stegoPath
      * @param string $text
-     * @return boolen true for success or false otherwise
+     *
+     * @return bool true for success or false otherwise
      */
     public function encode($coverPath, $stegoPath, $text) 
     {
-        $this->setImage(array(
+        $this->setImage([
             'path'      => $coverPath,
-            'savePath'  => $stegoPath
-        ));
-        $secretText = new PlainText(array(
-            'text' => $text
-        ));
+            'savePath'  => $stegoPath,
+        ]);
+        $secretText = ObjectManager::getInstance()->create(
+            'Picamator\SteganographyKit\SecretText\PlainText',
+            [['text' => $text]]
+        );
         
         return $this->getStegoSystem()
             ->encode($secretText, $this->image);
@@ -61,14 +57,15 @@ class StegoContainer
      * Decode
      * 
      * @param string $stegoPath
-     * @retun string
+     *
+     * @return string
      */
     public function decode($stegoPath) 
     {
-        $this->setImage(array(
+        $this->setImage([
             'path'=> $stegoPath,
-        ));  
-        $secretText = new PlainText();
+        ]);
+        $secretText = ObjectManager::getInstance()->create('Picamator\SteganographyKit\SecretText\PlainText');
         
         return $this->getStegoSystem()
             ->decode($this->image, $secretText);
@@ -87,6 +84,7 @@ class StegoContainer
      * Sets Stego System
      * 
      * @param StegoSystemInterface $stegoSystem
+     *
      * @return self
      */
     public function setStegoSystem(StegoSystemInterface $stegoSystem)
@@ -105,7 +103,7 @@ class StegoContainer
     {
         if (is_null($this->stegoSystem)) {
             $stegoSystem        = self::DEFAULT_STEGO_SYSTEM;
-            $this->stegoSystem  = new $stegoSystem();
+            $this->stegoSystem  = ObjectManager::getInstance()->create($stegoSystem);
         }
         
         return  $this->stegoSystem;
@@ -118,6 +116,6 @@ class StegoContainer
      */
     protected function setImage(array $options) 
     {
-        $this->image = new Image($options);
+        $this->image = ObjectManager::getInstance()->create('Picamator\SteganographyKit\Image\Image', [$options]);
     }
 }

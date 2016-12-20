@@ -2,13 +2,21 @@
 namespace Picamator\SteganographyKit\SecretText;
 
 use Picamator\SteganographyKit\Iterator\SecretTextIterator;
+use Picamator\SteganographyKit\ObjectManager\ObjectManager;
 use Picamator\SteganographyKit\RuntimeException;
 
 /**
  * Secret Text - Plain text
  */
 class PlainText extends AbstractSecretText 
-{       
+{
+    /**
+     * Cache container
+     *
+     * @var array
+     */
+    static protected $cache = [];
+
     /**
      * Default Options
      * 
@@ -25,24 +33,12 @@ class PlainText extends AbstractSecretText
      * @var string 
      */
     protected $binaryData;
-    
+
     /**
-     * Cache container
-     * 
-     * @var array 
+     * @var SecretTextIterator | null
      */
-    static protected $cache = array();
-    
-    /**
-     * @param array $options
-     */
-    public function __construct(array $options = array()) 
-    {
-        parent::__construct($options);
-        
-        $this->validateZLib();
-    }
-    
+    private $iterator = null;
+
    /**
     * Gets Iterator
     * 
@@ -50,16 +46,21 @@ class PlainText extends AbstractSecretText
     */ 
     public function getIterator() 
     {
-        return new SecretTextIterator($this);
+        if(is_null($this->iterator)) {
+            $this->iterator = ObjectManager::getInstance()->create('Picamator\SteganographyKit\Iterator\SecretTextIterator', [$this]);
+        }
+
+        return $this->iterator;
     }
 
     /**
      * Count elements
-     * 
+     *
      * @param string $mode
-     * @return int The custom count as an integer
+     *
+     * @return int The custom count as an int
      */
-    public function count($mode = 'COUNT_NORMAL') 
+    public function count($mode = 'COUNT_NORMAL')
     {
         return strlen($this->binaryData);
     }
@@ -67,7 +68,7 @@ class PlainText extends AbstractSecretText
     /**
      * {@inheritDoc}
      */
-    public function setOptions(array $options, array $optionsDefault = array()) 
+    public function setOptions(array $options, array $optionsDefault = [])
     {
         parent::setOptions($options, $optionsDefault);
         
@@ -90,6 +91,7 @@ class PlainText extends AbstractSecretText
      * Gets secretText from binary data
      * 
      * @param string    $binaryData - raw secretText with endMark
+     *
      * @return string
      */
     public function getFromBinaryData($binaryData) 
@@ -142,6 +144,7 @@ class PlainText extends AbstractSecretText
      * 
      * @param string $data
      * @param \Closure $converter
+     *
      * @return string
      */
     static protected function convertData($data, \Closure $converter)
@@ -177,21 +180,10 @@ class PlainText extends AbstractSecretText
     }
     
     /**
-     * Validate compress library
-     * 
-     * @throws RuntimeException
-     */
-    protected function validateZLib()
-    {
-        if (!function_exists('gzcompress')) {
-            throw new RuntimeException('ZLib was not installed: http://php.net/manual/en/book.zlib.php');
-        }
-    }
-    
-    /**
      * Encode text
      * 
      * @param string $text
+     *
      * @return string - base64encoded compresses string
      */
     protected function encode($text) 
@@ -203,6 +195,7 @@ class PlainText extends AbstractSecretText
      * Decode text
      * 
      * @param string $text
+     *
      * @return string
      */
     protected function decode($text) 

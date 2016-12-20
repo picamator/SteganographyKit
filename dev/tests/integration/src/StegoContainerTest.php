@@ -15,6 +15,7 @@ class StegoContainerTest extends BaseTest
     public function setUp() 
     {
         parent::setUp();
+
         $this->stegoContainer = new StegoContainer();
     }
     
@@ -28,6 +29,7 @@ class StegoContainerTest extends BaseTest
     
     /**
      * @dataProvider providerEncode
+     *
      * @param string $coverPath
      * @param string $stegoPath
      * @param string $text
@@ -44,6 +46,7 @@ class StegoContainerTest extends BaseTest
     
     /**
      * @dataProvider providerDecode
+     *
      * @param string $stegoPath
      * @param string $expected
      */
@@ -57,8 +60,8 @@ class StegoContainerTest extends BaseTest
     
     /**
      * @dataProvider providerRenderImage
+     *
      * @param string $coverPath
-     * @param string $stegoPath
      * @param string $text
      */
     public function testRenderImage($coverPath, $text) 
@@ -77,22 +80,22 @@ class StegoContainerTest extends BaseTest
     
     public function providerEncode()
     {
-        return array(
-            array('original_200_200.png', 'stego_origin_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm')
-        );
+        return [
+            ['original_200_200.png', 'stego_origin_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm'],
+        ];
     }
     
     public function providerDecode() 
     {
-        return array(
-            array('lsb/pure/stego_origin_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm')
-        );
+        return [
+            ['lsb/pure/stego_origin_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm'],
+        ];
     }
     
     public function providerRenderImage()
     {
-        return array(
-            array('original_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm')
-        );
+        return [
+            ['original_200_200.png', 'Лорем іпсум, Lorem ipsum, Łorem ipsóm'],
+        ];
     }
 }

@@ -2,7 +2,7 @@
 namespace Picamator\SteganographyKit\StegoSystem;
 
 use Picamator\SteganographyKit\Image\ImageInterface;
-use Picamator\SteganographyKit\Iterator\ImageRandomIterator;
+use Picamator\SteganographyKit\ObjectManager\ObjectManager;
 
 /**
  * Stego System of Secret LSB
@@ -35,7 +35,10 @@ class SecretLsb extends AbstractLsb
     protected function getImageIterator(ImageInterface $image) 
     {
         $stegoKey = $this->getStegoKey();
-        $iterator = new ImageRandomIterator($image, $stegoKey->getSecretKey());
+        $iterator = ObjectManager::getInstance()->create(
+            'Picamator\SteganographyKit\Iterator\ImageRandomIterator',
+            [$image, $stegoKey->getSecretKey()]
+        );
         
         return $iterator;
     }

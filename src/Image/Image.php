@@ -1,13 +1,14 @@
 <?php
 namespace Picamator\SteganographyKit\Image;
 
+use Picamator\SteganographyKit\ObjectManager\ObjectManager;
 use Picamator\SteganographyKit\Options\OptionsTrait;
 use Picamator\SteganographyKit\Iterator\ImageIterator;
 use Picamator\SteganographyKit\RuntimeException;
 use Picamator\SteganographyKit\InvalidArgumentException;
 
 /**
- * Image Trait
+ * Image
  */
 class Image implements ImageInterface, \Countable, \IteratorAggregate 
 {   
@@ -41,11 +42,11 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * 
      * @var array
      */
-    protected $supportedType = array(
+    protected $supportedType = [
         IMAGETYPE_PNG,
         IMAGETYPE_JPEG,
-        IMAGETYPE_GIF
-    );
+        IMAGETYPE_GIF,
+    ];
     
     /**
      * Link to png image resource
@@ -59,11 +60,16 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * 
      * @var array
      */
-    protected $optionsDefault = array(
+    protected $optionsDefault = [
         'path'      => '',
-        'savePath'  => ''
-    );
-    
+        'savePath'  => '',
+    ];
+
+    /**
+     * @var ImageIterator | null
+     */
+    private $iterator = null;
+
     /**
      * @param array $options
      */
@@ -78,15 +84,21 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * 
      * @return ImageIterator;
      */
-    public function getIterator() {
-        return new ImageIterator($this);
+    public function getIterator()
+    {
+        if (is_null($this->iterator)) {
+            $this->iterator = ObjectManager::getInstance()->create('Picamator\SteganographyKit\Iterator\ImageIterator', [$this]);
+        }
+
+        return $this->iterator;
     }
     
     /**
      * Count elements
      * 
      * @param string $mode
-     * @return int The custom count as an integer
+     *
+     * @return int The custom count as an int
      */
     public function count($mode = 'COUNT_NORMAL') 
     {
@@ -117,10 +129,12 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Sets pixel
      * Modify image pixel
      * 
-     * @param integer $xIndex
-     * @param integer $yIndex
+     * @param int $xIndex
+     * @param int $yIndex
      * @param array $pixel
+     *
      * @return self
+     *
      * @throws RuntimeException
      */
     public function setPixel($xIndex, $yIndex, array $pixel) 
@@ -129,7 +143,9 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
 
         $result = imagesetpixel($this->image, $xIndex, $yIndex, $color);
         if ($result === false) {
-            throw new RuntimeException('Failed to modify pixel [' .$xIndex .', ' . $yIndex . '].' );
+            throw new RuntimeException(
+                sprintf('Failed to modify pixel [%s, %s].', $xIndex, $yIndex)
+            );
         }
         
         return $this;
@@ -138,7 +154,8 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     /**
      * Encode color index to rgb array with binary values
      * 
-     * @param integer $colorIndex result of imagecolorate
+     * @param int $colorIndex result of imagecolorate
+     *
      * @return array
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
@@ -146,12 +163,12 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      */
     public function getDecimalColor($colorIndex) 
     {   
-        $result = array(
+        $result = [
             'red'   => ($colorIndex >> 16) & 0xFF,
             'green' => ($colorIndex >> 8) & 0xFF,
             'blue'  => $colorIndex & 0xFF,
             'alpha' => ($colorIndex & 0x7F000000) >> 24
-        );
+        ];
         
         return $result;
     }
@@ -159,7 +176,8 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     /**
      * Encode decimalPixel to binary
      * 
-     * @param integer $colorIndex result of imagecolorate
+     * @param int $colorIndex result of imagecolorate
+     *
      * @return array
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
@@ -179,7 +197,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     /**
      * Save image
      * 
-     * @return boolean true if ok or false otherwise
+     * @return bool true if ok or false otherwise
      */
     public function save() 
     {
@@ -228,7 +246,9 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
         }
         
         if($image === false) {
-            throw new InvalidArgumentException('Can not create image by path: ' . $path);
+            throw new InvalidArgumentException(
+                sprintf('Can not create image by path "%s"', $path)
+            );
         }
         
         $this->image = $image;
@@ -238,10 +258,11 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Gets Colorallocate
      * It works only for truecolor otherwise it should be used imagecolorallocate
      * 
-     * @param integer $red      0-255
-     * @param integer $green    0-255
-     * @param integer $blue     0-255
-     * @return integer
+     * @param int $red      0-255
+     * @param int $green    0-255
+     * @param int $blue     0-255
+     *
+     * @return int
      */
     protected function getColorallocate($red, $green, $blue)
     {
@@ -260,11 +281,13 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     {
         $result = getimagesize($path);
         if($result === false) {
-            throw new RuntimeException('Imposible to calculate image size: ' . $path);
+            throw new RuntimeException(
+                sprintf('Impossible calculate image size "%s"', $path)
+            );
         }
         
         $this->imgSize = array_combine(
-            array('width', 'height', 'type', 'attr', 'bits', 'mime'),
+            ['width', 'height', 'type', 'attr', 'bits', 'mime'],
             $result     
         );
     }
@@ -273,8 +296,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Initialize and validation
      */
     protected function init() 
-    {        
-        $this->validateGbLib();
+    {
         $this->validatePath($this->options['path']);
         $this->validateSavePath($this->options['savePath']);
         
@@ -282,18 +304,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
         $this->validateType();
         
         $this->setImage($this->options['path']);
-    }
-    
-    /**
-     * Verify is GB Lib extension was loaded
-     * 
-     * @throws RuntimeException
-     */
-    protected function validateGbLib() 
-    {
-        if(extension_loaded('gd') === false) {
-            throw new RuntimeException('GD php extension was not loaded: http://www.php.net/manual/en/book.image.php');
-        } 
     }
     
     /**
@@ -305,7 +315,9 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     protected function validatePath($path)
     {
         if(!file_exists($path) || !is_readable($path)) {    
-            throw new InvalidArgumentException('Incorrect path "' . $path . '". Image does not exsit or not readable.');
+            throw new InvalidArgumentException(
+                sprintf('Incorrect path "%s". Image does not exist or not readable.', $path)
+            );
         }
     }
     
@@ -323,9 +335,15 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
         
         $dirPath = dirname($savePath);      
         if(!file_exists($dirPath) && !mkdir($dirPath, 0755, true)) {
-            throw new InvalidArgumentException('Impossible create subfolders structure for destination: ' . $savePath);
-        } else if(!is_writable($dirPath)) {
-            throw new InvalidArgumentException('Destination does not have writable permission: ' . $dirPath);
+            throw new InvalidArgumentException(
+                sprintf('Impossible create sub-folders structure for destination "%s"', $savePath)
+            );
+        }
+
+        if(!is_writable($dirPath)) {
+            throw new InvalidArgumentException(
+                sprintf('Destination does not have writable permission "%s"', $dirPath)
+            );
         }
     }
     
@@ -337,8 +355,8 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     protected function validateType() 
     {
         if (!in_array($this->imgSize['type'], $this->supportedType)) {
-            throw new InvalidArgumentException('Image with type: "' . $this->imgSize['type'] 
-                . '", mime: "' . $this->imgSize['mime'] . '" is not supported.'
+            throw new InvalidArgumentException(
+                sprintf('Image with type: "%s", mime: "%s" is not supported', $this->imgSize['type'], $this->imgSize['mime'])
             );
         }
     }

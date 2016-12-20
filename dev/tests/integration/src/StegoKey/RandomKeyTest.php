@@ -22,6 +22,7 @@ class RandomKeyTest extends BaseTest
     /**
      * @dataProvider providerFailedSecretKey
      * @expectedException \Picamator\SteganographyKit\InvalidArgumentException
+     *
      * @param string $secretKey
      */
     public function testFailedSecretKey($secretKey)  
@@ -31,6 +32,7 @@ class RandomKeyTest extends BaseTest
     
     /**
      * @dataProvider providerSuccessSecretKey
+     *
      * @param integer $secretKey
      */
     public function testSuccessSecretKey($secretKey) 
@@ -58,18 +60,18 @@ class RandomKeyTest extends BaseTest
         
     public function providerFailedSecretKey() 
     {
-        return array(
-            array(str_repeat('t', RandomKey::MIN_SECRET_KEY_LENGTH - 1)),
-            array((int)str_repeat('9', RandomKey::MAX_SECRET_KEY_LENGTH + 1)),
-            array('test')
-        );
+        return [
+            [str_repeat('t', RandomKey::MIN_SECRET_KEY_LENGTH - 1)],
+            [(int)str_repeat('9', RandomKey::MAX_SECRET_KEY_LENGTH + 1)],
+            ['test']
+        ];
     }
     
     public function providerSuccessSecretKey() 
     {
-        return array(
-            array((int)str_repeat('1', RandomKey::MIN_SECRET_KEY_LENGTH)),
-            array((int)str_repeat('1', RandomKey::MAX_SECRET_KEY_LENGTH)),
-        );
+        return [
+            [(int)str_repeat('1', RandomKey::MIN_SECRET_KEY_LENGTH)],
+            [(int)str_repeat('1', RandomKey::MAX_SECRET_KEY_LENGTH)],
+        ];
     }
 }

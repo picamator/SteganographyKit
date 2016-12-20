@@ -24,10 +24,12 @@ interface ImageInterface
      * Sets pixel
      * Modify image pixel
      * 
-     * @param integer $xIndex
-     * @param integer $yIndex
+     * @param int $xIndex
+     * @param int $yIndex
      * @param array $pixel
+     *
      * @return self
+     *
      * @throws RuntimeException
      */
     public function setPixel($xIndex, $yIndex, array $pixel);
@@ -35,7 +37,8 @@ interface ImageInterface
     /**
      * Encode color index to rbb array with binary values
      * 
-     * @param integer $colorIndex result of imagecolorate
+     * @param int $colorIndex result of imagecolorate
+     *
      * @return array
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
@@ -46,7 +49,8 @@ interface ImageInterface
     /**
      * Encode decimalPixel to binary
      * 
-     * @param integer $colorIndex result of imagecolorate
+     * @param int $colorIndex result of imagecolorate
+     *
      * @return array
      * <code>
             array('red' => ..., 'green' => ..., 'blue' => ..., 'alpha' => ...);
@@ -57,7 +61,7 @@ interface ImageInterface
     /**
      * Save image
      * 
-     * @return boolean true if ok or false otherwise
+     * @return bool true if ok or false otherwise
      */
     public function save();
     

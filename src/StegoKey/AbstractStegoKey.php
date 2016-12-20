@@ -11,12 +11,12 @@ abstract class AbstractStegoKey implements StegoKeyInterface
     /**
      * SecretKey
      * 
-     * @var string|integer 
+     * @var string|int
      */
     protected $secretKey;
     
     /**
-     * @param string|integer $secretText
+     * @param string|int $secretText
      */
     public function __construct($secretText = null) 
     {
@@ -28,8 +28,9 @@ abstract class AbstractStegoKey implements StegoKeyInterface
     /**
      * Gets secretKey
      * 
-     * @return string|integer
-     * @throw LogicException
+     * @return string|int
+     *
+     * @throws LogicException
      */
     public function getSecretKey() 
     {

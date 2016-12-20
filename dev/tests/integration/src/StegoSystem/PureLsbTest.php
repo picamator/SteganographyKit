@@ -22,6 +22,7 @@ class PureLsbTest extends BaseLsbTest
 
     /**
      * @dataProvider providerEncode
+     *
      * @param array $optionsCoverText
      * @param array $optionsSecretText
      */
@@ -41,6 +42,7 @@ class PureLsbTest extends BaseLsbTest
     
     /**
      * @dataProvider providerDecode
+     *
      * @param array $optionsStegoText
      */
     public function testDecode(array $optionsStegoText, $expected) 
@@ -55,6 +57,7 @@ class PureLsbTest extends BaseLsbTest
     
     /**
      * @dataProvider        providerEncodeDecode
+     *
      * @param array         $optionsCoverText
      * @param array         $optionsSecretText
      * @param array         $useChannel
@@ -67,27 +70,27 @@ class PureLsbTest extends BaseLsbTest
     
     public function providerDecode() 
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'path' => 'lsb/pure/lorem_ipsum_li_200_200.png',
-                ),
+                ],
                 'Lorem ipsum Li'
-            )
-        );
+            ]
+        ];
     }
     
     public function providerEncode() 
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'path'      => 'original_200_200.png',
                     'savePath'  => 'original_' . date('Y_m_d_H_i_s') . '.png'
-                ),
-                array('text' => 'Lorem ipsum Li'),
-            )
-        );
+                ],
+                ['text' => 'Lorem ipsum Li'],
+            ]
+        ];
     }
     
     /**
@@ -100,6 +103,6 @@ class PureLsbTest extends BaseLsbTest
      */
     public function providerEncodeDecode()
     {
-       return $this->generateProvider(10, 1000, array('red', 'green', 'blue'));
+       return $this->generateProvider(10, 1000, ['red', 'green', 'blue']);
     }
 }

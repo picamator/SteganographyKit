@@ -14,6 +14,7 @@ interface StegoSystemInterface
      * Sets stegoKey
      * 
      * @param StegoKeyInterface $stegoKey
+     *
      * @return self
      */
     public function setStegoKey(StegoKeyInterface $stegoKey);
@@ -23,6 +24,7 @@ interface StegoSystemInterface
      * 
      * @param array $channels
      * @return self
+     *
      * @throws InvalidArgumentException
      */
     public function setChannels(array $channels);
@@ -32,6 +34,7 @@ interface StegoSystemInterface
      * 
      * @param   SecretTextInterface $secretText
      * @param   ImageInterface      $coverText
+     *
      * @return  string
      */
     public function encode(SecretTextInterface $secretText, ImageInterface $coverText);
@@ -41,6 +44,7 @@ interface StegoSystemInterface
      * 
      * @param   ImageInterface      $stegoText
      * @param   SecretTextInterface $secretText
+     *
      * @return  string
      */
     public function decode(ImageInterface $stegoText, SecretTextInterface $secretText);
