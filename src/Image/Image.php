@@ -10,7 +10,7 @@ use Picamator\SteganographyKit\InvalidArgumentException;
 /**
  * Image
  */
-class Image implements ImageInterface, \Countable, \IteratorAggregate 
+class Image implements ImageInterface
 {   
     use OptionsTrait;
     
@@ -18,22 +18,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
      * Image size
      * 
      * @var array
-     * <code>
-     *      array(6) {
-     *        'width' =>
-     *         int(3264)
-     *         'height' =>
-     *         int(2448)
-     *         'type' =>
-     *         int(3)
-     *         'attr' =>
-     *         string(26) "width="3264" height="2448""
-     *         'bits' =>
-     *         int(8)
-     *         'mime' =>
-     *         string(9) "image/png"
-     *       }
-     * </code>
      */
     protected $imgSize;
     
@@ -45,7 +29,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     protected $supportedType = [
         IMAGETYPE_PNG,
         IMAGETYPE_JPEG,
-        IMAGETYPE_GIF,
     ];
     
     /**
@@ -232,10 +215,6 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
             case IMAGETYPE_JPEG:
                 $image = imagecreatefromjpeg($path);
                 break;
-            
-            case IMAGETYPE_GIF;
-                $image = imagecreatefromgif($path);
-                break;
 
             case IMAGETYPE_PNG;
                 $image = imagecreatefrompng($path);
@@ -285,11 +264,16 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
                 sprintf('Impossible calculate image size "%s"', $path)
             );
         }
-        
-        $this->imgSize = array_combine(
-            ['width', 'height', 'type', 'attr', 'bits', 'mime'],
-            $result     
-        );
+
+        $this->imgSize = [
+            'width'     => $result[0],
+            'height'    => $result[1],
+            'type'      => $result[2],
+            'attr'      => $result[3],
+            'bits'      => $result['bits'],
+            'channels'  => isset($result['channels']) ? $result['channels'] : 0,
+            'mime'      => $result['mime']
+        ];
     }
     
     /**
@@ -356,7 +340,7 @@ class Image implements ImageInterface, \Countable, \IteratorAggregate
     {
         if (!in_array($this->imgSize['type'], $this->supportedType)) {
             throw new InvalidArgumentException(
-                sprintf('Image with type: "%s", mime: "%s" is not supported', $this->imgSize['type'], $this->imgSize['mime'])
+                sprintf('Image type: "%s", mime: "%s" is not supported', $this->imgSize['type'], $this->imgSize['mime'])
             );
         }
     }

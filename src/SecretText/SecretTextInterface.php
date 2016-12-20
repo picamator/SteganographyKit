@@ -4,7 +4,7 @@ namespace Picamator\SteganographyKit\SecretText;
 /**
  * Interface for Secret Text
  */
-interface SecretTextInterface 
+interface SecretTextInterface extends \Countable, \IteratorAggregate
 {    
     /**
      * @param array $options

@@ -82,7 +82,9 @@ class StegoContainer
     
     /**
      * Sets Stego System
-     * 
+     *
+     * @codeCoverageIgnore
+     *
      * @param StegoSystemInterface $stegoSystem
      *
      * @return self

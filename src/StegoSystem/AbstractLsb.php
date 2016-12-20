@@ -140,7 +140,8 @@ abstract class AbstractLsb implements StegoSystemInterface
      * @param ImageInterface    $coverText
      * @param string            $secretItem - e.g. "100"
      */
-    protected function encodeItem(array $pixelData, 
+    protected function encodeItem(
+        array $pixelData,
         ImageInterface $coverText, $secretItem
     ) {  
         $colorData      = $coverText->getDecimalColor($pixelData['color']);
@@ -213,8 +214,8 @@ abstract class AbstractLsb implements StegoSystemInterface
      */
     protected function validateCapacity(SecretTextInterface $secretText, ImageInterface $coverText)
     {
-        $coverCapacity  = $this->channelsSize * count($coverText);    
-        $secretSize     = count($secretText);
+        $coverCapacity  = $this->channelsSize * $coverText->count();
+        $secretSize     = $secretText->count();
         
         if ($secretSize > $coverCapacity) {
             throw new RuntimeException(

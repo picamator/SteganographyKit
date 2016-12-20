@@ -5,7 +5,7 @@ use Picamator\SteganographyKit\Image\Image;
 use Picamator\SteganographyKit\Tests\Integration\BaseTest;
 
 class ImageTest extends BaseTest
-{    
+{
     /**
      * @dataProvider providerPath
      *
@@ -97,24 +97,36 @@ class ImageTest extends BaseTest
     }
     
     /**
-     * @dataProvider providerInitFailed
+     * @dataProvider providerFailInit
      * @expectedException \Picamator\SteganographyKit\InvalidArgumentException
      *
      * @param array $options
      */
-    public function testInitFailed(array $options) 
+    public function testFailInit(array $options)
     {
         new Image($options);
     }
-    
+
+    /**
+     * @dataProvider providerFailType
+     * @expectedException \Picamator\SteganographyKit\InvalidArgumentException
+     *
+     * @param array $options
+     */
+    public function testFailType(array $options)
+    {
+        new Image($options);
+    }
+
     public function providerPath() 
     {
         return [
             [['path' => 'original_50_50.png']],
+            [['path' => 'original_50_50.jpeg']],
         ];
     }
-    
-    public function providerInitFailed() 
+
+    public function providerFailInit()
     {
         return [
             [['path' => 'non_existing_file.png']],
@@ -133,6 +145,14 @@ class ImageTest extends BaseTest
     {
         return [
             [['path' => 'original_50_50.png', 'savePath' => 'stego']],
+        ];
+    }
+
+    public function providerFailType()
+    {
+        return [
+            [['path' => 'original_50_50.gif']],
+            [['path' => 'original_50_50.bmp']],
         ];
     }
 }

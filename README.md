@@ -63,7 +63,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 $stegoContainer = new Picamator\SteganographyKit\StegoContainer();
 
-// cover-image.png|.jpg|.gif - path to existing image to cover secretText
+// cover-image.png|.jpg - path to existing image to cover secretText
 // stego-image.png  - path where new stegoImage should be saved
 $stegoContainer->encode('/path/to/cover-image.png', 
     '/path/to/stego-image.png', 'secret test');
@@ -119,7 +119,7 @@ LSB method is modified least significant bit of coverText to get stegoText.
 Detailed description with example can be found in [4] or in "Steganography in Depth" section [5].
 
 SteganographyKit has implementation of LSB with such conditions:
-* png, jpg or gif images as coverText,
+* png or jpg images as coverText,
 * text as a secretText.
 
 ### Pure Steganography

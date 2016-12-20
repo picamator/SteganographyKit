@@ -4,7 +4,7 @@ namespace Picamator\SteganographyKit\Image;
 /**
  * Image
  */
-interface ImageInterface
+interface ImageInterface extends \Countable, \IteratorAggregate
 {
     /**
      * Gets image
