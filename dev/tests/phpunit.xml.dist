@@ -22,7 +22,7 @@
             <directory>./unit/src/</directory>
         </testsuite>
         <testsuite name="Picamator SteganographyKit Integration Test Suite">
-            <directory>./unit/integration/src/</directory>
+            <directory>./integration/src/</directory>
         </testsuite>
     </testsuites>
     <filter>
