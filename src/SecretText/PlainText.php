@@ -3,7 +3,6 @@ namespace Picamator\SteganographyKit\SecretText;
 
 use Picamator\SteganographyKit\Iterator\SecretTextIterator;
 use Picamator\SteganographyKit\ObjectManager\ObjectManager;
-use Picamator\SteganographyKit\RuntimeException;
 
 /**
  * Secret Text - Plain text

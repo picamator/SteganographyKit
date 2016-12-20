@@ -34,10 +34,10 @@ interface ObjectManagerInterface
      *
      * @param ObjectManagerInterface $instance
      */
-    static function setInstance(ObjectManagerInterface $instance);
+    static public function setInstance(ObjectManagerInterface $instance);
 
     /**
      * Clean instance
      */
-    static function cleanInstance();
+    static public function cleanInstance();
 }

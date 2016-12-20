@@ -73,7 +73,7 @@ class ObjectManager implements ObjectManagerInterface
      *
      * @codeCoverageIgnore
      */
-    static function setInstance(ObjectManagerInterface $instance)
+    static public function setInstance(ObjectManagerInterface $instance)
     {
         self::$instance = $instance;
     }
@@ -83,7 +83,7 @@ class ObjectManager implements ObjectManagerInterface
      *
      * @codeCoverageIgnore
      */
-    static function cleanInstance()
+    static public function cleanInstance()
     {
         self::$instance = null;
     }
