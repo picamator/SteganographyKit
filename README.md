@@ -48,7 +48,7 @@ Update your `composer.json` with:
 ```json
 {
     "require": {
-        "picamator/steganographykit": "~1.0"
+        "picamator/steganographykit": "~1.1"
     }
 }
 ```

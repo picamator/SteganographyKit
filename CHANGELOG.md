@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+1.1.1 (2017-01-**)
+------------------
+* Upgraded composer dependencies
+
 1.1.0 (2016-12-20)
 ------------------
 * Moved to PSR-4
