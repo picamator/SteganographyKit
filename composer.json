@@ -22,8 +22,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Picamator\\SteganographyKit\\Tests\\Unit\\": "dev/tests/unit/src",
-            "Picamator\\SteganographyKit\\Tests\\Integration\\": "dev/tests/integration/src"
+            "Picamator\\SteganographyKit\\Tests\\Unit\\": "tests/unit/src",
+            "Picamator\\SteganographyKit\\Tests\\Integration\\": "tests/integration/src"
         }
     },
     "minimum-stability": "stable",
