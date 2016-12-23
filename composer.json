@@ -17,7 +17,7 @@
             "Picamator\\SteganographyKit\\": "src/"
         },
         "exclude-from-classmap": [
-            "/dev/tests/"
+            "/tests/"
         ]
     },
     "autoload-dev": {
