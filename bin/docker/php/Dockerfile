@@ -45,7 +45,7 @@ RUN cd xdebug-2.4.1 && cp modules/xdebug.so /usr/lib/php/20151012
 RUN rm -rf xdebug-2.4.1
 
 # xdebug config cli
-ADD ./dev/docker/php/config/20-xdebug.ini /usr/local/etc/php/conf.d/
+ADD ./bin/docker/php/config/20-xdebug.ini /usr/local/etc/php/conf.d/
 RUN echo "xdebug.remote_host = $host_ip" >> /usr/local/etc/php/conf.d/20-xdebug.ini
 
 # php
@@ -65,7 +65,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) gd
 
 # php.ini
-ADD  ./dev/docker/php/config/php.ini /usr/local/etc/php/
+ADD  ./bin/docker/php/config/php.ini /usr/local/etc/php/
 
 # volume
 RUN mkdir /SteganographyKit

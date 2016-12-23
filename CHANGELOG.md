@@ -1,9 +1,10 @@
 CHANGELOG
 =========
 
-1.1.1 (2017-01-**)
+1.2.0 (2017-01-**)
 ------------------
 * Upgraded composer dependencies
+* Reorganised directory structure to fit [Standard PHP package skeleton](https://github.com/php-pds/skeleton)
 
 1.1.0 (2016-12-20)
 ------------------

@@ -15,7 +15,7 @@ Before start please be sure that was installed:
 Installation
 ------------
 1. Set environment variable `HOST_IP` with your host machine IP, e.g. `export host_ip=192.168.0.104`
-2. Run in application root `sudo docker-compose -f dev/docker/docker-compose.yml up`
+2. Run in application root `sudo docker-compose -f bin/docker/docker-compose.yml up`
 3. Check containers `sudo docker-compose ps`
 
 Containers
@@ -36,9 +36,9 @@ To make connection via console simple run `ssh root@0.0.0.0 -p 2231`.
 Usefull commands
 ----------------
 
-* go to shell inside container `sudo docker-compose -f ./dev/docker/docker-compose.yml exec {{container-name}} bash`
-* build container `sudo docker-compose -f ./dev/docker/docker-compose.yml build {{container-name}}`
-* build container without caching `sudo docker-compose -f ./dev/docker/docker-compose.yml build --no-cache {{container-name}}`
+* go to shell inside container `sudo docker-compose -f ./bin/docker/docker-compose.yml exec {{container-name}} bash`
+* build container `sudo docker-compose -f ./bin/docker/docker-compose.yml build {{container-name}}`
+* build container without caching `sudo docker-compose -f ./bin/docker/docker-compose.yml build --no-cache {{container-name}}`
 
 _Note_: please substitute `{{container-name}}` by `stego-php`.
 
@@ -57,6 +57,6 @@ More information is [here](https://confluence.jetbrains.com/display/PhpStorm/Wor
 1. Configure UnitTest using remote interpreter. 
 2. Choose "Use custom autoload"
 3. Set "Path to script": `/SteganographyKit/vendor/autoload.php`
-4. Set "Default configuration file": `/SteganographyKit/dev/tests/phpunit.xml.dist`
+4. Set "Default configuration file": `/SteganographyKit/bin/tests/phpunit.xml.dist`
 
 More information is [here](https://confluence.jetbrains.com/display/PhpStorm/Running+PHPUnit+tests+over+SSH+on+a+remote+server+with+PhpStorm).

@@ -153,25 +153,20 @@ channel that had `(X + Y) % 3` would be moved to old red's place. For instance `
  
 Documentation
 -------------
-* UML class diagram: [class.diagram.png](doc/uml/class.diagram.png)
-* LSB encode/decode: [lsb-encode-decode.png](doc/uml/lsb-encode-decode.png)
-* Generated documentation: [phpdoc](doc/phpdoc), please build it following [instruction](dev/phpdoc)
+* UML class diagram: [class.diagram.png](docs/uml/class.diagram.png)
+* LSB encode/decode: [lsb-encode-decode.png](docs/uml/lsb-encode-decode.png)
+* Generated documentation: [phpdoc](docs/phpdoc), please build it following [instruction](bin/phpdoc)
 
 Developing
 ----------
 To configure developing environment please:
 
-1. Follow [Docker installation steps](dev/docker/README.md)
+1. Follow [Docker installation steps](bin/docker/README.md)
 2. Run inside Docker container `composer install`
 
 Contribution
 ------------
-If you find this project worth to use please add a star. Follow changes to see all activities.
-And if you see room for improvement, proposals please feel free to create an issue or send pull request.
-Here is a great [guide to start contributing](https://guides.github.com/activities/contributing-to-open-source/).
-
-Please note that this project is released with a [Contributor Code of Conduct](http://contributor-covenant.org/version/1/4/).
-By participating in this project and its community you agree to abide by those terms.
+To start helping the project please review [CONTRIBUTING](CONTRIBUTING.md).
 
 License
 -------

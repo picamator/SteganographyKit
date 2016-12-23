@@ -2,10 +2,10 @@
 <phpdoc>
     <title>SteganographyKit</title>
     <parser>
-        <target>../../doc/phpdoc</target>
+        <target>../../docs/phpdoc</target>
     </parser>
     <transformer>
-        <target>../../doc/phpdoc</target>
+        <target>../../docs/phpdoc</target>
     </transformer>
     <files>
         <directory>../../src</directory>

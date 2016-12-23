@@ -10,12 +10,12 @@ cache:
 
 before_script:
   - composer install
-  - sudo chown :travis dev/tests/integration/src/data
-  - sudo chmod g+rw dev/tests/integration/src/data
+  - sudo chown :travis tests/integration/src/data
+  - sudo chmod g+rw tests/integration/src/data
 
 script:
   - mkdir -p build/logs
-  - phpunit -c dev/tests/phpunit.xml.dist --coverage-clover build/logs/clover.xml
+  - phpunit -c tests/phpunit.xml.dist --coverage-clover build/logs/clover.xml
 
 after_script:
   - php vendor/bin/coveralls

@@ -3,7 +3,7 @@ services:
   stego-php:
     build:
         context : ../..
-        dockerfile: dev/docker/php/Dockerfile
+        dockerfile: bin/docker/php/Dockerfile
         args:
           - host_ip
     volumes:
