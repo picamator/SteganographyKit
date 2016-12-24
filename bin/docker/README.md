@@ -57,6 +57,6 @@ More information is [here](https://confluence.jetbrains.com/display/PhpStorm/Wor
 1. Configure UnitTest using remote interpreter. 
 2. Choose "Use custom autoload"
 3. Set "Path to script": `/SteganographyKit/vendor/autoload.php`
-4. Set "Default configuration file": `/SteganographyKit/bin/tests/phpunit.xml.dist`
+4. Set "Default configuration file": `/SteganographyKit/tests/phpunit.xml.dist`
 
 More information is [here](https://confluence.jetbrains.com/display/PhpStorm/Running+PHPUnit+tests+over+SSH+on+a+remote+server+with+PhpStorm).
